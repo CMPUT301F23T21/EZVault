@@ -7,17 +7,13 @@ assignees: ''
 
 ---
 
+Add labels for story point estimation and risk level.
+
 # Original Description
 <ORIGINAL USER STORY Description>
 
 # Description
 <Potentially more fleshed out description>
-
-# Story Point Estimation
-<ESTIMATE>(add github label)
-
-# Risk Level (low, medium, high)
-<ESTIMATE>(add github label)
 
 # Acceptance Criteria
 <list of criteria that must be fulfilled for the user story to be fulfilled>
