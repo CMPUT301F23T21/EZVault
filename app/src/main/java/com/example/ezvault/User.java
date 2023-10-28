@@ -9,14 +9,14 @@ import java.util.UUID;
  */
 public class User {
     private String userName;
-    private final UUID uid;
+    private final String uid;
 
     /**
-     * Constructs a new User object with the specified username and user ID (UUID).
+     * Constructs a new User object with the specified user name and user id.
      * @param userName The username of the user.
-     * @param uid      The user ID (UUID) of the user.
+     * @param uid      The user ID of the user.
      */
-    public User(String userName, UUID uid) {
+    public User(String userName, String uid) {
         this.userName = userName;
         this.uid = uid;
     }
@@ -37,10 +37,10 @@ public class User {
     }
 
     /**
-     * Gets the user id (UUID) of the user.
-     * @return The user id (UUID) of the user.
+     * Gets the user id of the user.
+     * @return The user id of the user.
      */
-    public UUID getUid() {
+    public String getUid() {
         return uid;
     }
 }
