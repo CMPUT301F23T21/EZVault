@@ -28,10 +28,18 @@ public class FirebaseBundle {
         this.auth = auth;
     }
 
+    /**
+     * Get the database
+     * @return The Firestore database instance
+     */
     public FirebaseFirestore getDb() {
         return db;
     }
 
+    /**
+     * Get the auth
+     * @return The Firebase auth instnace
+     */
     public FirebaseAuth getAuth() {
         return auth;
     }
