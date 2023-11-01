@@ -41,9 +41,6 @@ public class ItemService {
         // Add each item to the item list
         return itemDocs.continueWith(task -> {
             task.getResult().forEach(itemDoc -> {
-
-                Log.d("ijiojef", String.valueOf(task.isSuccessful()));
-
                 String key = itemDoc.getId();
 
                 // Retrieve all item attributes. Stored in local variables for readability
@@ -83,10 +80,10 @@ public class ItemService {
 
     /**
      * Adds an item to the item list
-     * @param item
+     * @param item Item to add
      * @return
      */
-    public Task<Void> addItem(Item item){
+    public Task<String> addItem(Item item){
         return itemsDAO.addItem(item, getItemIds())
                 .continueWith(docIdTask -> {
                     String docId = docIdTask.getResult();
@@ -94,11 +91,16 @@ public class ItemService {
                     itemList.put(docId, item);
                     printItems();
 
-                    return null;
+                    return docId;
                 });
     }
 
 
+    /**
+     * Updates an item in the item list/database
+     * @param updatedItem The item containing it's new modifications
+     * @return
+     */
     public Task<Void> applyItemEdit(Item updatedItem){
         return itemsDAO.updateItem(updatedItem)
                 .continueWith(t ->{
@@ -109,6 +111,11 @@ public class ItemService {
                 });
     }
 
+    /**
+     * Removes items from the user's item list
+     * @param items Items to be removed
+     * @return
+     */
     public Task<Void> deleteItems(List<Item> items){
         return itemsDAO.deleteItems(items, getItemIds())
                 .continueWith(t -> {
@@ -121,8 +128,17 @@ public class ItemService {
                 });
     }
 
+    /**
+     * Returns all the user's currently owned items
+     * @return
+     */
     public List<Item> getItems(){
         return new ArrayList<>(itemList.values());
     }
+
+    /**
+     * Returns the ids of all the user's currently owned items
+     * @return
+     */
     public List<String> getItemIds() { return new ArrayList<>(itemList.keySet()); }
 }

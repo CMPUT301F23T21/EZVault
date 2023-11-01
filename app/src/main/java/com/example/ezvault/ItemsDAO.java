@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Class that interacts with the Firestore database in regards to the user's items
  */
 public class ItemsDAO {
     private FirebaseBundle firebase;
@@ -29,6 +29,12 @@ public class ItemsDAO {
         this.firebase = firebase;
     }
 
+    /**
+     * Fetches all the item documents that the user owns. This should only be called upon
+     * initialization
+     * @param itemIds
+     * @return
+     */
     public Task<QuerySnapshot> fetchItemDocs(List<String> itemIds){
         CollectionReference itemCollection = firebase.getDb()
                 .collection("items");
@@ -43,6 +49,12 @@ public class ItemsDAO {
                 .get();
     }
 
+    /**
+     * Adds an item to the database
+     * @param item Item to be added
+     * @param allItemIds The ids of the user's currently owned items
+     * @return
+     */
     public Task<String> addItem(Item item, List<String> allItemIds) {
         Map<String, Object> itemFields = new HashMap<>();
         itemFields.put("make", item.getMake());
@@ -63,6 +75,11 @@ public class ItemsDAO {
                 .continueWith(t -> docId);
     }
 
+    /**
+     * Updates the attributes of an existing item in the database
+     * @param updatedItem The item with updated attributes
+     * @return
+     */
     public Task<Void> updateItem(Item updatedItem) {
         Map<String, Object> itemFields = new HashMap<>();
         itemFields.put("make", updatedItem.getMake());
@@ -74,6 +91,12 @@ public class ItemsDAO {
                 .set(itemFields, SetOptions.merge());
     }
 
+    /**
+     * Deletes items from the database
+     * @param items Items to be deleted
+     * @param allItemIds The ids of the user's currently owned items
+     * @return
+     */
     public Task<Void> deleteItems(List<Item> items, List<String> allItemIds){
         List<String> idsPendingDeletion = new ArrayList<>();
 
@@ -88,6 +111,12 @@ public class ItemsDAO {
                 .continueWithTask(t -> deleteItemDocs(idsPendingDeletion));
     }
 
+    /**
+     * Used in conjunction with deleteItems. This method deletes the item docs in the items
+     * collection
+     * @param itemIds The ids of the items to be deleted
+     * @return
+     */
     private Task<Void> deleteItemDocs(List<String> itemIds){
         WriteBatch batch = firebase.getDb().batch();
 
@@ -106,6 +135,11 @@ public class ItemsDAO {
                 }).continueWithTask(t -> batch.commit());
     }
 
+    /**
+     * Updates the user's local item store within the database
+     * @param allItemIds The ids of the user's currently owned items
+     * @return
+     */
     private Task<Void> updateUserItemIds(List<String> allItemIds){
         Map<String, Object> userDoc = new HashMap<>();
         userDoc.put("itemids", allItemIds);

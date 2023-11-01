@@ -31,6 +31,12 @@ public class Item {
         this.serialNumber = serialNumber;
     }
 
+
+    /**
+     * Im using this constructor for testing just so we dont have to create the full item
+     * @param make
+     * @param model
+     */
     public Item(String make, String model){
         this.make = make;
         this.model = model;
