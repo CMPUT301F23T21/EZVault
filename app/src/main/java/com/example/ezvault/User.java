@@ -8,6 +8,7 @@ import java.util.UUID;
  * Username is local and may be out of sync with the database.
  */
 public class User {
+    private final ItemService itemService;
     private String userName;
     private final String uid;
 
@@ -16,7 +17,8 @@ public class User {
      * @param userName The username of the user.
      * @param uid      The user ID of the user.
      */
-    public User(String userName, String uid) {
+    public User(ItemService itemService, String userName, String uid) {
+        this.itemService = itemService;
         this.userName = userName;
         this.uid = uid;
     }
@@ -42,5 +44,9 @@ public class User {
      */
     public String getUid() {
         return uid;
+    }
+
+    public ItemService getItemService() {
+        return itemService;
     }
 }

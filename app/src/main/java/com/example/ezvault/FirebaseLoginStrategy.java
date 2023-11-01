@@ -1,7 +1,13 @@
 package com.example.ezvault;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Represents a login strategy ({@link LoginStrategy}) that relies upon a {@link FirebaseBundle}.
@@ -16,9 +22,28 @@ public abstract class FirebaseLoginStrategy implements LoginStrategy {
      */
     public abstract Task<String> authenticate(FirebaseBundle firebase);
 
-    private User finalContinuation(String uid, Task<DocumentSnapshot> docTask) {
+    private User finalContinuation(ItemService itemService, String uid, DocumentSnapshot doc) {
+        //DocumentSnapshot doc = docTask.getResult();
+        return new User (
+                itemService,
+                doc.getString("name"),
+                uid
+        );
+    }
+
+    /**
+     * Load the users item database via the {@link ItemService}
+     * @param uid The uid of the user
+     * @param docTask The completed task holding the user's Firestore document
+     * @return
+     */
+    private Task<User> itemsContinuation(String uid, Task<DocumentSnapshot> docTask) {
         DocumentSnapshot doc = docTask.getResult();
-        return new User(doc.getString("name"), uid);
+
+        List<String> itemIds = (List<String>)doc.get("itemids");
+        ItemService itemService = new ItemService(firebase);
+
+        return itemService.initItems(itemIds).continueWith(t -> finalContinuation(itemService, uid, doc));
     }
 
     private Task<User> uidContinuation(Task<String> uidTask) {
@@ -29,7 +54,7 @@ public abstract class FirebaseLoginStrategy implements LoginStrategy {
                         .document(uid)
                         .get();
         return documentSnapshotTask
-                .continueWith(d -> finalContinuation(uid, d));
+                .continueWithTask(d -> itemsContinuation(uid, d));
     }
 
     @Override

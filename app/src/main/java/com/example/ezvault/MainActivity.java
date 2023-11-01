@@ -23,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
         lh.login().continueWith(uTask -> {
             User u = uTask.getResult();
             Log.i("EZVault", "uid: " + u.getUid() + " uname: " + u.getUserName());
+
+            // Add an item
+            u.getItemService().addItem(new Item("Chip", "Dip"));
+
+            // Delete all items
+            // u.getItemService().deleteItems(u.getItemService().getItems()); ;//addItem(new Item("Chip", "Dip"));
             return null;
         });
     }
