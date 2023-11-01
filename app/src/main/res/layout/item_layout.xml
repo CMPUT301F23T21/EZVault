@@ -22,7 +22,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/view_details_button"
         app:layout_constraintStart_toEndOf="@+id/item_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/fredoka_one"/>
 
     <ImageButton
         android:id="@+id/view_details_button"
@@ -31,7 +32,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="null"/>
 
     <TextView
         android:id="@+id/quantity_text"
@@ -41,7 +43,8 @@
         android:text="00 Units"
         app:layout_constraintEnd_toStartOf="@+id/cost_text"
         app:layout_constraintStart_toEndOf="@+id/item_image"
-        app:layout_constraintTop_toBottomOf="@+id/item_name" />
+        app:layout_constraintTop_toBottomOf="@+id/item_name"
+        android:fontFamily="@font/paytone_one"/>
 
     <TextView
         android:id="@+id/cost_text"
@@ -50,7 +53,8 @@
         android:layout_marginTop="10dp"
         android:text="Total Amount"
         app:layout_constraintEnd_toStartOf="@+id/view_details_button"
-        app:layout_constraintTop_toBottomOf="@+id/item_name" />
+        app:layout_constraintTop_toBottomOf="@+id/item_name"
+        android:fontFamily="@font/paytone_one"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tag_list"
