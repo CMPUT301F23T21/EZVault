@@ -1,61 +1,138 @@
 package com.example.ezvault;
 
-import androidx.annotation.NonNull;
+import java.time.Instant;
 
+import javax.annotation.Nullable;
+
+/**
+ * Represents an item
+ */
 public class Item {
-    private String id;
+    /**
+     * The ID of the Item
+     */
+    private final String id;
+    /**
+     * The make of the item
+     */
     private String make;
+    /**
+     * The model of the Item
+     */
     private String model;
-    private int unixDayEpoch;
+    /**
+     * The time of acquisition, does not include timezone info
+     */
+    private Instant acquisitionDate;
+    /**
+     * A description of the item
+     */
     private String description;
+    /**
+     * A comment on the item
+     */
     private String comment;
-    private String serialNumber;
+    /**
+     * The serial number of the item.
+     * Null if there is not one.
+     */
+    private @Nullable String serialNumber;
 
-    public Item(String id, String make, String model, int unixDayEpoch, String description, String comment) {
+    /**
+     * Create an item without a serial number.
+     * @param id The id of the item
+     * @param make the make of the item
+     * @param model The model of the item
+     * @param acquisitionDate The time of acquisition
+     * @param description The description of the item
+     * @param comment The comment on the item
+     */
+    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment) {
         this.id = id;
         this.make = make;
         this.model = model;
-        this.unixDayEpoch = unixDayEpoch;
+        this.acquisitionDate = acquisitionDate;
         this.description = description;
         this.comment = comment;
         this.serialNumber = null;
     }
 
-    public Item(String id, String make, String model, int unixDayEpoch, String description, String comment, String serialNumber) {
+    /**
+     * Create an item with a serial number.
+     * @param id The id of the item
+     * @param make the make of the item
+     * @param model The model of the item
+     * @param acquisitionDate The time of acquisition
+     * @param description The description of the item
+     * @param comment The comment on the item
+     * @param serialNumber The serial number of the item
+     */
+    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber) {
         this.id = id;
         this.make = make;
         this.model = model;
-        this.unixDayEpoch = unixDayEpoch;
+        this.acquisitionDate = acquisitionDate;
         this.description = description;
         this.comment = comment;
         this.serialNumber = serialNumber;
     }
 
-
     /**
-     * Im using this constructor for testing just so we dont have to create the full item
-     * @param make
-     * @param model
+     * Returns the make of the item.
+     * @return The make associated with the item.
      */
-    public Item(String make, String model){
-        this.make = make;
-        this.model = model;
-    }
-
     public String getMake() {
         return make;
     }
 
+    /**
+     * Returns the model of the item.
+     * @return The specific model of the item.
+     */
     public String getModel() {
         return model;
     }
 
+    /**
+     * Returns the ID of the item.
+     * @return The unique identifier for the item.
+     */
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    /**
+     * Returns the acquisition date of the item.
+     * @return The specific instant of acquisition.
+     */
+    public Instant getAcquisitionDate() {
+        return acquisitionDate;
+    }
+
+    /**
+     * Returns the description of the item.
+     * @return The description with the item.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Returns the comment on the item.
+     * @return The comment of the item.
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * Returns the serial number of the item.
+     * @return The serial number of the item
+     * or null if it does not have a serial code.
+     */
+    @Nullable
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
     public void setMake(String make) {
@@ -64,5 +141,37 @@ public class Item {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    /**
+     * Set the acquisition date.
+     * @param acquisitionDate The date of acquisition of the item.
+     */
+    public void setAcquisitionDate(Instant acquisitionDate) {
+        this.acquisitionDate = acquisitionDate;
+    }
+
+    /**
+     * Set the description of the item.
+     * @param description The new description of the item.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Set the comment on the item.
+     * @param comment The new comment.
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    /**
+     * Set the serial number.
+     * @param serialNumber The serial number or null if there is not one.
+     */
+    public void setSerialNumber(@Nullable String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }
