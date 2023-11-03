@@ -32,7 +32,7 @@ public class UserDAO extends AbstractDAO<User, String> {
     private Map<String, Object> userToMap(User user) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", user.getUserName());
-        //map.put("itemids", user.getItemList().getItems());
+        //map.put("itemids", user.getItemList().getItems().forEach(item -> item.getId()));
         return map;
     }
 
