@@ -1,6 +1,7 @@
 package com.example.ezvault;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
@@ -38,6 +39,8 @@ public class Item {
      */
     private @Nullable String serialNumber;
 
+    private ArrayList<Tag> tags;
+
     /**
      * Create an item without a serial number.
      * @param id The id of the item
@@ -46,8 +49,9 @@ public class Item {
      * @param acquisitionDate The time of acquisition
      * @param description The description of the item
      * @param comment The comment on the item
+     * @param tags The tags associated with the item
      */
-    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment) {
+    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, ArrayList<Tag> tags) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -55,6 +59,7 @@ public class Item {
         this.description = description;
         this.comment = comment;
         this.serialNumber = null;
+        this.tags = tags;
     }
 
     /**
@@ -66,6 +71,7 @@ public class Item {
      * @param description The description of the item
      * @param comment The comment on the item
      * @param serialNumber The serial number of the item
+     * @param tags The tags associated with the item
      */
     public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber) {
         this.id = id;
@@ -75,6 +81,7 @@ public class Item {
         this.description = description;
         this.comment = comment;
         this.serialNumber = serialNumber;
+        this.tags = tags;
     }
 
     /**
@@ -126,6 +133,12 @@ public class Item {
     }
 
     /**
+     * Get the tags of the item
+     * @return Get a list of the tags associated with the item
+     */
+    public ArrayList<Tag> getTags() { return tags; }
+
+    /**
      * Returns the serial number of the item.
      * @return The serial number of the item
      * or null if it does not have a serial code.
@@ -173,5 +186,13 @@ public class Item {
      */
     public void setSerialNumber(@Nullable String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    /**
+     * Set the tags.
+     * @param tags The list of tags to be associated with the item.
+     */
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
     }
 }
