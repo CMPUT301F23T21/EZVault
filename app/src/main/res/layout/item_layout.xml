@@ -27,7 +27,7 @@
 
     <ImageButton
         android:id="@+id/view_details_button"
-        android:src="@drawable/baseline_arrow_forward_ios_24"
+        android:src="@drawable/icon_forward_icon"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

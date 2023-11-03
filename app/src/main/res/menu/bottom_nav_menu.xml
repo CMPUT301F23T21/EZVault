@@ -3,15 +3,15 @@
 
 
     <item
-        android:id="@+id/tags_nav"
+        android:id="@+id/nav_bar_tags"
         android:title="Tags"
-        android:icon="@drawable/baseline_local_offer_24"/>
+        android:icon="@drawable/icon_tag"/>
     <item
-        android:id="@+id/search_nav"
-        android:icon="@drawable/baseline_search_24"
+        android:id="@+id/nav_bar_search"
+        android:icon="@drawable/icon_search"
         android:title="Search" />
     <item
-        android:id="@+id/items_nav"
+        android:id="@+id/nav_bar_items"
         android:title="Items"
-        android:icon="@drawable/baseline_inventory_24"/>
+        android:icon="@drawable/icon_inventory"/>
 </menu>
