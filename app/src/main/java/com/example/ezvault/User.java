@@ -1,7 +1,5 @@
 package com.example.ezvault;
 
-import java.util.UUID;
-
 /**
  * Represents a user in the application.
  * Does not perform I/O.
