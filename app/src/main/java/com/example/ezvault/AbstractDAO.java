@@ -1,6 +1,8 @@
 package com.example.ezvault;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
 
 import java.util.function.Supplier;
 
@@ -54,39 +56,33 @@ public abstract class AbstractDAO<T, ID> {
     abstract Task<Void> delete(ID id);
 
     /**
-     * The deferred version of {@code create}
-     * @param t The object to write to the database.
-     * @return A thunk representing the creation operation.
+     * Represents a creation of an object in a transaction.
+     * @param transaction The current transaction state
+     * @param t The object to create
+     * @return The ID of the object created
      */
-    public Supplier<Task<ID>> deferCreate(T t) {
-        return () -> create(t);
-    }
+    abstract ID createTransactional(Transaction transaction, T t);
 
     /**
-     * The deferred version of {@code read}
-     * @param id The unique identifier of the object.
-     * @return A thunk representing the reading operation.
+     * Represents reading an object in a transaction
+     * @param transaction The current transaction state
+     * @param id The id of the object to read
+     * @return The object read
      */
-    public final Supplier<Task<T>> deferRead(ID id) {
-        return () -> read(id);
-    }
+    abstract T readTransactional(Transaction transaction, ID id);
 
     /**
-     * The deferred version of {@code update}
-     * @param id The unique identifier of the object.
-     * @param t The new value for the object to be set to.
-     * @return A thunk representing the updating operation.
+     * Update an object in a transaction
+     * @param transaction The current transaction state
+     * @param t The new value of the object
+     * @param id The id of the object to be updated
      */
-    public final Supplier<Task<Void>> deferUpdate(ID id, T t) {
-        return () -> update(id, t);
-    }
+    abstract void updateTransactional(Transaction transaction, T t, ID id);
 
     /**
-     * The deferred version of {@code delete}
-     * @param id The unique identifier of the object.
-     * @return A thunk representing the deletion operation.
+     * Delete an object in a transaction
+     * @param transaction The current transaction state
+     * @param id The id of the object to delete
      */
-    public final Supplier<Task<Void>> deferDelete(ID id) {
-        return () -> delete(id);
-    }
+    abstract void deleteTransactional(Transaction transaction, ID id);
 }
