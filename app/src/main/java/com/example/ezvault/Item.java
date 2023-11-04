@@ -61,7 +61,7 @@ public class Item {
      * @param tags The tags associated with the item
      * @param images The images associated with the item
      */
-    private Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
+    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
         this.id = id;
         this.make = make;
         this.model = model;
