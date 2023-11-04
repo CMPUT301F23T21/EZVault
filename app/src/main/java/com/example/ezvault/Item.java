@@ -39,6 +39,9 @@ public class Item {
      */
     private @Nullable String serialNumber;
 
+    /**
+     * List of tags associated with the item.
+     */
     private ArrayList<Tag> tags;
 
     /**
