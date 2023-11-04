@@ -58,7 +58,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public Item createItem() {
+    public Item build() {
         return new Item(id, make, model, acquisitionDate, description, comment, serialNumber, tags, images);
     }
 }
