@@ -58,7 +58,9 @@ public class RawUserDAO extends AbstractDAO<RawUserDAO.RawUser, String> {
 
     @Override
     Task<Void> delete(String s) {
-        return null;
+        return db.collection(collectionName)
+                .document(s)
+                .delete();
     }
 
     @Override
