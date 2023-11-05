@@ -50,29 +50,6 @@ public class Item {
     private ArrayList<Image> images;
 
     /**
-     * Create an item without a serial number.
-     * @param id The id of the item
-     * @param make the make of the item
-     * @param model The model of the item
-     * @param acquisitionDate The time of acquisition
-     * @param description The description of the item
-     * @param comment The comment on the item
-     * @param tags The tags associated with the item
-     * @param images The images associated with the item
-     */
-    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, ArrayList<Tag> tags, ArrayList<Image> images) {
-        this.id = id;
-        this.make = make;
-        this.model = model;
-        this.acquisitionDate = acquisitionDate;
-        this.description = description;
-        this.comment = comment;
-        this.serialNumber = null;
-        this.tags = tags;
-        this.images = images;
-    }
-
-    /**
      * Create an item with a serial number.
      * @param id The id of the item
      * @param make the make of the item
@@ -84,7 +61,7 @@ public class Item {
      * @param tags The tags associated with the item
      * @param images The images associated with the item
      */
-    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, ArrayList<Tag> tags, ArrayList<Image> images, String serialNumber) {
+    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
         this.id = id;
         this.make = make;
         this.model = model;
