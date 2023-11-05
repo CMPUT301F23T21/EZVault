@@ -51,7 +51,9 @@ public class RawUserDAO extends AbstractDAO<RawUserDAO.RawUser, String> {
 
     @Override
     Task<Void> update(String s, RawUser rawUser) {
-        return null;
+        return db.collection(collectionName)
+                .document(s)
+                .set(rawUser);
     }
 
     @Override
