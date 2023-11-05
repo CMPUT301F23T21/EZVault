@@ -1,5 +1,6 @@
-package com.example.ezvault;
+package com.example.ezvault.database;
 
+import com.example.ezvault.FirebaseBundle;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
