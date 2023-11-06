@@ -1,6 +1,7 @@
 package com.example.ezvault.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
@@ -39,23 +40,14 @@ public class Item {
     private @Nullable String serialNumber;
 
     /**
-     * Create an item without a serial number.
-     * @param id The id of the item
-     * @param make the make of the item
-     * @param model The model of the item
-     * @param acquisitionDate The time of acquisition
-     * @param description The description of the item
-     * @param comment The comment on the item
+     * List of tags associated with the item.
      */
-    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment) {
-        this.id = id;
-        this.make = make;
-        this.model = model;
-        this.acquisitionDate = acquisitionDate;
-        this.description = description;
-        this.comment = comment;
-        this.serialNumber = null;
-    }
+    private ArrayList<Tag> tags;
+
+    /**
+     * List of images associated with the item
+     */
+    private ArrayList<Image> images;
 
     /**
      * Create an item with a serial number.
@@ -66,8 +58,10 @@ public class Item {
      * @param description The description of the item
      * @param comment The comment on the item
      * @param serialNumber The serial number of the item
+     * @param tags The tags associated with the item
+     * @param images The images associated with the item
      */
-    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber) {
+    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -75,6 +69,8 @@ public class Item {
         this.description = description;
         this.comment = comment;
         this.serialNumber = serialNumber;
+        this.tags = tags;
+        this.images = images;
     }
 
     /**
@@ -126,6 +122,12 @@ public class Item {
     }
 
     /**
+     * Get the tags of the item
+     * @return Get a list of the tags associated with the item
+     */
+    public ArrayList<Tag> getTags() { return tags; }
+
+    /**
      * Returns the serial number of the item.
      * @return The serial number of the item
      * or null if it does not have a serial code.
@@ -134,6 +136,12 @@ public class Item {
     public String getSerialNumber() {
         return serialNumber;
     }
+
+    /**
+     * Get associated images
+     * @return List of images associated with the item
+     */
+    public ArrayList<Image> getImages() { return images; }
 
     public void setMake(String make) {
         this.make = make;
@@ -173,5 +181,21 @@ public class Item {
      */
     public void setSerialNumber(@Nullable String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    /**
+     * Set the tags.
+     * @param tags The list of tags to be associated with the item.
+     */
+    public void setTags(ArrayList<Tag> tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * Set the images
+     * @param images List of images to be associated with the item.
+     */
+    public void setImages(ArrayList<Image> images) {
+        this.images = images;
     }
 }
