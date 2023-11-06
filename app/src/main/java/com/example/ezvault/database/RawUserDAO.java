@@ -66,15 +66,6 @@ public class RawUserDAO extends AbstractDAO<RawUserDAO.RawUser, String> {
         protected ArrayList<String> tagids;
         protected ArrayList<String> itemids;
 
-        @Override
-        public String toString() {
-            return "RawUser{" +
-                    "userName='" + name + '\'' +
-                    ", tags=" + tagids +
-                    ", items=" + itemids +
-                    '}';
-        }
-
         public RawUser(String userName, ArrayList<String> tags, ArrayList<String> items) {
             this.name = userName;
             this.tagids = tags;

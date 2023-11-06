@@ -1,13 +1,14 @@
 package com.example.ezvault.model;
 
-import java.time.Instant;
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 
 public class ItemBuilder {
     private String id;
     private String make;
     private String model;
-    private Instant acquisitionDate;
+    private Timestamp acquisitionDate;
     private String description = "";
     private String comment = "";
     private String serialNumber = null;
@@ -29,7 +30,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setAcquisitionDate(Instant acquisitionDate) {
+    public ItemBuilder setAcquisitionDate(Timestamp acquisitionDate) {
         this.acquisitionDate = acquisitionDate;
         return this;
     }

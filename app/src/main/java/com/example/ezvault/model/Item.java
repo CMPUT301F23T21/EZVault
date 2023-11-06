@@ -1,6 +1,7 @@
 package com.example.ezvault.model;
 
-import java.time.Instant;
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 
 import javax.annotation.Nullable;
@@ -24,7 +25,7 @@ public class Item {
     /**
      * The time of acquisition, does not include timezone info
      */
-    private Instant acquisitionDate;
+    private Timestamp acquisitionDate;
     /**
      * A description of the item
      */
@@ -61,7 +62,7 @@ public class Item {
      * @param tags The tags associated with the item
      * @param images The images associated with the item
      */
-    public Item(String id, String make, String model, Instant acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
+    public Item(String id, String make, String model, Timestamp acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -101,7 +102,7 @@ public class Item {
      * Returns the acquisition date of the item.
      * @return The specific instant of acquisition.
      */
-    public Instant getAcquisitionDate() {
+    public Timestamp getAcquisitionDate() {
         return acquisitionDate;
     }
 
@@ -155,7 +156,7 @@ public class Item {
      * Set the acquisition date.
      * @param acquisitionDate The date of acquisition of the item.
      */
-    public void setAcquisitionDate(Instant acquisitionDate) {
+    public void setAcquisitionDate(Timestamp acquisitionDate) {
         this.acquisitionDate = acquisitionDate;
     }
 

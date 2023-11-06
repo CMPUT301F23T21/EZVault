@@ -11,7 +11,7 @@ public class TaskUtils {
         return task.onSuccessTask(s -> Tasks.forResult(f.apply(s)));
     }
 
-    public static <S> Task<Void> onSuccess(Task<S> task, Consumer<S> f) {
+    public static <S> Task<Void> onSuccessProc(Task<S> task, Consumer<S> f) {
         return onSuccess(task, s -> {
             f.accept(s);
             return null;
