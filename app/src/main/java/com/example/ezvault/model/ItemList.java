@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.model;
 
 import java.util.ArrayList;
 

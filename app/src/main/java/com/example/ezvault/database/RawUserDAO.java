@@ -1,11 +1,9 @@
 package com.example.ezvault.database;
 
-import com.example.ezvault.FirebaseBundle;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Transaction;
 
 import java.util.ArrayList;
 
@@ -24,7 +22,7 @@ public class RawUserDAO extends AbstractDAO<RawUserDAO.RawUser, String> {
     }
 
     @Override
-    Task<String> create(RawUser rawUser) {
+    public Task<String> create(RawUser rawUser) {
         Task<DocumentReference> t = db.collection(collectionName)
                 .add(rawUser);
         return t.continueWith(task -> task.getResult().getId());
@@ -50,69 +48,49 @@ public class RawUserDAO extends AbstractDAO<RawUserDAO.RawUser, String> {
     }
 
     @Override
-    Task<Void> update(String s, RawUser rawUser) {
+    public Task<Void> update(String s, RawUser rawUser) {
         return db.collection(collectionName)
                 .document(s)
                 .set(rawUser);
     }
 
     @Override
-    Task<Void> delete(String s) {
+    public Task<Void> delete(String s) {
         return db.collection(collectionName)
                 .document(s)
                 .delete();
     }
 
-    @Override
-    String createTransactional(Transaction transaction, RawUser rawUser) {
-        return null;
-    }
-
-    @Override
-    RawUser readTransactional(Transaction transaction, String s) {
-        return null;
-    }
-
-    @Override
-    void updateTransactional(Transaction transaction, RawUser rawUser, String s) {
-
-    }
-
-    @Override
-    void deleteTransactional(Transaction transaction, String s) {
-
-    }
-
     public static class RawUser {
-        protected String userName;
-        protected ArrayList<String> tags;
-        protected ArrayList<String> items;
+        protected String name;
+        protected ArrayList<String> tagids;
+        protected ArrayList<String> itemids;
 
         @Override
         public String toString() {
             return "RawUser{" +
-                    "userName='" + userName + '\'' +
-                    ", tags=" + tags +
-                    ", items=" + items +
+                    "userName='" + name + '\'' +
+                    ", tags=" + tagids +
+                    ", items=" + itemids +
                     '}';
         }
 
         public RawUser(String userName, ArrayList<String> tags, ArrayList<String> items) {
-            this.userName = userName;
-            this.tags = tags;
-            this.items = items;
+            this.name = userName;
+            this.tagids = tags;
+            this.itemids = items;
         }
 
-        public String getUserName() {
-            return this.userName;
+        public String getName() {
+            return this.name;
         }
 
-        public ArrayList<String> getTags() {
-            return tags;
+        public ArrayList<String> getTagids() {
+            return tagids;
         }
 
-        public ArrayList<String> getItems() {
-            return items;
+        public ArrayList<String> getItemids() {
+            return itemids;
         }
     }
 }

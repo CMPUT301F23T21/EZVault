@@ -1,11 +1,10 @@
 package com.example.ezvault.database;
 
-import com.example.ezvault.FirebaseBundle;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.Transaction;
 
-import java.util.function.Supplier;
+import java.util.ArrayList;
 
 /**
  * An object that interacts interacts with the database to
@@ -32,14 +31,14 @@ public abstract class AbstractDAO<T, ID> {
      * @param t The object to be created on the database.
      * @return The ID of the newly created database entry.
      */
-    abstract Task<ID> create(T t);
+    public abstract Task<ID> create(T t);
 
     /**
      * Reads an object from the database based on a unique identifier.
      * @param id The unique identifier of the object.
      * @return The object from the database.
      */
-    abstract Task<T> read(ID id);
+    public abstract Task<T> read(ID id);
 
     /**
      * Updates the value of an existing object on the database.
@@ -47,22 +46,25 @@ public abstract class AbstractDAO<T, ID> {
      * @param t The new value to update the object to.
      * @return A {@code Task} representing the asynchronous operation.
      */
-    abstract Task<Void> update(ID id, T t);
+    public abstract Task<Void> update(ID id, T t);
 
     /**
      * Deletes an object from the database.
      * @param id The id of the object to be deleted.
      * @return A {@code Task} representing the asynchronous operation.
      */
-    abstract Task<Void> delete(ID id);
+    public abstract Task<Void> delete(ID id);
 
     /**
      * Represents a creation of an object in a transaction.
+     *
      * @param transaction The current transaction state
-     * @param t The object to create
+     * @param t           The object to create
      * @return The ID of the object created
      */
-    abstract ID createTransactional(Transaction transaction, T t);
+    public ID createTransactional(Transaction transaction, T t) {
+        throw new UnsupportedOperationException("Unsupported Operation!");
+    }
 
     /**
      * Represents reading an object in a transaction
@@ -70,7 +72,9 @@ public abstract class AbstractDAO<T, ID> {
      * @param id The id of the object to read
      * @return The object read
      */
-    abstract T readTransactional(Transaction transaction, ID id);
+    public T readTransactional(Transaction transaction, ID id) {
+        throw new UnsupportedOperationException("Unsupported Operation!");
+    }
 
     /**
      * Update an object in a transaction
@@ -78,12 +82,33 @@ public abstract class AbstractDAO<T, ID> {
      * @param t The new value of the object
      * @param id The id of the object to be updated
      */
-    abstract void updateTransactional(Transaction transaction, T t, ID id);
+    public void updateTransactional(Transaction transaction, T t, ID id) {
+        throw new UnsupportedOperationException("Unsupported Operation!");
+    }
 
     /**
      * Delete an object in a transaction
      * @param transaction The current transaction state
      * @param id The id of the object to delete
      */
-    abstract void deleteTransactional(Transaction transaction, ID id);
+    public void deleteTransactional(Transaction transaction, ID id) {
+        throw new UnsupportedOperationException("Unsupported Operation!");
+    }
+
+    public Task<ArrayList<T>> pluralRead(ArrayList<ID> ids) {
+        Task<ArrayList<T>> task = Tasks.forResult(new ArrayList<>());
+        if (ids.size() <= 0) {
+            return task;
+        }
+        for (ID id : ids) {
+            task = task.onSuccessTask(ts -> {
+                Task<T> tTask = read(id);
+                return tTask.continueWith(t -> {
+                    ts.add(tTask.getResult());
+                    return ts;
+                });
+            });
+        }
+        return task;
+    }
 }
