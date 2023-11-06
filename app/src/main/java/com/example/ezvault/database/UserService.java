@@ -1,6 +1,7 @@
 package com.example.ezvault.database;
 
 import com.example.ezvault.model.Item;
+import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
 
@@ -34,7 +35,8 @@ public class UserService {
                     RawUser rawUser = (RawUser) tasks.get(0);
                     ArrayList<Item> items = (ArrayList<Item>) tasks.get(1);
                     ArrayList<Tag> tags = (ArrayList<Tag>) tasks.get(2);
-                    return Tasks.forResult(new User(rawUser.getName(), uid));
+                    ItemList itemList = new ItemList(items, tags);
+                    return Tasks.forResult(new User(rawUser.getName(), uid, itemList));
                 });
     }
 

@@ -19,8 +19,7 @@ public class ItemList {
      * Constructs an empty list of items and tags.
      */
     public ItemList() {
-        this.items = new ArrayList<>();
-        this.tags = new ArrayList<>();
+        this(new ArrayList<>(), new ArrayList<>());
     }
 
     /**

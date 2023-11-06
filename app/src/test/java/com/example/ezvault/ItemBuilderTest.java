@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import com.example.ezvault.model.Item;
+import com.example.ezvault.model.ItemBuilder;
+
 import org.junit.Test;
 
 public class ItemBuilderTest {

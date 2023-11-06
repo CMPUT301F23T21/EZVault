@@ -1,5 +1,7 @@
 package com.example.ezvault.database;
 
+import android.util.Log;
+
 import com.example.ezvault.model.Tag;
 import com.google.android.gms.tasks.Task;
 
@@ -24,14 +26,19 @@ public class TagDAO extends AbstractDAO<Tag,String> {
 
     @Override
     public Task<Tag> read(String id) {
+        Log.v("EZVault", "Reading tag: " + id);
         return firebase.getDb().collection(collectionName)
                 .document(id)
                 .get()
-                .continueWith(task -> task.getResult().toObject(Tag.class));
+                .continueWith(task -> {
+                    String identifier = task.getResult().getString("identifier");
+                    return new Tag(identifier);
+                });
     }
 
     @Override
     public Task<Void> update(String id, Tag tag) {
+        Log.v("EZVault", "Updating tag: " + id);
         return firebase.getDb().collection(collectionName)
                 .document(id)
                 .set(tag);
@@ -39,6 +46,7 @@ public class TagDAO extends AbstractDAO<Tag,String> {
 
     @Override
     public Task<Void> delete(String id) {
+        Log.v("EZVault", "Deleting tag: " + id);
         return firebase.getDb().collection(collectionName)
                 .document(id)
                 .delete();

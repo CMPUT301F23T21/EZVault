@@ -8,15 +8,19 @@ package com.example.ezvault.model;
 public class User {
     private String userName;
     private final String uid;
+    private ItemList itemList;
 
     /**
      * Constructs a new User object with the specified user name and user id.
+     *
      * @param userName The username of the user.
      * @param uid      The user ID of the user.
+     * @param itemList
      */
-    public User(String userName, String uid) {
+    public User(String userName, String uid, ItemList itemList) {
         this.userName = userName;
         this.uid = uid;
+        this.itemList = itemList;
     }
 
     /**
@@ -40,5 +44,19 @@ public class User {
      */
     public String getUid() {
         return uid;
+    }
+
+    public ItemList getItemList() {
+        return itemList;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", uid='" + uid + '\'' +
+                ", items=" + itemList.getItems() +
+                ", tags=" + itemList.getTags() +
+                '}';
     }
 }
