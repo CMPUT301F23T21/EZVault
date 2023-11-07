@@ -35,12 +35,14 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_button);
 
         loginButton.setOnClickListener(v -> {
+            loginButton.setEnabled(false);
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
             EmailPasswordAuthenticationStrategy as = new EmailPasswordAuthenticationStrategy(firebase, email, password);
             AuthenticationHandler ah = new AuthenticationHandler(as);
             ah.authenticate().addOnFailureListener(e -> {
                 Log.e("EZVault", "Failed to login", e);
+                loginButton.setEnabled(true);
             }).addOnSuccessListener(u -> {
                 Log.v("EZVault", "Success on login " + u.toString());
                 finish();
