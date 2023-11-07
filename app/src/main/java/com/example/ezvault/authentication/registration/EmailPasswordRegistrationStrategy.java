@@ -1,8 +1,12 @@
 package com.example.ezvault.authentication.registration;
 
 import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.database.UserService;
+import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+
+import java.util.function.Supplier;
 
 /**
  * Represents the registration strategy using firebase and it's email and password provider.
@@ -31,6 +35,8 @@ public class EmailPasswordRegistrationStrategy extends FirebaseRegistrationStrat
      */
     @Override
     public Task<AuthResult> register(FirebaseBundle firebase, String userName) {
-        return firebase.getAuth().createUserWithEmailAndPassword(email, password);
+        Supplier<Task<AuthResult>> thunk = () -> firebase.getAuth().createUserWithEmailAndPassword(email, password);
+        Task<Void> findTask = new UserService(firebase).userExists(userName);
+        return TaskUtils.onFailureTask(findTask, thunk, new RegistrationException.UserAlreadyExists(userName));
     }
 }

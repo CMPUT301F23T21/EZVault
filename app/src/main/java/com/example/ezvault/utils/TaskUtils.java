@@ -5,8 +5,23 @@ import com.google.android.gms.tasks.Tasks;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class TaskUtils {
+    public static <S> Task<Void> drop(Task<S> task) {
+        return onSuccessProc(task, x -> {});
+    }
+
+    public static <S> Task<S> onFailureTask(Task<?> t, Supplier<Task<S>> thunk, Exception e)  {
+        return t.continueWithTask(task -> {
+            if (!t.isSuccessful()) {
+                return thunk.get();
+            } else {
+                return Tasks.forException(e);
+            }
+        });
+    }
+
     public static <S, T> Task<T> onSuccess(Task<S> task, Function<S, T> f) {
         return task.onSuccessTask(s -> Tasks.forResult(f.apply(s)));
     }

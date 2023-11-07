@@ -21,7 +21,6 @@ public class RegistrationException extends Exception {
         /**
          * The user already exists.
          * @param userName The name of the user that already exists.
-         * @return An exception representing that a user already exists
          */
         public UserAlreadyExists(String userName) {
             super("User " + "\"" + userName +"\" already exists.");

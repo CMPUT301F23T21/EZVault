@@ -5,10 +5,14 @@ Handles direct database access to users within the 'users' collection.
 
 package com.example.ezvault.database;
 
+import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -85,6 +89,13 @@ public class RawUserDAO extends AbstractDAO<RawUserDAO.RawUser, String> {
         return db.collection(collectionName)
                 .document(s)
                 .delete();
+    }
+
+    public Task<Void> find(String userName) {
+        Task<QuerySnapshot> t = db.collection(collectionName)
+                .whereEqualTo("name", userName)
+                .get();
+        return TaskUtils.drop(t);
     }
 
     /**

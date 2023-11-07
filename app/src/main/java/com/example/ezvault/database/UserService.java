@@ -13,6 +13,7 @@ import com.example.ezvault.database.RawUserDAO.RawUser;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -53,5 +54,9 @@ public class UserService {
                     ItemList itemList = new ItemList(items, tags);
                     return Tasks.forResult(new User(rawUser.getName(), uid, itemList));
                 });
+    }
+
+    public Task<Void> userExists(String userName) {
+        return rawUserDAO.find(userName);
     }
 }
