@@ -1,5 +1,6 @@
 package com.example.ezvault;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,8 +17,14 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
-    FirebaseBundle firebase = new FirebaseBundle();
+    @Inject
+    FirebaseBundle firebase;
     BottomNavigationView bottomNavView;
     Toolbar toolbar;
 
@@ -35,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         bottomNavView.setOnItemSelectedListener(this);
         bottomNavView.setSelectedItemId(R.id.nav_bar_items);
         toolbar.setTitle("Items");
+
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 
     ItemsFragment items = new ItemsFragment();

@@ -1,11 +1,17 @@
 package com.example.ezvault.database;
 
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Utility class for grouping Firebase components together.
  */
+@Singleton
 public class FirebaseBundle {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -14,6 +20,7 @@ public class FirebaseBundle {
      * Construct a FirebaseBundle based on the default
      * Firestore database and Firebase auth.
      */
+    @Inject
     public FirebaseBundle() {
         this(FirebaseFirestore.getInstance(), FirebaseAuth.getInstance());
     }
