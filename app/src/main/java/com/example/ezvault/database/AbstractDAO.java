@@ -1,3 +1,8 @@
+/*
+Provides an AbstractDAO class that is intended to be extended by subclasses.
+The subclasses should specialize in accessing the database for a specific type of object.
+ */
+
 package com.example.ezvault.database;
 
 import com.google.android.gms.tasks.Task;
@@ -95,6 +100,11 @@ public abstract class AbstractDAO<T, ID> {
         throw new UnsupportedOperationException("Unsupported Operation!");
     }
 
+    /**
+     * Performs a batch read operation for multiple objects from the database based on their unique identifiers.
+     * @param ids The list of unique identifiers for the objects to be read.
+     * @return A {@code Task} containing an {@code ArrayList} of objects of type {@code T} corresponding to the provided identifiers.
+     */
     public Task<ArrayList<T>> pluralRead(ArrayList<ID> ids) {
         Task<ArrayList<T>> task = Tasks.forResult(new ArrayList<>());
         if (ids.size() <= 0) {

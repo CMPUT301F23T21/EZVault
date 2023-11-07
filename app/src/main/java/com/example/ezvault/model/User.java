@@ -1,5 +1,7 @@
 package com.example.ezvault.model;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents a user in the application.
  * Does not perform I/O.
@@ -50,6 +52,7 @@ public class User {
         return itemList;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +

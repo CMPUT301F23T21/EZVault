@@ -1,3 +1,7 @@
+/**
+ * Handles direct database operations relating to Item objects.
+ */
+
 package com.example.ezvault.database;
 
 import android.util.Log;
@@ -27,6 +31,11 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         this.tagDAO = new TagDAO(firebase);
     }
 
+    /**
+     * Adds a new item to the 'items' collection.
+     * @param item The item to be added.
+     * @return A task with the new item's ID.
+     */
     @Override
     public Task<String> create(Item item) {
         return firebase.getDb().collection(collectionName)
@@ -34,7 +43,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
                 .continueWith(itemTask -> itemTask.getResult().getId());
     }
 
-    public Task<Item> readContinuation(String id, DocumentSnapshot doc) {
+    private Task<Item> readContinuation(String id, DocumentSnapshot doc) {
         String comment = doc.getString("comment");
         Timestamp date = doc.getTimestamp("date");
         String description = doc.getString("description");
@@ -52,6 +61,11 @@ public class ItemDAO extends AbstractDAO<Item, String> {
                 .build());
     }
 
+    /**
+     * Reads an item from the 'items' collection.
+     * @param id The ID of the item to fetch.
+     * @return A task with the item details.
+     */
     @Override
     public Task<Item> read(String id) {
         Log.v("EZVault", "Reading item: " + id);
@@ -62,6 +76,12 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         return docTask.onSuccessTask(d -> readContinuation(id, d));
     }
 
+    /**
+     * Updates an item in the 'items' collection.
+     * @param id The ID of the item to update.
+     * @param item The item with updated information.
+     * @return A task indicating the operation status.
+     */
     @Override
     public Task<Void> update(String id, Item item) {
         Log.v("EZVault", "Updating item: " + id);
@@ -70,6 +90,11 @@ public class ItemDAO extends AbstractDAO<Item, String> {
                 .set(item);
     }
 
+    /**
+     * Removes an item from the 'items' collection.
+     * @param id The ID of the item to remove.
+     * @return A task indicating the operation status.
+     */
     @Override
     public Task<Void> delete(String id) {
         Log.v("EZVault", "Deleting item: " + id);
