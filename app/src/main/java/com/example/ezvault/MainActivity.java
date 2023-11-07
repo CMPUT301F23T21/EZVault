@@ -17,13 +17,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        String email = "nortif8@gmail.com";
-        String password = "test123";
-        EmailPasswordAuthenticationStrategy as = new EmailPasswordAuthenticationStrategy(firebase, email, password);
-        AuthenticationHandler auth = new AuthenticationHandler(as);
-        TaskUtils.onSuccess(auth.authenticate(), user -> {
-            Log.d("EZVault", "Logged in: " + user.toString());
-        });
     }
 }
