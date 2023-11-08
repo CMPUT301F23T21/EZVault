@@ -51,6 +51,16 @@ public class Item {
     private ArrayList<Image> images;
 
     /**
+     * The value of the item in CAD.
+     */
+    private double value;
+
+    /**
+     * The amount or quantity of the item.
+     */
+    private double count;
+
+    /**
      * Create an item with a serial number.
      * @param id The id of the item
      * @param make the make of the item
@@ -62,7 +72,7 @@ public class Item {
      * @param tags The tags associated with the item
      * @param images The images associated with the item
      */
-    public Item(String id, String make, String model, Timestamp acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
+    public Item(String id, String make, String model, Timestamp acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images, double count, double value) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -72,6 +82,8 @@ public class Item {
         this.serialNumber = serialNumber;
         this.tags = tags;
         this.images = images;
+        this.count = count;
+        this.value = value;
     }
 
     /**
@@ -127,6 +139,22 @@ public class Item {
      * @return Get a list of the tags associated with the item
      */
     public ArrayList<Tag> getTags() { return tags; }
+
+    /**
+     * Get the value of the item
+     * @return The value of the item
+     */
+    public double getValue() {
+        return value;
+    }
+
+    /**
+     * Get the count of the item
+     * @return The count/amount of the item.
+     */
+    public double getCount() {
+        return count;
+    }
 
     /**
      * Returns the serial number of the item.
