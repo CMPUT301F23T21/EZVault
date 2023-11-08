@@ -207,13 +207,30 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginStart="25dp"/>
 
+                    <EditText
+                        android:id="@+id/edittext_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_below="@id/text_item_tags"
+                        android:background="@drawable/background_add_edittext"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:inputType="date"
+                        android:paddingLeft="16dp"
+                        android:paddingEnd="13dp"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:drawableRight="@drawable/icon_forward_icon"
+                        android:drawableTint="#3d3d3d"
+                        />
+
                     <TextView
                         android:id="@+id/text_item_serial"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Serial Number"
                         android:fontFamily="@font/paytone_one"
-                        android:layout_below="@+id/text_item_tags"
+                        android:layout_below="@+id/edittext_tags"
                         android:textSize="20sp"
                         android:layout_marginTop="20dp"
                         android:layout_marginStart="25dp"/>
@@ -233,7 +250,7 @@
                         android:id="@+id/button_serial_scan"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/icon_camera"
+                        android:src="@drawable/icon_barcode_scan"
                         android:background="Null"
                         android:layout_below="@id/text_item_serial"
                         android:layout_alignParentRight="true"
@@ -268,12 +285,12 @@
                         android:id="@+id/button_description_scan"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/icon_camera"
+                        android:src="@drawable/icon_barcode_scan"
                         android:background="Null"
                         android:layout_below="@id/text_item_description"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="20dp"
-                        android:layout_marginTop="15dp"/>
+                        android:layout_marginTop="13dp"/>
 
                     <TextView
                         android:id="@+id/text_item_comment"
@@ -298,7 +315,8 @@
                         android:paddingEnd="13dp"
                         android:inputType="textMultiLine"
                         android:lines="6"
-                        android:gravity="top" />
+                        android:gravity="top"
+                        />
 
                     <Button
                         android:id="@+id/button_confirm_add_item"
