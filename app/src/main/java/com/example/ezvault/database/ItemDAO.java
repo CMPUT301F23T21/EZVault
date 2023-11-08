@@ -49,6 +49,8 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         String description = doc.getString("description");
         String make = doc.getString("make");
         String model = doc.getString("model");
+        double count = doc.getDouble("count");
+        double value = doc.getDouble("value");
         ArrayList<String> tagIds = (ArrayList<String>) doc.get("tags");
         Task<ArrayList<Tag>> tagsTask = tagDAO.pluralRead(tagIds);
         return TaskUtils.onSuccess(tagsTask, tags -> new ItemBuilder()
@@ -58,6 +60,8 @@ public class ItemDAO extends AbstractDAO<Item, String> {
                 .setId(id)
                 .setMake(make)
                 .setModel(model)
+                .setCount(count)
+                .setValue(value)
                 .build());
     }
 

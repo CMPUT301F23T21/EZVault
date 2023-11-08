@@ -51,6 +51,16 @@ public class Item {
     private ArrayList<Image> images;
 
     /**
+     * The value of the item in CAD.
+     */
+    private double value;
+
+    /**
+     * The amount or quantity of the item.
+     */
+    private double count;
+
+    /**
      * Create an item with a serial number.
      * @param id The id of the item
      * @param make the make of the item
@@ -62,7 +72,7 @@ public class Item {
      * @param tags The tags associated with the item
      * @param images The images associated with the item
      */
-    public Item(String id, String make, String model, Timestamp acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images) {
+    public Item(String id, String make, String model, Timestamp acquisitionDate, String description, String comment, String serialNumber, ArrayList<Tag> tags, ArrayList<Image> images, double count, double value) {
         this.id = id;
         this.make = make;
         this.model = model;
@@ -72,6 +82,8 @@ public class Item {
         this.serialNumber = serialNumber;
         this.tags = tags;
         this.images = images;
+        this.count = count;
+        this.value = value;
     }
 
     /**

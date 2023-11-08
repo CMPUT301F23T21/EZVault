@@ -14,6 +14,8 @@ public class ItemBuilder {
     private String serialNumber = null;
     private ArrayList<Tag> tags = new ArrayList<>();
     private ArrayList<Image> images = new ArrayList<>();
+    private double value;
+    private double count;
 
     public ItemBuilder setId(String id) {
         this.id = id;
@@ -59,7 +61,17 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setValue(double value) {
+        this.value = value;
+        return this;
+    }
+
+    public ItemBuilder setCount(double count) {
+        this.count = count;
+        return this;
+    }
+
     public Item build() {
-        return new Item(id, make, model, acquisitionDate, description, comment, serialNumber, tags, images);
+        return new Item(id, make, model, acquisitionDate, description, comment, serialNumber, tags, images, count, value);
     }
 }
