@@ -3,27 +3,83 @@ package com.example.ezvault;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.ezvault.authentication.authentication.AuthenticationHandler;
 import com.example.ezvault.authentication.authentication.EmailPasswordAuthenticationStrategy;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.utils.TaskUtils;
 
-public class MainActivity extends AppCompatActivity {
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
     FirebaseBundle firebase = new FirebaseBundle();
+    BottomNavigationView bottomNavView;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String email = "nortif8@gmail.com";
-        String password = "test123";
-        EmailPasswordAuthenticationStrategy as = new EmailPasswordAuthenticationStrategy(firebase, email, password);
-        AuthenticationHandler auth = new AuthenticationHandler(as);
-        TaskUtils.onSuccess(auth.authenticate(), user -> {
-            Log.d("EZVault", "Logged in: " + user.toString());
-        });
+        // setup toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // setup bottom navigation bar
+        bottomNavView = findViewById(R.id.bottom_navigation_bar);
+        bottomNavView.setOnItemSelectedListener(this);
+        bottomNavView.setSelectedItemId(R.id.nav_bar_items);
+        toolbar.setTitle("Items");
+    }
+
+    ItemsFragment items = new ItemsFragment();
+    SearchFragment search = new SearchFragment();
+    TagsFragment tags = new TagsFragment();
+
+    // Allows for switching of fragments from bottom navigation bar
+    @Override
+    public boolean
+    onNavigationItemSelected(@NonNull MenuItem item)
+    {
+        int itemId = item.getItemId();
+        if (itemId == R.id.nav_bar_search) {
+            toolbar.setTitle("Search");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_layout, search)
+                    .commit();
+            return true;
+        } else if (itemId == R.id.nav_bar_items) {
+            toolbar.setTitle("Items");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_layout, items)
+                    .commit();
+            return true;
+        } else if (itemId == R.id.nav_bar_tags) {
+            toolbar.setTitle("Tags");
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_layout, tags)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
     }
 }

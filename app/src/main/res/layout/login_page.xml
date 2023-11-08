@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F59401">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@font/paytone_one"
+        android:text="EZGuard"
+        android:textColor="@color/white"
+        android:textSize="64sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="72dp"
+        android:backgroundTint="#BCD7F8"
+        android:fontFamily="@font/fredoka_one"
+        android:text="Login"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="187dp"
+        android:layout_height="189dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:srcCompat="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/username_text"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:fontFamily="@font/fredoka_one"
+        android:hint="Username"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        android:drawableStart="@drawable/icon_person"
+        android:drawablePadding="12dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="@drawable/background_login_edittext"
+        android:textSize="28sp"/>
+
+    <EditText
+        android:id="@+id/password_text"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
+        android:ems="10"
+        android:drawableStart="@drawable/icon_key"
+        android:drawablePadding="12dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:fontFamily="@font/fredoka_one"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/login_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_text"
+        app:layout_constraintVertical_bias="0.544"
+        android:background="@drawable/background_login_edittext"
+        android:textSize="28sp" />
+
+    <ImageButton
+        android:id="@+id/login_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_back_arrow" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
