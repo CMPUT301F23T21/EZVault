@@ -1,8 +1,16 @@
 package com.example.ezvault;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.ezvault.authentication.authentication.AuthenticationHandler;
+import com.example.ezvault.authentication.authentication.EmailPasswordAuthenticationStrategy;
+import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.utils.TaskUtils;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,7 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
-
+    FirebaseBundle firebase = new FirebaseBundle();
     BottomNavigationView bottomNavView;
     Toolbar toolbar;
 
