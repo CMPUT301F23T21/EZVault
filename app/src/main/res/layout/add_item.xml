@@ -251,7 +251,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/icon_barcode_scan"
-                        android:background="Null"
+                        android:background="@null"
                         android:layout_below="@id/text_item_serial"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="20dp" />
@@ -286,7 +286,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/icon_barcode_scan"
-                        android:background="Null"
+                        android:background="@null"
                         android:layout_below="@id/text_item_description"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="20dp"
