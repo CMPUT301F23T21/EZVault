@@ -141,6 +141,22 @@ public class Item {
     public ArrayList<Tag> getTags() { return tags; }
 
     /**
+     * Get the value of the item
+     * @return The value of the item
+     */
+    public double getValue() {
+        return value;
+    }
+
+    /**
+     * Get the count of the item
+     * @return The count/amount of the item.
+     */
+    public double getCount() {
+        return count;
+    }
+
+    /**
      * Returns the serial number of the item.
      * @return The serial number of the item
      * or null if it does not have a serial code.
