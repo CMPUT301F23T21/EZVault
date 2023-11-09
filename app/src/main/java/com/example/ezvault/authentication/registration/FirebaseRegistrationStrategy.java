@@ -50,5 +50,6 @@ public abstract class FirebaseRegistrationStrategy implements IRegistrationStrat
                 return Tasks.forException(new UserAlreadyExists(userName));
             }
         }).onSuccessTask(authResult -> userService.createUser(authResult.getUser().getUid(), userName));
+
     }
 }
