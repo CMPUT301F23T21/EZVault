@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_profile_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Username"
+        android:textSize="20sp"
+        android:fontFamily="@font/paytone_one"
+        android:layout_marginStart="25dp"/>
+
+    <EditText
+        android:id="@+id/edittext_profile_username"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/text_profile_username"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="13dp"
+        android:background="@drawable/background_profile_text"/>
+
+    <TextView
+        android:id="@+id/text_profile_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:layout_below="@id/edittext_profile_username"
+        android:textSize="20sp"
+        android:fontFamily="@font/paytone_one"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"/>
+
+    <EditText
+        android:id="@+id/edittext_profile_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/text_profile_email"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="13dp"
+        android:background="@drawable/background_profile_text"/>
+
+    <TextView
+        android:id="@+id/text_profile_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:layout_below="@id/edittext_profile_email"
+        android:textSize="20sp"
+        android:fontFamily="@font/paytone_one"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"/>
+
+    <EditText
+        android:id="@+id/edittext_profile_password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/text_profile_password"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="13dp"
+        android:background="@drawable/background_profile_text"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        android:layout_below="@id/edittext_profile_password"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/EZGuardOrange"/>
+
+</RelativeLayout>
