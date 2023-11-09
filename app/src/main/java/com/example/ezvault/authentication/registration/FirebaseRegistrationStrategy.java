@@ -37,6 +37,6 @@ public abstract class FirebaseRegistrationStrategy implements IRegistrationStrat
     public Task<User> register(String userName) {
         UserService userService = new UserService(this.firebase);
         return this.register(firebase, userName)
-                .onSuccessTask(authResult -> userService.readUser(authResult.getUser().getUid()));
+                .onSuccessTask(auth -> userService.createUser(auth.getUser().getUid(), userName));
     }
 }
