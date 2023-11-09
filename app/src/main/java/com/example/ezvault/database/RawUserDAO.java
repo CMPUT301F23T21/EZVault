@@ -91,11 +91,10 @@ public class RawUserDAO extends AbstractDAO<RawUserDAO.RawUser, String> {
                 .delete();
     }
 
-    public Task<Void> find(String userName) {
-        Task<QuerySnapshot> t = db.collection(collectionName)
+    public Task<QuerySnapshot> find(String userName) {
+        return db.collection(collectionName)
                 .whereEqualTo("name", userName)
                 .get();
-        return TaskUtils.drop(t);
     }
 
     /**
