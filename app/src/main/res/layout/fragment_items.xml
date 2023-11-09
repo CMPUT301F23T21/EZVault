@@ -104,7 +104,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="10dp"
-            android:backgroundTint="#F59401"/>
+            android:backgroundTint="@color/EZGuardOrange"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
