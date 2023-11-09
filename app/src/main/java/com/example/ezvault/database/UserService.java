@@ -10,10 +10,12 @@ import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
 
 import com.example.ezvault.database.RawUserDAO.RawUser;
+import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -56,7 +58,13 @@ public class UserService {
                 });
     }
 
-    public Task<Void> userExists(String userName) {
-        return rawUserDAO.find(userName);
+    public Task<Boolean> userExists(String userName) {
+        return TaskUtils.onSuccess(rawUserDAO.find(userName), QuerySnapshot::isEmpty);
+    }
+
+    public Task<User> createUser(String uid, String userName) {
+        User user = new User(userName, uid, new ItemList());
+        RawUser rawUser = new RawUser(userName, new ArrayList<>(), new ArrayList<>());
+        return rawUserDAO.update(uid, rawUser).onSuccessTask(v -> Tasks.forResult(user));
     }
 }
