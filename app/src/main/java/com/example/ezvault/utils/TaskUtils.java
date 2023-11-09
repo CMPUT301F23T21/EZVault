@@ -26,6 +26,16 @@ public class TaskUtils {
         return task.onSuccessTask(s -> Tasks.forResult(f.apply(s)));
     }
 
+    public static <S> Task<S> onTrueFalseTask(Task<Boolean> task, Supplier<Task<S>> trueThunk, Supplier<Task<S>> falseThunk) {
+        return task.onSuccessTask(b -> {
+            if (b) {
+                return trueThunk.get();
+            } else {
+                return falseThunk.get();
+            }
+        });
+    }
+
     public static <S> Task<Void> onSuccessProc(Task<S> task, Consumer<S> f) {
         return onSuccess(task, s -> {
             f.accept(s);
