@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F59401">
+    android:background="@color/EZGuardOrange">
 
 
     <EditText
         android:id="@+id/create_password_text"
         android:layout_width="340dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/background_login_edittext"
         android:drawableStart="@drawable/icon_key"
         android:drawablePadding="12dp"
@@ -24,7 +24,7 @@
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/confirm_password_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -56,11 +56,12 @@
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent" />
 
+
     <EditText
         android:id="@+id/create_username_text"
         android:layout_width="340dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/background_login_edittext"
         android:drawableStart="@drawable/icon_person"
         android:drawablePadding="12dp"
@@ -73,6 +74,26 @@
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/create_password_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/create_email_text"
+        android:layout_width="340dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/background_login_edittext"
+        android:drawableStart="@drawable/icon_email"
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:fontFamily="@font/fredoka_one"
+        android:hint="New Username"
+        android:inputType="text"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/create_username_text"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -80,7 +101,7 @@
         android:id="@+id/confirm_password_text"
         android:layout_width="340dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/background_login_edittext"
         android:drawableStart="@drawable/icon_key"
         android:drawablePadding="12dp"

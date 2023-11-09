@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F59401">
+    android:background="@color/EZGuardOrange">
 
 
     <TextView
@@ -34,8 +34,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -52,41 +51,41 @@
         android:layout_width="340dp"
         android:layout_height="80dp"
         android:layout_marginTop="32dp"
+        android:background="@drawable/background_login_edittext"
+        android:drawableStart="@drawable/icon_person"
+        android:drawablePadding="12dp"
         android:ems="10"
         android:fontFamily="@font/fredoka_one"
-        android:hint="Username"
+        android:hint="Email"
         android:inputType="text"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        android:drawableStart="@drawable/icon_person"
-        android:drawablePadding="12dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:background="@drawable/background_login_edittext"
-        android:textSize="28sp"/>
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <EditText
         android:id="@+id/password_text"
         android:layout_width="340dp"
         android:layout_height="80dp"
-        android:ems="10"
+        android:background="@drawable/background_login_edittext"
         android:drawableStart="@drawable/icon_key"
         android:drawablePadding="12dp"
+        android:ems="10"
+        android:fontFamily="@font/fredoka_one"
         android:hint="Password"
         android:inputType="textPassword"
-        android:fontFamily="@font/fredoka_one"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
+        android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username_text"
-        app:layout_constraintVertical_bias="0.544"
-        android:background="@drawable/background_login_edittext"
-        android:textSize="28sp" />
+        app:layout_constraintVertical_bias="0.544" />
 
     <ImageButton
         android:id="@+id/login_back_button"

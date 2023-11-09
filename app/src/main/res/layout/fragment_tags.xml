@@ -30,7 +30,7 @@
             android:src="@drawable/icon_plus"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="10dp"
-            android:backgroundTint="#F59401"
+            android:backgroundTint="@color/EZGuardOrange"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
 
