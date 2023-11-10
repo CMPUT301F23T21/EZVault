@@ -1,3 +1,5 @@
+// Model class for a user's ItemList
+
 package com.example.ezvault.model;
 
 import androidx.annotation.NonNull;
@@ -56,6 +58,10 @@ public class ItemList implements List<Item> {
         return tags;
     }
 
+    /**
+     * Get the total value of the list
+     * @return The total value of the list
+     */
     public double getTotalValue() {
         double total = 0.0;
         for (Item item : this) {
@@ -64,121 +70,190 @@ public class ItemList implements List<Item> {
         return total;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int size() {
         return items.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isEmpty() {
         return items.isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean contains(@Nullable Object o) {
         return items.contains(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public Iterator<Item> iterator() {
         return items.iterator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public Object[] toArray() {
         return items.toArray();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public <T> T[] toArray(@NonNull T[] a) {
         return items.toArray(a);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean add(Item item) {
         return items.add(item);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean remove(@Nullable Object o) {
         return items.remove(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean containsAll(@NonNull Collection<?> c) {
         return items.containsAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(@NonNull Collection<? extends Item> c) {
         return items.addAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean addAll(int index, @NonNull Collection<? extends Item> c) {
         return items.addAll(index, c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean removeAll(@NonNull Collection<?> c) {
         return items.removeAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean retainAll(@NonNull Collection<?> c) {
         return items.retainAll(c);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         items.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Item get(int index) {
         return items.get(index);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Item set(int index, Item element) {
         return items.set(index, element);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void add(int index, Item element) {
         items.add(index, element);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Item remove(int index) {
         return items.remove(index);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int indexOf(@Nullable Object o) {
         return items.indexOf(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int lastIndexOf(@Nullable Object o) {
         return items.lastIndexOf(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public ListIterator<Item> listIterator() {
         return items.listIterator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public ListIterator<Item> listIterator(int index) {
         return items.listIterator(index);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public List<Item> subList(int fromIndex, int toIndex) {
