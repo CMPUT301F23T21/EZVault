@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph"
-    app:startDestination="@id/welcomeFragment">
+    app:startDestination="@id/itemsFragment">
 
     <fragment
         android:id="@+id/welcomeFragment"
@@ -49,7 +49,11 @@
         android:id="@+id/itemsFragment"
         android:name="com.example.ezvault.ItemsFragment"
         android:label="Items"
-        tools:layout="@layout/fragment_items" />
+        tools:layout="@layout/fragment_items" >
+        <action
+            android:id="@+id/itemsFragment_to_addItemFragment"
+            app:destination="@id/addItemFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.ezvault.SearchFragment"
@@ -63,11 +67,11 @@
     <fragment
         android:id="@+id/addItemFragment"
         android:name="com.example.ezvault.AddItemFragment"
-        android:label="AddItemFragment"
-        tools:layout="@layout/fragment_add_item"/>
+        android:label="New Item"
+        tools:layout="@layout/fragment_add_item" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.ezvault.ProfileFragment"
-        android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile"/>
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

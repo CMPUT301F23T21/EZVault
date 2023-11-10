@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 
+import com.example.ezvault.utils.UserManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -34,11 +35,18 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity{
     FirebaseBundle firebase = new FirebaseBundle();
     BottomNavigationView bottomNavView;
     Toolbar toolbar;
     NavController navController;
+    @Inject
+    UserManager userManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +72,6 @@ public class MainActivity extends AppCompatActivity{
         NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavView, navController);
-
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
 
@@ -76,6 +83,9 @@ public class MainActivity extends AppCompatActivity{
                     bottomNavView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                 }
+                if (navDestination.getId() == R.id.addItemFragment) {
+                    bottomNavView.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -85,5 +95,10 @@ public class MainActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return NavigationUI.onNavDestinationSelected(item, navController);
     }
 }

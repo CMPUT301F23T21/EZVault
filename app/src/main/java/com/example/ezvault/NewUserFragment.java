@@ -9,8 +9,18 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
 
-import androidx.appcompat.widget.AppCompatImageButton;
+
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import com.example.ezvault.authentication.registration.EmailPasswordRegistrationStrategy;
+import com.example.ezvault.authentication.registration.RegistrationHandler;
+import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.utils.UserManager;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,9 +48,9 @@ public class NewUserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_user, container, false);
 
-        AppCompatImageButton backButton = view.findViewById(R.id.create_user_back_button);
+        backButton = view.findViewById(R.id.create_user_back_button);
         backButton.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
+            Navigation.findNavController(view).popBackStack();
         });
 
         EditText emailText = view.findViewById(R.id.create_email_text);
@@ -48,9 +58,9 @@ public class NewUserFragment extends Fragment {
         EditText passwordText = view.findViewById(R.id.create_password_text);
         EditText confirmPasswordText = view.findViewById(R.id.confirm_password_text);
 
-        Button createButton = view.findViewById(R.id.create_user_button);
+        createUser = view.findViewById(R.id.create_user_button);
 
-        createButton.setOnClickListener(v -> {
+        createUser.setOnClickListener(v -> {
             String email = emailText.getText().toString();
             String userName = userNameText.getText().toString();
             String password = passwordText.getText().toString();
@@ -63,13 +73,12 @@ public class NewUserFragment extends Fragment {
                 rh.register(userName).addOnSuccessListener(user -> {
                     Log.v("EZVault", "Successfully Registered: " + user.getUid());
                     userManager.setUser(user);
-                    getActivity().finish();
+                    Navigation.findNavController(view).navigate(R.id.newUserFragment_to_itemsFragment);
                 }).addOnFailureListener(e -> {
                     Log.e("EZVault", "Failed Registration.", e);
                 });
             }
         });
-
 
         return view;
     }

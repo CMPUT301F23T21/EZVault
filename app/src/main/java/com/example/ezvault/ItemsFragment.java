@@ -3,10 +3,12 @@ package com.example.ezvault;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,6 +21,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class ItemsFragment extends Fragment {
 
     FloatingActionButton floatbtn;
+    TextView totalCost;
+    TextView totalQuantity;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -65,12 +69,13 @@ public class ItemsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
+
         floatbtn = view.findViewById(R.id.button_add_item);
-        floatbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(),"Hello", Toast.LENGTH_SHORT).show();
-            }
+        totalCost = view.findViewById(R.id.text_total_value);
+        totalQuantity = view.findViewById(R.id.text_number_of_items);
+
+        floatbtn.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
         // Inflate the layout for this fragment
         return view;
