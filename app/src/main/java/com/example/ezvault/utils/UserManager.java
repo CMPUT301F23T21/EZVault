@@ -8,6 +8,11 @@ import javax.inject.Singleton;
 public class UserManager {
     private User user = null;
 
+    @Inject
+    public UserManager() {
+
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
