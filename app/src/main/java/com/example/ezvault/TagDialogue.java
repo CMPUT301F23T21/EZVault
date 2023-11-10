@@ -2,6 +2,7 @@ package com.example.ezvault;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 public class TagDialogue extends DialogFragment {
-
 
     @NonNull
     @Override
@@ -31,6 +31,7 @@ public class TagDialogue extends DialogFragment {
         cancel.setOnClickListener(v -> {
             dismiss();
         });
+
 
         return builder.create();
     }

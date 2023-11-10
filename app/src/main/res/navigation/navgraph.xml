@@ -63,7 +63,11 @@
         android:id="@+id/tagsFragment"
         android:name="com.example.ezvault.TagsFragment"
         android:label="Tags"
-        tools:layout="@layout/fragment_tags" />
+        tools:layout="@layout/fragment_tags" >
+        <action
+            android:id="@+id/tagsFragment_to_tagDialogue"
+            app:destination="@id/tagDialogue" />
+    </fragment>
     <fragment
         android:id="@+id/addItemFragment"
         android:name="com.example.ezvault.AddItemFragment"
@@ -74,4 +78,10 @@
         android:name="com.example.ezvault.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+    <dialog
+        android:id="@+id/tagDialogue"
+        android:name="com.example.ezvault.TagDialogue"
+        android:label="TagDialogue"
+        tools:layout="@layout/add_tag_dialogue"
+        />
 </navigation>

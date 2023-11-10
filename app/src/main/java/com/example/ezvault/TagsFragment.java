@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -68,10 +69,10 @@ public class TagsFragment extends Fragment {
 
         addTag = view.findViewById(R.id.button_add_tag);
         addTag.setOnClickListener(v -> {
-            TagDialogue tagDialogue = new TagDialogue();
-            tagDialogue.show(getChildFragmentManager(), "GAH");
+            Navigation.findNavController(view).navigate(R.id.tagDialogue);
         });
 
         return view;
     }
+
 }
