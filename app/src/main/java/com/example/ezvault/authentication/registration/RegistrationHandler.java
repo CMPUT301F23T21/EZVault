@@ -10,7 +10,7 @@ public class RegistrationHandler {
         this.strategy = strategy;
     }
 
-    public Task<User> register(String userName) throws RegistrationException {
+    public Task<User> register(String userName) {
         return strategy.register(userName);
     }
 }

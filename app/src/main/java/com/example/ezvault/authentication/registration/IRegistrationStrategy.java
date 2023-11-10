@@ -4,5 +4,5 @@ import com.example.ezvault.model.User;
 import com.google.android.gms.tasks.Task;
 
 public interface IRegistrationStrategy {
-    Task<User> register(String userName) throws RegistrationException;
+    Task<User> register(String userName);
 }
