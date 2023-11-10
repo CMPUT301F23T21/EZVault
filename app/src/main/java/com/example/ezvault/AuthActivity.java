@@ -12,8 +12,8 @@ public class AuthActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.activity_auth_container, new WelcomeFragment())
                 .addToBackStack("welcome")
+                .replace(R.id.activity_auth_container, new WelcomeFragment())
                 .commit();
     }
 }
