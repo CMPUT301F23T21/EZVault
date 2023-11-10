@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "54649957492",
+    "project_id": "ezvault-52067",
+    "storage_bucket": "ezvault-52067.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54649957492:android:3c607b377bafb660e3b521",
+        "android_client_info": {
+          "package_name": "com.example.ezvault"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgx4R8rbQQke2Y-q-mSaAVZN2Y1I5UBC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
