@@ -1,6 +1,6 @@
-package com.example.ezvault.model;
+// model class for a User
 
-import androidx.annotation.NonNull;
+package com.example.ezvault.model;
 
 /**
  * Represents a user in the application.
@@ -48,18 +48,11 @@ public class User {
         return uid;
     }
 
+    /**
+     * Gets the item list of the user
+     * @return The item list of the user
+     */
     public ItemList getItemList() {
         return itemList;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "User{" +
-                "userName='" + userName + '\'' +
-                ", uid='" + uid + '\'' +
-                ", items=" + itemList.getItems() +
-                ", tags=" + itemList.getTags() +
-                '}';
     }
 }
