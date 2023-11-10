@@ -2,6 +2,7 @@ package com.example.ezvault.utils;
 
 import com.example.ezvault.model.User;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
