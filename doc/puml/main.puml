@@ -1,0 +1,19 @@
+@startuml classDiagram
+
+!pragma useIntermediatePackages false
+skinparam ClassAttributeIconSize 0
+skinparam linetype polyline
+
+!include database.puml
+!include model.puml
+!include utils.puml
+
+!include authentication/authentication.puml
+!include authentication/registration.puml
+
+ItemDAO -- Item
+TagDAO -- Tag
+
+UserService -- User
+
+@enduml
