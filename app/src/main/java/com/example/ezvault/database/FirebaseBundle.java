@@ -2,6 +2,7 @@ package com.example.ezvault.database;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 /**
  * Utility class for grouping Firebase components together.
@@ -9,13 +10,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class FirebaseBundle {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
+    private FirebaseStorage storage;
 
     /**
      * Construct a FirebaseBundle based on the default
      * Firestore database and Firebase auth.
      */
     public FirebaseBundle() {
-        this(FirebaseFirestore.getInstance(), FirebaseAuth.getInstance());
+        this(FirebaseFirestore.getInstance(), FirebaseAuth.getInstance(), FirebaseStorage.getInstance());
     }
 
     /**
@@ -23,9 +25,10 @@ public class FirebaseBundle {
      * @param db Firestore Database
      * @param auth Firebase Auth
      */
-    public FirebaseBundle(FirebaseFirestore db, FirebaseAuth auth) {
+    public FirebaseBundle(FirebaseFirestore db, FirebaseAuth auth, FirebaseStorage storage) {
         this.db = db;
         this.auth = auth;
+        this.storage = storage;
     }
 
     /**
@@ -43,4 +46,10 @@ public class FirebaseBundle {
     public FirebaseAuth getAuth() {
         return auth;
     }
+
+    /**
+     * Get the storage
+     * @return The Firebase storage instnace
+     */
+    public FirebaseStorage getStorage() { return storage; }
 }

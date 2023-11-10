@@ -1,5 +1,7 @@
 package com.example.ezvault.model;
 
+import com.google.firebase.firestore.Exclude;
+
 import javax.annotation.Nullable;
 
 /**
@@ -10,6 +12,12 @@ public class Image {
      * The id of the image, null if not in database
      */
     private @Nullable String id;
+
+    /**
+     * The byte data of the image
+     */
+    @Exclude
+    private byte[] contents;
 
     /**
      * Get the Image's id
@@ -31,10 +39,21 @@ public class Image {
     }
 
     /**
-     * Get the base64 representation of the image.
+     * Gets the byte data of the Image
      * @return
      */
-    public String getBase64() {
-        throw new UnsupportedOperationException("unimplemented");
+    @Exclude
+    public byte[] getContents() {
+        return contents;
+    }
+
+    /**
+     * Sets the byte data of the Image
+     * @param contents The raw byte data of the desired image
+     * @return
+     */
+    @Exclude
+    public void setContents(byte[] contents) {
+        this.contents = contents;
     }
 }

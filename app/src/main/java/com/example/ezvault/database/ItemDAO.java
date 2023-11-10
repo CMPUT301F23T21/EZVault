@@ -6,11 +6,13 @@ package com.example.ezvault.database;
 
 import android.util.Log;
 
+import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemBuilder;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -21,6 +23,8 @@ public class ItemDAO extends AbstractDAO<Item, String> {
 
     private final TagDAO tagDAO;
 
+    private final ImageDAO imageDAO;
+
     /**
      * Constructs an AbstractDAO
      *
@@ -29,6 +33,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
     public ItemDAO(FirebaseBundle firebase) {
         super(firebase);
         this.tagDAO = new TagDAO(firebase);
+        this.imageDAO = new ImageDAO(firebase);
     }
 
     /**
@@ -52,17 +57,30 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         double count = doc.getDouble("count");
         double value = doc.getDouble("value");
         ArrayList<String> tagIds = (ArrayList<String>) doc.get("tags");
+        ArrayList<String> imageIds = (ArrayList<String>) doc.get("images");
         Task<ArrayList<Tag>> tagsTask = tagDAO.pluralRead(tagIds);
-        return TaskUtils.onSuccess(tagsTask, tags -> new ItemBuilder()
-                .setAcquisitionDate(date)
-                .setComment(comment)
-                .setDescription(description)
-                .setId(id)
-                .setMake(make)
-                .setModel(model)
-                .setCount(count)
-                .setValue(value)
-                .build());
+        Task<ArrayList<Image>> imagesTask = imageDAO.pluralRead(imageIds);
+
+        return Tasks.whenAllSuccess(tagsTask, imagesTask)
+                .onSuccessTask(tasks -> {
+                    ArrayList<Tag> tags = (ArrayList<Tag>)tasks.get(0);
+                    ArrayList<Image> images = (ArrayList<Image>)tasks.get(1);
+
+                    return Tasks.forResult(new ItemBuilder()
+                            .setAcquisitionDate(date)
+                            .setComment(comment)
+                            .setDescription(description)
+                            .setId(id)
+                            .setMake(make)
+                            .setModel(model)
+                            .setCount(count)
+                            .setValue(value)
+                            .setTags(tags)
+                            .setImages(images)
+                            .build()
+                    );
+
+                });
     }
 
     /**
