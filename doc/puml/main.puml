@@ -1,0 +1,27 @@
+@startuml classDiagram
+
+!pragma useIntermediatePackages false
+skinparam ClassAttributeIconSize 0
+skinparam linetype polyline
+
+!include database.puml
+!include model.puml
+!include utils.puml
+
+!include frag.puml
+
+!include authentication/authentication.puml
+!include authentication/registration.puml
+
+class com.example.ezvault.EZVaultApplication {}
+class com.example.ezvault.MainActivity {}
+
+MainActivity --|> androidx.appcompat.app.AppCompatActivity
+EZVaultApplication --|> android.app.Application
+
+ItemDAO -- Item
+TagDAO -- Tag
+
+UserService -- User
+
+@enduml

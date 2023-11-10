@@ -1,0 +1,61 @@
+@startuml db
+namespace com.example.ezvault.database {
+    class FirebaseBundle {
+        - db: FirebaseFirestore
+        - auth: FirebaseAuth
+
+        + getDb: FirebaseFirestore
+        + getAuth: FirebaseAuth
+
+        + <<Create>> FirebaseBundle()
+        + <<Create>> FirebaseBundle(db: FirebaseFirestore, auth: FirebaseAuth)
+    }
+
+
+    abstract class AbstractDAO<T, ID> {
+        + {abstract} create(FirebaseBundle, T): Task<ID>
+        + {abstract} read(FirebaseBundle, ID): Task<T>
+        + {abstract} update(FirebaseBundle, ID, T): Task<Void>
+        + {abstract} delete(FirebaseBundle, ID): Task<Void>
+        + pluralRead(FirebaseBundle, ArrayList<ID>): Task<ArrayList<T>>
+    }
+
+    class ItemDAO {
+        + create(FirebaseBundle, Item): Task<String>
+        + read(FirebaseBundle, String): Task<Item>
+        + update(FirebaseBundle, String, Item): Task<Void>
+        + delete(FirebaseBundle, String): Task<Void>
+    }
+
+    class RawUserDAO {
+        + create(FirebaseBundle, RawUserDAO.RawUser): Task<String>
+        + read(FirebaseBundle, String): Task<RawUserDAO.RawUser>
+        + update(FirebaseBundle, String, RawUserDAO.RawUser): Task<Void>
+        + delete(FirebaseBundle, String): Task<Void>
+    }
+
+    class TagDAO {
+        + create(FirebaseBundle, Tag): Task<String>
+        + read(FirebaseBundle, String): Task<Tag>
+        + update(FirebaseBundle, String, Tag): Task<Void>
+        + delete(FirebaseBundle, String): Task<Void>
+    }
+
+    ItemDAO --|> AbstractDAO
+    RawUserDAO --|> AbstractDAO
+    TagDAO --|> AbstractDAO
+
+    AbstractDAO "0..*" -- "1" FirebaseBundle
+
+    class UserService {
+        - itemDAO: ItemDAO
+        - tagDAO: TagDAO
+        - rawUserDAO: RawUserDAO
+    }
+
+    UserService "0..*"--"1" RawUserDAO
+    UserService "0..*"--"1" ItemDAO
+    UserService "0..*"--"1" TagDAO
+}
+
+@enduml

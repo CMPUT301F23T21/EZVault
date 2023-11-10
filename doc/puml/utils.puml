@@ -1,0 +1,23 @@
+@startuml utils
+
+namespace com.example.ezvault.utils {
+    class UserManager {
+        -user : User
+        +getUser(): User
+        +setUser(user: User): User
+
+        + <<Create>> UserManager()
+    }
+    note top of UserManager : Provides a singleton interface\n for a user using hilt
+
+    class UserModule {
+        + provideUserManager(): UserManager
+    }
+    note top of UserModule : Meant for usage with Hilt
+
+    UserModule -- UserManager
+
+    UserManager "0..*" -- "1" User
+}
+
+@enduml
