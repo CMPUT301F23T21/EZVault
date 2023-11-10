@@ -1,3 +1,5 @@
+// Represents an item
+
 package com.example.ezvault.model;
 
 import com.google.firebase.Timestamp;
