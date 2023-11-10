@@ -13,6 +13,12 @@ skinparam linetype polyline
 !include authentication/authentication.puml
 !include authentication/registration.puml
 
+class com.example.ezvault.EZVaultApplication {}
+class com.example.ezvault.MainActivity {}
+
+MainActivity --|> androidx.appcompat.app.AppCompatActivity
+EZVaultApplication --|> android.app.Application
+
 ItemDAO -- Item
 TagDAO -- Tag
 
