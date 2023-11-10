@@ -1,5 +1,6 @@
 package com.example.ezvault;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         bottomNavView.setOnItemSelectedListener(this);
         bottomNavView.setSelectedItemId(R.id.nav_bar_items);
         toolbar.setTitle("Items");
+
+        startActivity(new Intent(MainActivity.this, AuthActivity.class));
     }
 
     ItemsFragment items = new ItemsFragment();

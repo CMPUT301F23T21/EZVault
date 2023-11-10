@@ -36,14 +36,6 @@ public class EmailPasswordRegistrationStrategy extends FirebaseRegistrationStrat
      */
     @Override
     public Task<AuthResult> register(FirebaseBundle firebase, String userName) {
-        Task<Boolean> findTask = new UserService(firebase).userExists(userName);
-        return findTask.onSuccessTask(exists -> {
-            if (exists) {
-//                return Tasks.forException(new RegistrationException.UserAlreadyExists(userName));
-                return firebase.getAuth().createUserWithEmailAndPassword(email, password);
-            } else {
-                return firebase.getAuth().createUserWithEmailAndPassword(email, password);
-            }
-        });
+        return firebase.getAuth().createUserWithEmailAndPassword(email, password);
     }
 }

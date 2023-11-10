@@ -1,9 +1,13 @@
 package com.example.ezvault.authentication.registration;
 
+import android.util.Log;
+
+import com.example.ezvault.authentication.registration.RegistrationException.UserAlreadyExists;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.model.User;
 import com.example.ezvault.database.UserService;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 
 /**
@@ -36,7 +40,16 @@ public abstract class FirebaseRegistrationStrategy implements IRegistrationStrat
     @Override
     public Task<User> register(String userName) {
         UserService userService = new UserService(this.firebase);
-        return this.register(firebase, userName)
-                .onSuccessTask(auth -> userService.createUser(auth.getUser().getUid(), userName));
+        Task<Boolean> userExists = userService.userExists(userName);
+        return userExists.onSuccessTask(exists -> {
+            if (exists) {
+                Log.d("EZVault", "User " + userName + " does not exist!");
+                return this.register(firebase, userName);
+            } else {
+                Log.d("EZVault", "User " + userName + " does exist!");
+                return Tasks.forException(new UserAlreadyExists(userName));
+            }
+        }).onSuccessTask(authResult -> userService.createUser(authResult.getUser().getUid(), userName));
+
     }
 }
