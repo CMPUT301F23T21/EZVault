@@ -8,17 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddItemFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * fragment class that collects the information of a new item
  */
 public class AddItemFragment extends Fragment {
 
@@ -68,14 +69,13 @@ public class AddItemFragment extends Fragment {
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.toolbar_edit_menu, menu);
+                menu.clear();
             }
-
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 return false;
             }
-        });
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     @Override
@@ -84,6 +84,18 @@ public class AddItemFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_item, container, false);
+
+        EditText itemName = view.findViewById(R.id.edittext_item_name);
+        EditText itemDate = view.findViewById(R.id.edittext_item_date);
+        EditText itemValue = view.findViewById(R.id.edittext_item_value);
+        EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
+        EditText itemMake = view.findViewById(R.id.edittext_item_make);
+        EditText itemModel = view.findViewById(R.id.edittext_item_model);
+        EditText itemSerial = view.findViewById(R.id.edittext_item_serial);
+        EditText itemDescription = view.findViewById(R.id.edittext_item_description);
+        EditText itemComments = view.findViewById(R.id.edittext_item_comment);
+
+
         addItem = view.findViewById(R.id.button_confirm_add_item);
         addItem.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();

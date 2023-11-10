@@ -14,9 +14,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link TagsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays all of the current tags and is responsible for adding new ones
  */
 public class TagsFragment extends Fragment {
 

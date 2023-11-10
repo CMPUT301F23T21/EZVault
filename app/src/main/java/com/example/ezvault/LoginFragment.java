@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Handles user login
  */
 @AndroidEntryPoint
 public class LoginFragment extends Fragment {

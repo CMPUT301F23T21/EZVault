@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A welcome page fragment that presents the user with 2 options
  */
 
 public class WelcomeFragment extends Fragment {

@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Handles the creation of a new user
  */
 @AndroidEntryPoint
 public class NewUserFragment extends Fragment {

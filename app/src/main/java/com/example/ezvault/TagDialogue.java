@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * A custom dialogue fragment
+ */
 public class TagDialogue extends DialogFragment {
 
     @NonNull
