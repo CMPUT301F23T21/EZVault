@@ -4,8 +4,15 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.ezvault.authentication.authentication.AuthenticationHandler;
 import com.example.ezvault.authentication.authentication.EmailPasswordAuthenticationStrategy;
@@ -15,67 +22,50 @@ import com.example.ezvault.utils.TaskUtils;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener{
+import org.checkerframework.checker.units.qual.A;
+
+public class MainActivity extends AppCompatActivity{
     FirebaseBundle firebase = new FirebaseBundle();
     BottomNavigationView bottomNavView;
     Toolbar toolbar;
-
+    NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // setup toolbar
+        // setup toolbar, bottom nav bar and set visibility to gone to hide
         toolbar = findViewById(R.id.toolbar);
+        bottomNavView = findViewById(R.id.bottom_navigation_bar);
+        toolbar.setVisibility(View.GONE);
+        bottomNavView.setVisibility(View.GONE);
+
         setSupportActionBar(toolbar);
 
-        // setup bottom navigation bar
-        bottomNavView = findViewById(R.id.bottom_navigation_bar);
-        bottomNavView.setOnItemSelectedListener(this);
-        bottomNavView.setSelectedItemId(R.id.nav_bar_items);
-        toolbar.setTitle("Items");
+        // setup bottom navigation bar with navController
+        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
+        navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(bottomNavView, navController);
+        NavigationUI.setupActionBarWithNavController(this, navController);
+
+        // show toolbar and bottom nav bar once on items page
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
+                if (navDestination.getId() == R.id.itemsFragment) {
+                    bottomNavView.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
-    ItemsFragment items = new ItemsFragment();
-    SearchFragment search = new SearchFragment();
-    TagsFragment tags = new TagsFragment();
-
-    // Allows for switching of fragments from bottom navigation bar
-    @Override
-    public boolean
-    onNavigationItemSelected(@NonNull MenuItem item)
-    {
-        int itemId = item.getItemId();
-        if (itemId == R.id.nav_bar_search) {
-            toolbar.setTitle("Search");
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame_layout, search)
-                    .commit();
-            return true;
-        } else if (itemId == R.id.nav_bar_items) {
-            toolbar.setTitle("Items");
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame_layout, items)
-                    .commit();
-            return true;
-        } else if (itemId == R.id.nav_bar_tags) {
-            toolbar.setTitle("Tags");
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame_layout, tags)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

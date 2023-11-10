@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +16,10 @@ import androidx.fragment.app.Fragment;
  */
 
 public class WelcomeFragment extends Fragment {
+
+    Button existingUser;
+    Button newUser;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -58,6 +64,27 @@ public class WelcomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_welcome, container, false);
+        View view = inflater.inflate(R.layout.fragment_welcome, container, false);
+
+        existingUser = view.findViewById(R.id.existing_user_button);
+        newUser = view.findViewById(R.id.new_user_button);
+
+        // click listener for existingUser button
+        existingUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_loginFragment);
+            }
+        });
+
+        // click listener for newUser button
+        newUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_newUserFragment);
+            }
+        });
+
+        return view;
     }
 }

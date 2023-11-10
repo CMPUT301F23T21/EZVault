@@ -22,7 +22,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/background_search_edittext"/>
+            android:background="@drawable/background_search_edittext"
+            android:layout_marginTop="5dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

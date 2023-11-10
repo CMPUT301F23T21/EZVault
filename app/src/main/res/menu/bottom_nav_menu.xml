@@ -3,15 +3,15 @@
 
 
     <item
-        android:id="@+id/nav_bar_tags"
+        android:id="@+id/tagsFragment"
         android:title="Tags"
         android:icon="@drawable/icon_tag"/>
     <item
-        android:id="@+id/nav_bar_search"
+        android:id="@+id/searchFragment"
         android:icon="@drawable/icon_search"
         android:title="Search" />
     <item
-        android:id="@+id/nav_bar_items"
+        android:id="@+id/itemsFragment"
         android:title="Items"
         android:icon="@drawable/icon_inventory"/>
 </menu>

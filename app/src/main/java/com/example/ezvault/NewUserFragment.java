@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -13,6 +16,9 @@ import androidx.fragment.app.Fragment;
  * create an instance of this fragment.
  */
 public class NewUserFragment extends Fragment {
+
+    Button createUser;
+    ImageButton back;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,6 +64,27 @@ public class NewUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_user, container, false);
+
+        createUser = view.findViewById(R.id.create_user_button);
+        back = view.findViewById(R.id.create_user_back_button);
+
+        // click listener for createUser
+        createUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).navigate(R.id.newUserFragment_to_itemsFragment);
+            }
+        });
+
+        // click listener for back button
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(view).popBackStack();
+            }
+        });
+
+        return view;
     }
 }
