@@ -2,11 +2,18 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs")
 }
+
+
 
 android {
     namespace = "com.example.ezvault"
     compileSdk = 34
+
+    sourceSets {
+        getByName("main").java.srcDir("build/generated/source/navigation-args")
+    }
 
     defaultConfig {
         applicationId = "com.example.ezvault"
@@ -34,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.navigation:navigation-fragment:2.7.5")
+    implementation("androidx.navigation:navigation-ui:2.7.5")
     implementation("com.google.mlkit:text-recognition:16.0.0")
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -46,8 +55,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
     implementation("com.google.dagger:hilt-android:2.44")
     annotationProcessor("com.google.dagger:hilt-android-compiler:2.44")
-
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
 }

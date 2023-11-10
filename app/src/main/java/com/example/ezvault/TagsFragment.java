@@ -3,18 +3,24 @@ package com.example.ezvault;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link TagsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays all of the current tags and is responsible for adding new ones
  */
 public class TagsFragment extends Fragment {
 
+    View view;
+    FloatingActionButton addTag;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -59,6 +65,21 @@ public class TagsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tags, container, false);
+        view = inflater.inflate(R.layout.fragment_tags, container, false);
+
+        addTag = view.findViewById(R.id.button_add_tag);
+        addTag.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.tagDialogue);
+
+
+        });
+
+        return view;
+    }
+
+    public void doAddClick(){
+        String name = TagsFragmentArgs.fromBundle(getArguments()).getTagName();
+        TextView text = view.findViewById(R.id.empty_tags);
+        text.setText(name);
     }
 }

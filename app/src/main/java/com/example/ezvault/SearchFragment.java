@@ -9,9 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment that is responsible for the search function
  */
 public class SearchFragment extends Fragment {
 

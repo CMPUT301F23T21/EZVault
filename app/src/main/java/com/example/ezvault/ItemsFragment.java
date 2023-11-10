@@ -2,23 +2,32 @@ package com.example.ezvault;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ItemsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Displays items in a list as well as total value and total quantity
  */
 public class ItemsFragment extends Fragment {
 
     FloatingActionButton floatbtn;
+    TextView totalCost;
+    TextView totalQuantity;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,6 +63,8 @@ public class ItemsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -65,14 +76,16 @@ public class ItemsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
+
         floatbtn = view.findViewById(R.id.button_add_item);
-        floatbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(),"Hello", Toast.LENGTH_SHORT).show();
-            }
+        totalCost = view.findViewById(R.id.text_total_value);
+        totalQuantity = view.findViewById(R.id.text_number_of_items);
+
+        floatbtn.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
         // Inflate the layout for this fragment
         return view;
     }
+
 }

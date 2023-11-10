@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.ezvault.authentication.authentication.AuthenticationHandler;
 import com.example.ezvault.authentication.authentication.EmailPasswordAuthenticationStrategy;
@@ -21,10 +23,13 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Handles user login
  */
 @AndroidEntryPoint
 public class LoginFragment extends Fragment {
+    Button loginButton;
+    ImageButton backButton;
+
     @Inject
     UserManager userManager;
 
@@ -43,16 +48,18 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        AppCompatImageButton backButton = view.findViewById(R.id.login_back_button);
-
-        backButton.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
-        });
-
+        // find the views
+        backButton = view.findViewById(R.id.login_back_button);
+        loginButton = view.findViewById(R.id.login_button);
         EditText emailText = view.findViewById(R.id.username_text);
         EditText passwordText = view.findViewById(R.id.password_text);
-        Button loginButton = view.findViewById(R.id.login_button);
 
+        // setup back button
+        backButton.setOnClickListener(v -> {
+            Navigation.findNavController(view).popBackStack();
+        });
+
+        // setup login button
         loginButton.setOnClickListener(v -> {
             loginButton.setEnabled(false);
 
@@ -65,7 +72,7 @@ public class LoginFragment extends Fragment {
             ah.authenticate().addOnSuccessListener(user -> {
                 Log.v("EZVault", "Successful login: " + user.getUid());
                 userManager.setUser(user);
-                getActivity().finish();
+                Navigation.findNavController(view).navigate(R.id.loginFragment_to_itemsFragment);
             }).addOnFailureListener(e -> {
                 loginButton.setEnabled(true);
                 Log.e("EZVault", "Failed login.", e);

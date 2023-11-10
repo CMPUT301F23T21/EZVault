@@ -7,12 +7,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A welcome page fragment that presents the user with 2 options
  */
 
 public class WelcomeFragment extends Fragment {
+
+    Button existingUser;
+    Button newUser;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,21 +29,18 @@ public class WelcomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_welcome, container, false);
 
-        Button newUserButton = view.findViewById(R.id.new_user_button);
-        Button existingUserButton = view.findViewById(R.id.existing_user_button);
+        // find the views
+        existingUser = view.findViewById(R.id.existing_user_button);
+        newUser = view.findViewById(R.id.new_user_button);
 
-        newUserButton.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .addToBackStack("register")
-                    .replace(R.id.activity_auth_container, new NewUserFragment())
-                    .commit();
+        // click listener for existingUser button
+        existingUser.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_loginFragment);
         });
 
-        existingUserButton.setOnClickListener(v -> {
-            getParentFragmentManager().beginTransaction()
-                    .addToBackStack("login")
-                    .replace(R.id.activity_auth_container, new LoginFragment())
-                    .commit();
+        // click listener for newUser button
+        newUser.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_newUserFragment);
         });
 
         return view;
