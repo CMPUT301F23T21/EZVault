@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  */
 public class TagsFragment extends Fragment {
 
+    View view;
     FloatingActionButton addTag;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,14 +65,21 @@ public class TagsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tags, container, false);
+        view = inflater.inflate(R.layout.fragment_tags, container, false);
 
         addTag = view.findViewById(R.id.button_add_tag);
         addTag.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.tagDialogue);
+
+
         });
 
         return view;
     }
 
+    public void doAddClick(){
+        String name = TagsFragmentArgs.fromBundle(getArguments()).getTagName();
+        TextView text = view.findViewById(R.id.empty_tags);
+        text.setText(name);
+    }
 }

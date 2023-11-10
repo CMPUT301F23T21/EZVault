@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph"
-    app:startDestination="@id/itemsFragment">
+    app:startDestination="@id/itemsFragment"
+    >
 
     <fragment
         android:id="@+id/welcomeFragment"
@@ -53,6 +54,9 @@
         <action
             android:id="@+id/itemsFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
+        <argument
+            android:name="item_name"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -67,12 +71,21 @@
         <action
             android:id="@+id/tagsFragment_to_tagDialogue"
             app:destination="@id/tagDialogue" />
+        <argument
+            android:name="tag_name"
+            app:argType="string"
+            android:defaultValue="guh"
+            />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
         android:name="com.example.ezvault.AddItemFragment"
         android:label="New Item"
-        tools:layout="@layout/fragment_add_item" />
+        tools:layout="@layout/fragment_add_item" >
+        <action
+            android:id="@+id/action_addItemFragment_to_itemsFragment"
+            app:destination="@id/itemsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.ezvault.ProfileFragment"
@@ -83,5 +96,9 @@
         android:name="com.example.ezvault.TagDialogue"
         android:label="TagDialogue"
         tools:layout="@layout/add_tag_dialogue"
-        />
+        >
+        <action
+            android:id="@+id/tagDialogue_to_tagsFragment"
+            app:destination="@id/tagsFragment" />
+    </dialog>
 </navigation>

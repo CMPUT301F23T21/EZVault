@@ -2,11 +2,18 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs")
 }
+
+
 
 android {
     namespace = "com.example.ezvault"
     compileSdk = 34
+
+    sourceSets {
+        getByName("main").java.srcDir("build/generated/source/navigation-args")
+    }
 
     defaultConfig {
         applicationId = "com.example.ezvault"
@@ -50,4 +57,5 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     annotationProcessor("com.google.dagger:hilt-android-compiler:2.44")
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
 }

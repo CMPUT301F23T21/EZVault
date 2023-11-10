@@ -69,12 +69,14 @@ public class MainActivity extends AppCompatActivity{
         topLevelDestinations.add(R.id.searchFragment);
         topLevelDestinations.add(R.id.tagsFragment);
         topLevelDestinations.add(R.id.profileFragment);
+
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinations).build();
 
         // setup bottom navigation bar with navController
         NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavView, navController);
+
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
 
@@ -103,5 +105,13 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return NavigationUI.onNavDestinationSelected(item, navController);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (navController != null) {
+            navController.navigateUp();
+        }
+        return super.onSupportNavigateUp();
     }
 }
