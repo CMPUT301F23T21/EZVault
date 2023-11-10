@@ -1,5 +1,6 @@
 package com.example.ezvault;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity{
         NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavView, navController);
+
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
 
