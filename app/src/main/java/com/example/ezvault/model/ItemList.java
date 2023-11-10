@@ -56,6 +56,14 @@ public class ItemList implements List<Item> {
         return tags;
     }
 
+    public double getTotalValue() {
+        double total = 0.0;
+        for (Item item : this) {
+            total += item.getValue() * item.getCount();
+        }
+        return total;
+    }
+
     @Override
     public int size() {
         return items.size();
