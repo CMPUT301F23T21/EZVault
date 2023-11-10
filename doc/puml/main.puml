@@ -8,6 +8,8 @@ skinparam linetype polyline
 !include model.puml
 !include utils.puml
 
+!include frag.puml
+
 !include authentication/authentication.puml
 !include authentication/registration.puml
 
