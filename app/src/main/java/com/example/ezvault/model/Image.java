@@ -1,3 +1,5 @@
+// Model class for Images
+
 package com.example.ezvault.model;
 
 import javax.annotation.Nullable;

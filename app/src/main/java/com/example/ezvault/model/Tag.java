@@ -1,3 +1,5 @@
+// Model class for tags
+
 package com.example.ezvault.model;
 
 /**
