@@ -30,6 +30,9 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity{
     FirebaseBundle firebase = new FirebaseBundle();
     BottomNavigationView bottomNavView;
@@ -48,11 +51,20 @@ public class MainActivity extends AppCompatActivity{
 
         setSupportActionBar(toolbar);
 
+        // set top level destinations to hide back button
+        Set<Integer> topLevelDestinations = new HashSet<>();
+        topLevelDestinations.add(R.id.itemsFragment);
+        topLevelDestinations.add(R.id.searchFragment);
+        topLevelDestinations.add(R.id.tagsFragment);
+        topLevelDestinations.add(R.id.profileFragment);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinations).build();
+
         // setup bottom navigation bar with navController
         NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavView, navController);
-        NavigationUI.setupActionBarWithNavController(this, navController);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
 
         // show toolbar and bottom nav bar once on items page
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
