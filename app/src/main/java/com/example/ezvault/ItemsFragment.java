@@ -8,7 +8,10 @@ import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,11 +21,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ezvault.model.Item;
+import com.example.ezvault.utils.UserManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Displays items in a list as well as total value and total quantity
  */
+@AndroidEntryPoint
 public class ItemsFragment extends Fragment {
 
     FloatingActionButton floatbtn;
@@ -37,6 +49,13 @@ public class ItemsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    @Inject
+    public UserManager userManager;
+
+    // Item adapter for the recycler view
+    private ItemAdapter mItemAdapter;
+    private RecyclerView mRecyclerView;
 
     public ItemsFragment() {
         // Required empty public constructor
@@ -64,7 +83,6 @@ public class ItemsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -84,8 +102,34 @@ public class ItemsFragment extends Fragment {
         floatbtn.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
+
+        mItemAdapter = new ItemAdapter(view.getContext(), new ArrayList<Item>(), new ItemAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+        });
+
+        // Setup recycler view
+        mRecyclerView = view.findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        mRecyclerView.setAdapter(mItemAdapter);
+
+        mItemAdapter.setItems(userManager.getUser().getItemList().getItems());
+
+        TextView numItemsView = view.findViewById(R.id.text_number_of_items);
+        numItemsView.setText(String.valueOf(mItemAdapter.getItemCount()));
+
+        TextView totalItemValueView = view.findViewById(R.id.text_total_value);
+        double totalItemValue = userManager.getUser().getItemList().getTotalValue();
+        totalItemValueView.setText(String.valueOf(totalItemValue));
+
         // Inflate the layout for this fragment
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }
