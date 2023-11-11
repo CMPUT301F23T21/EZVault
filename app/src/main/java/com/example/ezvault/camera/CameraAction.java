@@ -4,6 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import androidx.activity.ComponentActivity;
+import androidx.activity.result.ActivityResultRegistry;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+
+import com.example.ezvault.model.ActivityTaskChunk;
 import com.example.ezvault.model.Image;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -16,16 +22,48 @@ import java.util.List;
 /**
  * A class that encapsulates the behaviour of actions related to the camera.
  */
-public abstract class CameraAction {
+public abstract class CameraAction implements DefaultLifecycleObserver {
 
     /**
      * Activity used for content resolving
      */
     protected final ComponentActivity componentActivity;
 
-    public CameraAction (ComponentActivity componentActivity){
+    /**
+     * Registry for our ActivityResults
+     */
+    protected final ActivityResultRegistry registry;
+
+    /**
+     * Chunk for creating singular resolve tasks
+     */
+    protected ActivityTaskChunk<Image> resolveTaskChunk;
+
+    /**
+     * Chunk for creating plural resolve tasks
+     */
+    protected ActivityTaskChunk<List<Image>> resolveAllTaskChunk;
+
+
+    public CameraAction (@NonNull ComponentActivity componentActivity){
         this.componentActivity = componentActivity;
+        this.registry = componentActivity.getActivityResultRegistry();
+
+        resolveTaskChunk = new ActivityTaskChunk<Image>();
+        resolveAllTaskChunk = new ActivityTaskChunk<List<Image>>();
     }
+
+    @Override
+    public void onCreate(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onCreate(owner);
+        register(owner);
+    }
+
+    /**
+     * Used to register ActivityResults
+     * @param owner LifecycleOwner of class to observe
+     */
+    abstract void register(LifecycleOwner owner);
 
     /**
      * Creates an image from a local file URI
@@ -65,4 +103,12 @@ public abstract class CameraAction {
      * @return A Task containing the List of Images
      */
     public abstract Task<List<Image>> resolveAll();
+
+    /**
+     * Generates a random key for result registries
+     * @return a tagged and timestamped String
+     */
+    protected final String getRandomKey(){
+        return "EZ_VAULT_" + System.currentTimeMillis();
+    }
 }
