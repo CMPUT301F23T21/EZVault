@@ -8,8 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Context;
-import com.bumptech.glide.Glide;
 import com.example.ezvault.model.Image;
+
+import com.example.ezvault.model.Item;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +20,7 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
-    private List<com.example.ezvault.model.Item> itemList;
+    private List<Item> itemList;
     private LayoutInflater inflater;
     private ItemClickListener itemClickListener;
 
@@ -29,7 +30,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     // Constructor
-    public ItemAdapter(Context context, List<com.example.ezvault.model.Item> itemList, ItemClickListener listener) {
+    public ItemAdapter(Context context, List<Item> itemList, ItemClickListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.itemList = itemList;
         this.itemClickListener = listener;
@@ -44,7 +45,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ItemViewHolder holder, int position) {
-        com.example.ezvault.model.Item currentItem = itemList.get(position);
+        Item currentItem = itemList.get(position);
 
         // Construct the item name from make and model
         String itemName = currentItem.getMake() + " " + currentItem.getModel();
