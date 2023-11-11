@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navgraph"
+    app:startDestination="@id/itemsFragment"
+    >
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.ezvault.WelcomeFragment"
+        android:label="WelcomeFragment"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/welcomeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/welcomeFragment_to_newUserFragment"
+            app:destination="@id/newUserFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.ezvault.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/loginFragment_to_itemsFragment"
+            app:destination="@id/itemsFragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/welcomeFragment"/>
+        <action
+            android:id="@+id/loginFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newUserFragment"
+        android:name="com.example.ezvault.NewUserFragment"
+        android:label="NewUserFragment"
+        tools:layout="@layout/fragment_new_user">
+        <action
+            android:id="@+id/newUserFragment_to_itemsFragment"
+            app:destination="@id/itemsFragment"
+            app:popUpTo="@id/welcomeFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/newUserFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemsFragment"
+        android:name="com.example.ezvault.ItemsFragment"
+        android:label="Items"
+        tools:layout="@layout/fragment_items" >
+        <action
+            android:id="@+id/itemsFragment_to_addItemFragment"
+            app:destination="@id/addItemFragment" />
+        <argument
+            android:name="item_name"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.ezvault.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/tagsFragment"
+        android:name="com.example.ezvault.TagsFragment"
+        android:label="Tags"
+        tools:layout="@layout/fragment_tags" >
+        <action
+            android:id="@+id/tagsFragment_to_tagDialogue"
+            app:destination="@id/tagDialogue" />
+        <argument
+            android:name="tag_name"
+            app:argType="string"
+            android:defaultValue="guh"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/addItemFragment"
+        android:name="com.example.ezvault.AddItemFragment"
+        android:label="New Item"
+        tools:layout="@layout/fragment_add_item" >
+        <action
+            android:id="@+id/action_addItemFragment_to_itemsFragment"
+            app:destination="@id/itemsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.ezvault.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+    <dialog
+        android:id="@+id/tagDialogue"
+        android:name="com.example.ezvault.TagDialogue"
+        android:label="TagDialogue"
+        tools:layout="@layout/add_tag_dialogue"
+        >
+        <action
+            android:id="@+id/tagDialogue_to_tagsFragment"
+            app:destination="@id/tagsFragment" />
+    </dialog>
+</navigation>
