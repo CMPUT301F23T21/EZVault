@@ -4,6 +4,8 @@ Provides utilities for interacting with Users on the database.
 
 package com.example.ezvault.database;
 
+import android.util.Log;
+
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.Tag;
@@ -54,7 +56,13 @@ public class UserService {
                 .onSuccessTask(tasks -> {
                     RawUser rawUser = (RawUser) tasks.get(0);
                     ArrayList<Item> items = (ArrayList<Item>) tasks.get(1);
+                    if (items == null) {
+                        items = new ArrayList<>();
+                    }
                     ArrayList<Tag> tags = (ArrayList<Tag>) tasks.get(2);
+                    if (tags == null) {
+                        tags = new ArrayList<>();
+                    }
                     ItemList itemList = new ItemList(items, tags);
                     return Tasks.forResult(new User(rawUser.getName(), uid, itemList));
                 });
