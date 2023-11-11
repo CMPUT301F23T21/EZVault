@@ -28,6 +28,8 @@ public class UserService {
     private final TagDAO tagDAO;
     private final FirebaseAuth auth;
 
+    public static RawUser localUser = null;
+
     /**
      * Initializes services for user-related operations.
      * @param firebase FirebaseBundle containing Firebase services
@@ -65,6 +67,7 @@ public class UserService {
     public Task<User> createUser(String uid, String userName) {
         User user = new User(userName, uid, new ItemList());
         RawUser rawUser = new RawUser(userName, new ArrayList<>(), new ArrayList<>());
+        localUser = rawUser;
         return rawUserDAO.update(uid, rawUser).onSuccessTask(v -> Tasks.forResult(user));
     }
 }
