@@ -29,7 +29,7 @@ public class GalleryAction extends CameraAction{
      */
     @Override
     void register(LifecycleOwner owner) {
-        resolveTaskChunk.setArLauncher(registry.register("key", owner, new ActivityResultContracts.PickVisualMedia(), uri -> {
+        resolveTaskChunk.setArLauncher(registry.register(getRandomKey(), owner, new ActivityResultContracts.PickVisualMedia(), uri -> {
             imageFromUri(uri).continueWith(imageTask -> {
                 resolveTaskChunk.getTcSource().setResult(imageTask.getResult());
                 return null;
@@ -37,7 +37,7 @@ public class GalleryAction extends CameraAction{
 
         }));
 
-        resolveAllTaskChunk.setArLauncher(registry.register("key2", owner, new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
+        resolveAllTaskChunk.setArLauncher(registry.register(getRandomKey(), owner, new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
             List<Task<Image>> imageTasks = new ArrayList<>();
 
             uris.forEach(uri -> {

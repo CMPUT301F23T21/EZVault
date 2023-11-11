@@ -103,4 +103,12 @@ public abstract class CameraAction implements DefaultLifecycleObserver {
      * @return A Task containing the List of Images
      */
     public abstract Task<List<Image>> resolveAll();
+
+    /**
+     * Generates a random key for result registries
+     * @return a tagged and timestamped String
+     */
+    protected final String getRandomKey(){
+        return "EZ_VAULT_" + System.currentTimeMillis();
+    }
 }
