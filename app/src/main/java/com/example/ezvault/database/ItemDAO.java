@@ -57,14 +57,33 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         double count = doc.getDouble("count");
         double value = doc.getDouble("value");
         ArrayList<String> tagIds = (ArrayList<String>) doc.get("tags");
+
+        if (tagIds == null) {
+            tagIds = new ArrayList<>();
+        }
+
         ArrayList<String> imageIds = (ArrayList<String>) doc.get("images");
+
+        if (imageIds == null) {
+            imageIds = new ArrayList<>();
+        }
+
         Task<ArrayList<Tag>> tagsTask = tagDAO.pluralRead(tagIds);
         Task<ArrayList<Image>> imagesTask = imageDAO.pluralRead(imageIds);
 
         return Tasks.whenAllSuccess(tagsTask, imagesTask)
                 .onSuccessTask(tasks -> {
                     ArrayList<Tag> tags = (ArrayList<Tag>)tasks.get(0);
+
+                    if (tags == null) {
+                        tags = new ArrayList<>();
+                    }
+
                     ArrayList<Image> images = (ArrayList<Image>)tasks.get(1);
+
+                    if (images == null) {
+                        images = new ArrayList<>();
+                    }
 
                     return Tasks.forResult(new ItemBuilder()
                             .setAcquisitionDate(date)
