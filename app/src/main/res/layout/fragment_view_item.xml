@@ -17,15 +17,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.recyclerview.widget.RecyclerView
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_item_viewpager"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/add_item_photo"/>
+                    android:layout_height="200dp">
+
+                </androidx.viewpager2.widget.ViewPager2>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/add_item_photo"
+                    android:layout_below="@+id/view_item_viewpager"
                     android:layout_marginTop="20dp">
 
                     <TextView
@@ -37,8 +39,8 @@
                         android:fontFamily="@font/paytone_one"
                         android:layout_marginStart="25dp"/>
 
-                    <EditText
-                        android:id="@+id/edittext_item_name"
+                    <TextView
+                        android:id="@+id/view_item_name"
                         android:layout_width="match_parent"
                         android:maxLines="1"
                         android:layout_height="40dp"
@@ -47,32 +49,29 @@
                         android:layout_marginRight="10dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="13dp"
-                        android:background="@drawable/background_add_edittext"/>
+                        android:background="@drawable/background_blue_text"/>
 
                     <TextView
                         android:id="@+id/text_item_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Date of Aquisition"
-                        android:layout_below="@id/edittext_item_name"
+                        android:layout_below="@id/view_item_name"
                         android:textSize="20sp"
                         android:fontFamily="@font/paytone_one"
                         android:layout_marginStart="25dp"
                         android:layout_marginTop="20dp"/>
 
-                    <EditText
-                        android:id="@+id/edittext_item_date"
+                    <TextView
+                        android:id="@+id/view_item_date"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@id/text_item_date"
-                        android:background="@drawable/background_add_edittext"
+                        android:background="@drawable/background_blue_text"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:inputType="date"
                         android:paddingLeft="16dp"
                         android:paddingEnd="13dp"
-                        android:clickable="true"
-                        android:focusable="false"
                         />
 
                     <LinearLayout
@@ -80,7 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_below="@id/edittext_item_date">
+                        android:layout_below="@id/view_item_date">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -98,13 +97,12 @@
                                 android:textSize="20sp"
                                 android:layout_marginStart="25dp"/>
 
-                            <EditText
-                                android:id="@+id/edittext_item_value"
+                            <TextView
+                                android:id="@+id/view_item_value"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:background="@drawable/background_add_edittext"
+                                android:background="@drawable/background_blue_text"
                                 android:layout_marginStart="10dp"
-                                android:inputType="number"
                                 android:paddingStart="16dp"
                                 android:layout_marginEnd="5dp" />
                         </LinearLayout>
@@ -124,13 +122,12 @@
                                 android:textSize="20sp"
                                 android:layout_marginStart="15dp" />
 
-                            <EditText
-                                android:id="@+id/edittext_item_quantity"
+                            <TextView
+                                android:id="@+id/view_item_quantity"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:background="@drawable/background_add_edittext"
+                                android:background="@drawable/background_blue_text"
                                 android:paddingStart="16dp"
-                                android:inputType="number"
                                 android:layout_marginEnd="10dp"/>
                         </LinearLayout>
                     </LinearLayout>
@@ -158,12 +155,12 @@
                                 android:textSize="20sp"
                                 android:layout_marginStart="25dp"/>
 
-                            <EditText
-                                android:id="@+id/edittext_item_make"
+                            <TextView
+                                android:id="@+id/view_item_make"
                                 android:layout_width="match_parent"
                                 android:maxLines="1"
                                 android:layout_height="40dp"
-                                android:background="@drawable/background_add_edittext"
+                                android:background="@drawable/background_blue_text"
                                 android:layout_marginStart="10dp"
                                 android:paddingLeft="16dp"
                                 android:layout_marginEnd="2.5dp"/>
@@ -184,12 +181,12 @@
                                 android:textSize="20sp"
                                 android:layout_marginStart="18dp" />
 
-                            <EditText
-                                android:id="@+id/edittext_item_model"
+                            <TextView
+                                android:id="@+id/view_item_model"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                 android:maxLines="1"
-                                android:background="@drawable/background_add_edittext"
+                                android:background="@drawable/background_blue_text"
                                 android:paddingStart="16dp"
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginStart="2.5dp"/>
@@ -207,21 +204,16 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginStart="25dp"/>
 
-                    <EditText
-                        android:id="@+id/edittext_tags"
+                    <TextView
+                        android:id="@+id/view_item_tags"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@id/text_item_tags"
-                        android:background="@drawable/background_add_edittext"
+                        android:background="@drawable/background_blue_text"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:inputType="date"
                         android:paddingLeft="16dp"
                         android:paddingEnd="13dp"
-                        android:focusable="false"
-                        android:clickable="true"
-                        android:drawableRight="@drawable/icon_forward_icon"
-                        android:drawableTint="#3d3d3d"
                         />
 
                     <TextView
@@ -230,32 +222,22 @@
                         android:layout_height="wrap_content"
                         android:text="Serial Number"
                         android:fontFamily="@font/paytone_one"
-                        android:layout_below="@+id/edittext_tags"
+                        android:layout_below="@+id/view_item_tags"
                         android:textSize="20sp"
                         android:layout_marginTop="20dp"
                         android:layout_marginStart="25dp"/>
 
-                    <EditText
-                        android:id="@+id/edittext_item_serial"
+                    <TextView
+                        android:id="@+id/view_item_serial"
                         android:maxLines="1"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@id/text_item_serial"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/background_add_edittext"
+                        android:background="@drawable/background_blue_text"
                         android:paddingLeft="15dp"
                         android:paddingRight="45dp"/>
-
-                    <ImageButton
-                        android:id="@+id/button_serial_scan"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/icon_barcode_scan"
-                        android:background="@null"
-                        android:layout_below="@id/text_item_serial"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="20dp" />
 
                     <TextView
                         android:id="@+id/text_item_description"
@@ -263,35 +245,23 @@
                         android:layout_height="wrap_content"
                         android:text="Description"
                         android:fontFamily="@font/paytone_one"
-                        android:layout_below="@+id/edittext_item_serial"
+                        android:layout_below="@+id/view_item_serial"
                         android:textSize="20sp"
                         android:layout_marginTop="20dp"
                         android:layout_marginStart="25dp"/>
 
-                    <EditText
-                        android:id="@+id/edittext_item_description"
+                    <TextView
+                        android:id="@+id/view_item_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_item_description"
-                        android:background="@drawable/background_large_edittext"
+                        android:background="@drawable/background_blue_text"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="40dp"
-                        android:inputType="textMultiLine"
                         android:lines="3"
                         android:gravity="top" />
-
-                    <ImageButton
-                        android:id="@+id/button_description_scan"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/icon_barcode_scan"
-                        android:background="@null"
-                        android:layout_below="@id/text_item_description"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="13dp"/>
 
                     <TextView
                         android:id="@+id/text_item_comment"
@@ -299,38 +269,24 @@
                         android:layout_height="wrap_content"
                         android:text="Comments"
                         android:fontFamily="@font/paytone_one"
-                        android:layout_below="@+id/edittext_item_description"
+                        android:layout_below="@+id/view_item_description"
                         android:textSize="20sp"
                         android:layout_marginTop="20dp"
                         android:layout_marginStart="25dp"/>
 
-                    <EditText
+                    <TextView
                         android:id="@+id/edittext_item_comment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/text_item_comment"
-                        android:background="@drawable/background_large_edittext"
+                        android:background="@drawable/background_blue_text"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:paddingStart="16dp"
                         android:paddingEnd="13dp"
-                        android:inputType="textMultiLine"
                         android:lines="6"
                         android:gravity="top"
                         />
-
-                    <Button
-                        android:id="@+id/button_confirm_add_item"
-                        android:layout_width="140dp"
-                        android:layout_height="70dp"
-                        android:text="Add"
-                        android:textSize="36sp"
-                        android:fontFamily="@font/fredoka_one"
-                        android:layout_below="@id/edittext_item_comment"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:backgroundTint="#BCD7F8"
-                        android:textColor="@color/black"/>
 
                 </RelativeLayout>
             </RelativeLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/edit_item_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Confirm"
+        android:icon="@drawable/icon_checkmark"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/edit_item_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Cancel"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/icon_cancel"
+        />
+
+</menu>
