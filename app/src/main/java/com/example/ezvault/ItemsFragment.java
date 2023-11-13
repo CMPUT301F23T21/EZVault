@@ -103,7 +103,7 @@ public class ItemsFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
 
-        mItemAdapter = new ItemAdapter(view.getContext(), new ArrayList<Item>(), new ItemAdapter.ItemClickListener() {
+        mItemAdapter = new ItemAdapter(view.getContext(), userManager.getUser().getItemList(), new ItemAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -114,8 +114,6 @@ public class ItemsFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.setAdapter(mItemAdapter);
-
-        mItemAdapter.setItems(userManager.getUser().getItemList().getItems());
 
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
         numItemsView.setText(String.valueOf(mItemAdapter.getItemCount()));
