@@ -8,46 +8,37 @@ import com.example.ezvault.model.ItemList;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 
-public class ItemListFilter implements Iterable<Item>, ItemListView {
-    private final ItemList itemList;
-    private final ArrayList<Integer> indices = new ArrayList<>();
-    private Predicate<Item> predicate;
+abstract class ItemListFilter implements ItemListView {
+    protected final ItemList itemList;
+    protected final ArrayList<Integer> indices;
     private boolean valid = false;
 
     /**
-     * Create a new item-wise filter on an item-list
-     * @param itemList The list of items to sort.
-     * @param predicate The predicate to ensure holds true.
+     * Create a new filter on an item-list
+     * @param itemList The list of items to filter on.
      */
-    public ItemListFilter(ItemList itemList, Predicate<Item> predicate) {
-        this.predicate = predicate;
+    public ItemListFilter(ItemList itemList) {
+        this.indices = new ArrayList<>();
         this.itemList = itemList;
         updateIndices();
     }
 
+    protected abstract void validate();
+
     private void updateIndices() {
-        if (valid) {
-            return;
+        if (!valid) {
+            validate();
         }
-        indices.clear();
-        for (int i = 0; i < itemList.size(); i++) {
-            Item item = itemList.get(i);
-            if (predicate.test(item)) {
-                indices.add(i);
-            }
-        }
-        valid = true;
     }
 
-    public void invalidate() {
+    public final void invalidate() {
         valid = false;
     }
 
     @NonNull
     @Override
-    public Iterator<Item> iterator() {
+    public final Iterator<Item> iterator() {
         return new Iterator<Item>() {
             private int index = 0;
             @Override
@@ -69,17 +60,17 @@ public class ItemListFilter implements Iterable<Item>, ItemListView {
     }
 
     @Override
-    public int size() {
+    public final int size() {
         return indices.size();
     }
 
     @Override
-    public boolean isEmpty() {
+    public final boolean isEmpty() {
         return indices.isEmpty();
     }
 
     @Override
-    public Item get(int position) {
+    public final Item get(int position) {
         return itemList.get(indices.get(position));
     }
 }
