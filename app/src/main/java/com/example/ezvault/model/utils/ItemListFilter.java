@@ -39,6 +39,7 @@ abstract class ItemListFilter implements ItemListView {
     @NonNull
     @Override
     public final Iterator<Item> iterator() {
+        updateIndices();
         return new Iterator<Item>() {
             private int index = 0;
             @Override
@@ -61,16 +62,19 @@ abstract class ItemListFilter implements ItemListView {
 
     @Override
     public final int size() {
+        updateIndices();
         return indices.size();
     }
 
     @Override
     public final boolean isEmpty() {
+        updateIndices();
         return indices.isEmpty();
     }
 
     @Override
     public final Item get(int position) {
+        updateIndices();
         return itemList.get(indices.get(position));
     }
 }
