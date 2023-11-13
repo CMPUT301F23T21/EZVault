@@ -24,11 +24,11 @@ abstract class ItemListFilter implements ItemListView {
         updateIndices();
     }
 
-    protected abstract void validate();
+    protected abstract boolean validate();
 
     private void updateIndices() {
         if (!valid) {
-            validate();
+            valid = validate();
         }
     }
 
