@@ -10,7 +10,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
-public class ItemListFilter implements Iterable<Item> {
+public class ItemListFilter implements Iterable<Item>, ItemListView {
     private final ItemList itemList;
     private final ArrayList<Integer> indices = new ArrayList<>();
     private Predicate<Item> predicate;
@@ -66,5 +66,20 @@ public class ItemListFilter implements Iterable<Item> {
                 }
             }
         };
+    }
+
+    @Override
+    public int size() {
+        return indices.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return indices.isEmpty();
+    }
+
+    @Override
+    public Item get(int position) {
+        return itemList.get(indices.get(position));
     }
 }
