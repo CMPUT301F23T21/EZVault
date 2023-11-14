@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.ezvault"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
