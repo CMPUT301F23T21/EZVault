@@ -21,7 +21,6 @@ abstract class ItemListFilter implements ItemListView {
     public ItemListFilter(ItemList itemList) {
         this.indices = new ArrayList<>();
         this.itemList = itemList;
-        updateIndices();
     }
 
     protected abstract boolean validate();
