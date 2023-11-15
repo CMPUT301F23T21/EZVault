@@ -124,6 +124,14 @@ public class ItemsFragment extends Fragment {
         double totalItemValue = userManager.getUser().getItemList().getTotalValue();
         totalItemValueView.setText(String.valueOf(totalItemValue));
 
+        // Toggle the visibility of the Empty Items text field
+        TextView empty_text = view.findViewById(R.id.empty_items);
+        if (mItemAdapter.getItemCount() > 0) {
+            empty_text.setVisibility(View.GONE);
+        } else {
+            empty_text.setVisibility(View.VISIBLE);
+        }
+
         // Inflate the layout for this fragment
         return view;
     }
