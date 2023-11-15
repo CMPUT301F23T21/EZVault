@@ -20,9 +20,32 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.ezvault.camera.GalleryAction;
+import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.database.ItemDAO;
+import com.example.ezvault.database.RawUserDAO;
+import com.example.ezvault.model.Item;
+import com.example.ezvault.model.ItemBuilder;
+import com.example.ezvault.model.User;
+import com.example.ezvault.utils.UserManager;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.sql.Time;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * fragment class that collects the information of a new item
  */
+@AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
     Button addItem;
@@ -35,6 +58,11 @@ public class AddItemFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private GalleryAction galleryAction;
+
+    @Inject
+    protected UserManager userManager;
 
     public AddItemFragment() {
         // Required empty public constructor
@@ -61,6 +89,9 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        galleryAction = new GalleryAction(requireActivity());
+        getLifecycle().addObserver(galleryAction);
     }
 
     @Override
@@ -100,7 +131,51 @@ public class AddItemFragment extends Fragment {
 
         addItem = view.findViewById(R.id.button_confirm_add_item);
         addItem.setOnClickListener(v -> {
-            Navigation.findNavController(view).popBackStack();
+            FirebaseBundle fb = new FirebaseBundle();
+            ItemDAO itemDAO = new ItemDAO(fb);
+
+            // Construct our item
+            ItemBuilder itemBuilder = new ItemBuilder()
+                    .setMake(itemMake.getText().toString())
+                    .setModel(itemModel.getText().toString())
+                    .setCount(Double.valueOf(itemQuantity.getText().toString()))
+                    .setValue(Double.valueOf(itemValue.getText().toString()))
+                    .setAcquisitionDate(Timestamp.now())
+                    .setDescription(itemDescription.getText().toString())
+                    .setSerialNumber(itemSerial.getText().toString())
+                    .setComment(itemComments.getText().toString())
+                    .setTags(new ArrayList<>())
+                    .setImages(new ArrayList<>());
+
+            // Add the new item to our database
+            itemDAO.create(itemBuilder.build()).continueWith(idTask ->{
+                String itemId = idTask.getResult();
+
+                // User info
+                User localUser = userManager.getUser();
+                String uid = localUser.getUid();
+
+                // Add the item to our local store
+                itemBuilder.setId(itemId);
+                localUser.getItemList().add(itemBuilder.build());
+
+                RawUserDAO rawUserDAO = new RawUserDAO(fb);
+
+                // Fetch our raw local user
+                // TODO: Expose raw user so we dont have to fetch every tag/item creation or update
+                rawUserDAO.read(uid).continueWith(rawUserTask -> {
+                    RawUserDAO.RawUser rawUser = rawUserTask.getResult();
+                    rawUser.getItemids().add(itemId); // Add the item to our user database reference
+
+                    rawUserDAO.update(uid, rawUser)
+                            .continueWith(updateUserTask -> Navigation.findNavController(view).popBackStack());
+
+                    return null;
+                });
+
+                return null;
+            });
+
         });
 
         return view;
