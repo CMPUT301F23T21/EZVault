@@ -2,20 +2,12 @@ package com.example.ezvault;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.MenuHost;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -38,8 +30,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class ItemsFragment extends Fragment {
 
     FloatingActionButton floatbtn;
-    TextView totalCost;
-    TextView totalQuantity;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -96,8 +86,6 @@ public class ItemsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
 
         floatbtn = view.findViewById(R.id.button_add_item);
-        totalCost = view.findViewById(R.id.text_total_value);
-        totalQuantity = view.findViewById(R.id.text_number_of_items);
 
         floatbtn.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
@@ -117,9 +105,18 @@ public class ItemsFragment extends Fragment {
 
         mItemAdapter.setItems(userManager.getUser().getItemList().getItems());
 
+        // hide the empty items text if items exist
+        TextView no_item_warning = view.findViewById(R.id.empty_items);
+        if (mItemAdapter.getItemCount() != 0) {
+            no_item_warning.setVisibility(View.GONE);
+        }
+        else {
+            no_item_warning.setVisibility(View.VISIBLE);
+        }
+
+        // set the total quantity and total cost text
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
         numItemsView.setText(String.valueOf(mItemAdapter.getItemCount()));
-
         TextView totalItemValueView = view.findViewById(R.id.text_total_value);
         double totalItemValue = userManager.getUser().getItemList().getTotalValue();
         totalItemValueView.setText(String.valueOf(totalItemValue));
