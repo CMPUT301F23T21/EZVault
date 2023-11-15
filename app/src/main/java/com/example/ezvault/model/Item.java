@@ -3,6 +3,8 @@
 package com.example.ezvault.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.PropertyName;
 
 import java.util.ArrayList;
 
@@ -15,6 +17,7 @@ public class Item {
     /**
      * The ID of the Item
      */
+    @Exclude
     private final String id;
     /**
      * The make of the item
@@ -27,6 +30,7 @@ public class Item {
     /**
      * The time of acquisition, does not include timezone info
      */
+    @PropertyName("date")
     private Timestamp acquisitionDate;
     /**
      * A description of the item
@@ -108,6 +112,7 @@ public class Item {
      * Returns the ID of the item.
      * @return The unique identifier for the item.
      */
+    @Exclude
     public String getId() {
         return id;
     }
@@ -116,6 +121,7 @@ public class Item {
      * Returns the acquisition date of the item.
      * @return The specific instant of acquisition.
      */
+    @PropertyName("date")
     public Timestamp getAcquisitionDate() {
         return acquisitionDate;
     }
@@ -186,6 +192,7 @@ public class Item {
      * Set the acquisition date.
      * @param acquisitionDate The date of acquisition of the item.
      */
+    @PropertyName("date")
     public void setAcquisitionDate(Timestamp acquisitionDate) {
         this.acquisitionDate = acquisitionDate;
     }
