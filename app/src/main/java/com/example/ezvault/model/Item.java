@@ -229,4 +229,13 @@ public class Item {
     public void setImages(ArrayList<Image> images) {
         this.images = images;
     }
+
+    /**
+     * Check if the item has a specified tag
+     * @param tag The tag to check
+     * @return Whether or not the item has the specified tag
+     */
+    public boolean hasTag(Tag tag) {
+        return this.tags.contains(tag);
+    }
 }
