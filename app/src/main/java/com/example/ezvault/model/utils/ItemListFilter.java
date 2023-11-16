@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 /**
  * A class that represents a filter on top of an item list.
  */
-class ItemListFilter implements ItemListView {
+public class ItemListFilter implements ItemListView {
     /**
      * The underlying item list.
      */

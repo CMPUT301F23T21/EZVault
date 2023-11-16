@@ -1,5 +1,7 @@
 package com.example.ezvault.model.utils;
 
+import android.util.Log;
+
 import com.example.ezvault.model.Item;
 import com.google.firebase.Timestamp;
 
@@ -77,9 +79,9 @@ public class ItemDateFilter implements IItemFilter {
             return true;
         }
         if (startInclusive) {
-            return start.compareTo(instant) >= 0;
+            return start.compareTo(instant) <= 0;
         } else {
-            return start.compareTo(instant) > 0;
+            return start.compareTo(instant) < 0;
         }
     }
 
@@ -88,9 +90,9 @@ public class ItemDateFilter implements IItemFilter {
             return true;
         }
         if (endInclusive) {
-            return end.compareTo(instant) <= 0;
+            return end.compareTo(instant) >= 0;
         } else {
-            return end.compareTo(instant) < 0;
+            return end.compareTo(instant) > 0;
         }
     }
 
