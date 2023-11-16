@@ -1,6 +1,4 @@
-package com.example.ezvault.model.utils;
-
-import android.util.Log;
+package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
 import com.google.firebase.Timestamp;

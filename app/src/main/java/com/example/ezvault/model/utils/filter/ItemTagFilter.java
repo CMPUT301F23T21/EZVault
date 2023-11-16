@@ -1,7 +1,8 @@
-package com.example.ezvault.model.utils;
+package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.Tag;
+import com.example.ezvault.model.utils.filter.IItemFilter;
 
 import java.util.Collection;
 

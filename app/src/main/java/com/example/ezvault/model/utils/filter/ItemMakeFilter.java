@@ -1,6 +1,7 @@
-package com.example.ezvault.model.utils;
+package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
+import com.example.ezvault.model.utils.filter.IItemFilter;
 
 /**
  * An item filter which ensures items conform to a specific make

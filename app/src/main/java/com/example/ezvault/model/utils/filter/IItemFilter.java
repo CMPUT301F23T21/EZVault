@@ -1,4 +1,4 @@
-package com.example.ezvault.model.utils;
+package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
 
