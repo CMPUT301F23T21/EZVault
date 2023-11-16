@@ -10,9 +10,9 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * An abstract class that represents a filter on top of an item list.
+ * A class that represents a filter on top of an item list.
  */
-abstract class ItemListFilter implements ItemListView {
+class ItemListFilter implements ItemListView {
     /**
      * The underlying item list.
      */
@@ -29,19 +29,33 @@ abstract class ItemListFilter implements ItemListView {
     private boolean valid = false;
 
     /**
+     * The filter for each item.
+     */
+    private IItemFilter itemFilter;
+
+    /**
      * Create a new filter on an item-list
      * @param itemList The list of items to filter on.
      */
-    public ItemListFilter(ItemList itemList) {
+    public ItemListFilter(ItemList itemList, IItemFilter itemFilter) {
         this.indices = new ArrayList<>();
         this.itemList = itemList;
+        this.itemFilter = itemFilter;
     }
 
     /**
      * Try to validate the indices.
      * @return The new value of valid, true on success, false on failure.
      */
-    protected abstract boolean validate();
+    private boolean validate() {
+        indices.clear();
+        for (int i = 0; i < itemList.size(); i++) {
+            if (itemFilter.keep(itemList.get(i))) {
+                indices.add(i);
+            }
+        }
+        return true;
+    }
 
     /**
      * If the indices are invalid validate them.
