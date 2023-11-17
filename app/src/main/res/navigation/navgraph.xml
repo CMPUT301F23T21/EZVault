@@ -118,6 +118,6 @@
     <fragment
         android:id="@+id/editItemDetails"
         android:name="com.example.ezvault.EditItemDetails"
-        android:label="fragment_edit_item_details"
+        android:label="Edit Item"
         tools:layout="@layout/fragment_edit_item_details" />
 </navigation>
