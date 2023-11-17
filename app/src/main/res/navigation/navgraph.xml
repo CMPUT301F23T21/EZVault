@@ -57,6 +57,9 @@
         <argument
             android:name="item_name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_itemsFragment_to_editItemDetails"
+            app:destination="@id/editItemDetails" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -112,4 +115,9 @@
             android:id="@+id/action_cameraFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/editItemDetails"
+        android:name="com.example.ezvault.EditItemDetails"
+        android:label="fragment_edit_item_details"
+        tools:layout="@layout/fragment_edit_item_details" />
 </navigation>

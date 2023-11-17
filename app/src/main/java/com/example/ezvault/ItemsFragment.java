@@ -3,16 +3,18 @@ package com.example.ezvault;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.ezvault.model.Item;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -92,7 +94,10 @@ public class ItemsFragment extends Fragment {
         mItemAdapter = new ItemAdapter(view.getContext(), userManager.getUser().getItemList(), new ItemAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                Log.d("EZVault", userManager.getUser().getItemList().get(position).getModel());
+                ItemViewModel viewModel = new ViewModelProvider(getActivity()).get(ItemViewModel.class);
+                viewModel.set(userManager.getUser().getItemList().get(position));
+                Navigation.findNavController(view).navigate(R.id.action_itemsFragment_to_editItemDetails);
             }
         });
 
