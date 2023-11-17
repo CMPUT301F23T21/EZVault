@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="10dp"
-    android:id="@+id/cardview_photo">
-    
-    <ImageView
-        android:id="@+id/imageview_photo"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:scaleType="centerCrop"/>
+    android:layout_margin="5dp">
 
-</androidx.cardview.widget.CardView>
+    <RelativeLayout
+        android:id="@+id/photo_relative_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_item_remove_photo"
+        android:layout_marginTop="-25dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="150dp"
+            android:layout_height="250dp"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true">
+
+            <ImageView
+                android:id="@+id/imageview_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    <ImageButton
+        android:src="@drawable/icon_remove"
+        android:background="@drawable/background_grey_button"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/add_item_remove_photo"
+        android:layout_alignRight="@+id/photo_relative_layout"
+        />
+
+
+</RelativeLayout>
