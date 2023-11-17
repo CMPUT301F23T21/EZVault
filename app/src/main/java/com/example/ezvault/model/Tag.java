@@ -7,31 +7,38 @@ package com.example.ezvault.model;
  */
 public class Tag {
     /**
-     * The identifying string of the tag.
+     * The contents of the tag.
      */
-    private String identifier;
+    private String contents;
+
+    /**
+     * The unique id of the tag
+     */
+    private String uid;
 
     /**
      * Construct a tag with an identifier (should already be preprocessed and validated).
-     * @param identifier The string that is used for a tag.
+     * @param contents The string that is used for a tag.
+     * @param uid The unique identifier of the tag
      */
-    public Tag(String identifier) {
-        this.identifier = identifier;
+    public Tag(String contents, String uid) {
+        this.contents = contents;
+        this.uid = uid;
     }
 
     /**
-     * Get the identifier.
-     * @return The identifier of the tag.
+     * Get the contents.
+     * @return The contents of the tag.
      */
-    public String getIdentifier() {
-        return identifier;
+    public String getContents() {
+        return contents;
     }
 
     /**
-     * Set the identifier.
-     * @param identifier The identifying string of the tag.
+     * Set the contents.
+     * @param contents The contents of the tag.
      */
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 }
