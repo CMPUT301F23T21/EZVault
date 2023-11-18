@@ -10,7 +10,6 @@ import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemBuilder;
 import com.example.ezvault.model.Tag;
-import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
@@ -18,7 +17,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ItemDAO extends AbstractDAO<Item, String> {
@@ -38,8 +36,8 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         map.put("description", item.getDescription());
         map.put("make", item.getMake());
         map.put("model", item.getModel());
-        map.put("images", item.getImages().stream().map(Image::getId).toArray());
-        map.put("tags", item.getTags().stream().map(Tag::getUid).toArray());
+        map.put("images", item.getImages().stream().map(Image::getId).collect(Collectors.toCollection(ArrayList::new)));
+        map.put("tags", item.getTags().stream().map(Tag::getUid).collect(Collectors.toCollection(ArrayList::new)));
 
         return map;
     }
@@ -93,7 +91,6 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         return Tasks.whenAllSuccess(tagsTask, imagesTask)
                 .onSuccessTask(tasks -> {
                     ArrayList<Tag> tags = (ArrayList<Tag>)tasks.get(0);
-
                     if (tags == null) {
                         tags = new ArrayList<>();
                     }
