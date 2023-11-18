@@ -26,6 +26,10 @@ public class Tag {
         this.uid = uid;
     }
 
+    public String getUid() {
+        return uid;
+    }
+
     /**
      * Get the contents.
      * @return The contents of the tag.

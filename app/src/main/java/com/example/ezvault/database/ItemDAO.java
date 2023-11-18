@@ -17,6 +17,9 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ItemDAO extends AbstractDAO<Item, String> {
     private final String collectionName = "items";
@@ -24,6 +27,22 @@ public class ItemDAO extends AbstractDAO<Item, String> {
     private final TagDAO tagDAO;
 
     private final ImageDAO imageDAO;
+
+    private HashMap<String, Object> toMap(Item item) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("comment", item.getComment());
+        map.put("count", item.getCount());
+        map.put("value", item.getValue());
+        map.put("date", item.getAcquisitionDate());
+        map.put("description", item.getDescription());
+        map.put("make", item.getMake());
+        map.put("model", item.getModel());
+        map.put("images", item.getImages().stream().map(Image::getId).toArray());
+        map.put("tags", item.getTags().stream().map(Tag::getUid).toArray());
+
+        return map;
+    }
 
     /**
      * Constructs an AbstractDAO
@@ -44,7 +63,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
     @Override
     public Task<String> create(Item item) {
         return firebase.getDb().collection(collectionName)
-                .add(item)
+                .add(toMap(item))
                 .continueWith(itemTask -> itemTask.getResult().getId());
     }
 
@@ -128,7 +147,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         Log.v("EZVault", "Updating item: " + id);
         return firebase.getDb().collection(collectionName)
                 .document(id)
-                .set(item);
+                .set(toMap(item));
     }
 
     /**
