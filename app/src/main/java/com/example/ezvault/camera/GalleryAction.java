@@ -1,5 +1,7 @@
 package com.example.ezvault.camera;
 
+import android.util.Log;
+
 import androidx.activity.ComponentActivity;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -17,7 +19,7 @@ import java.util.List;
 /**
  * An action that allows the user to select photos from their gallery
  */
-public class GalleryAction extends CameraAction{
+public class GalleryAction extends CameraAction<Image, PickVisualMediaRequest>{
     public GalleryAction(@NonNull ComponentActivity componentActivity) {
         super(componentActivity);
     }
@@ -46,6 +48,7 @@ public class GalleryAction extends CameraAction{
 
             // Wait for all images to be processed
             Tasks.whenAllSuccess(imageTasks).continueWith(allImages -> {
+                Log.v("EEEDED", "ededede");
                 resolveAllTaskChunk.getTcSource().setResult((List<Image>)(List)allImages.getResult());
                 return null;
             });

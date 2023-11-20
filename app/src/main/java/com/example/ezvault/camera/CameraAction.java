@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * A class that encapsulates the behaviour of actions related to the camera.
  */
-public abstract class CameraAction implements DefaultLifecycleObserver {
+public abstract class CameraAction<T,S> implements DefaultLifecycleObserver {
 
     /**
      * Activity used for content resolving
@@ -37,24 +37,24 @@ public abstract class CameraAction implements DefaultLifecycleObserver {
     /**
      * Chunk for creating singular resolve tasks
      */
-    protected ActivityTaskChunk<Image> resolveTaskChunk;
+    protected ActivityTaskChunk<T, S> resolveTaskChunk;
 
     /**
      * Chunk for creating plural resolve tasks
      */
-    protected ActivityTaskChunk<List<Image>> resolveAllTaskChunk;
+    protected ActivityTaskChunk<List<T>, S> resolveAllTaskChunk;
 
 
     public CameraAction (@NonNull ComponentActivity componentActivity){
         this.componentActivity = componentActivity;
         this.registry = componentActivity.getActivityResultRegistry();
 
-        resolveTaskChunk = new ActivityTaskChunk<Image>();
-        resolveAllTaskChunk = new ActivityTaskChunk<List<Image>>();
+        resolveTaskChunk = new ActivityTaskChunk<T, S>();
+        resolveAllTaskChunk = new ActivityTaskChunk<List<T>, S>();
     }
 
     @Override
-    public void onCreate(@NonNull LifecycleOwner owner) {
+    final public void onCreate(@NonNull LifecycleOwner owner) {
         DefaultLifecycleObserver.super.onCreate(owner);
         register(owner);
     }
@@ -96,13 +96,13 @@ public abstract class CameraAction implements DefaultLifecycleObserver {
      * Used to retrieve a single user-selected image from the Camera Action
      * @return A Task containing the Image
      */
-    public abstract Task<Image> resolve();
+    public abstract Task<T> resolve();
 
     /**
      * Used to retrieve multiple user-selected images from the Camera Action
      * @return A Task containing the List of Images
      */
-    public abstract Task<List<Image>> resolveAll();
+    public abstract Task<List<T>> resolveAll();
 
     /**
      * Generates a random key for result registries
