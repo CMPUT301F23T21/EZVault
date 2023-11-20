@@ -3,6 +3,7 @@
 package com.example.ezvault.model;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import javax.annotation.Nullable;
 

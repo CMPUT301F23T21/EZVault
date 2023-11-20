@@ -7,6 +7,8 @@ import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.PropertyName;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -54,6 +56,7 @@ public class Item {
     /**
      * List of images associated with the item
      */
+    @Exclude
     private ArrayList<Image> images;
 
     /**
@@ -178,6 +181,7 @@ public class Item {
      * Get associated images
      * @return List of images associated with the item
      */
+    @Exclude
     public ArrayList<Image> getImages() { return images; }
 
     public void setMake(String make) {
@@ -233,7 +237,12 @@ public class Item {
      * Set the images
      * @param images List of images to be associated with the item.
      */
+
+    @Exclude
     public void setImages(ArrayList<Image> images) {
         this.images = images;
     }
+
+    @PropertyName("images")
+    public List<String> getImageIds() {return this.images.stream().map(Image::getId).collect(Collectors.toList());}
 }
