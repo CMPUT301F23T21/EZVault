@@ -9,7 +9,7 @@ import com.google.android.gms.tasks.TaskCompletionSource;
  * Storage class for the creation of ActivityResults
  * @param <T> Class type of result from the completion of an ActivityResult
  */
-public class ActivityTaskChunk<T> {
+public class ActivityTaskChunk<T, S> {
 
     /**
      * Keeps track of a Tasks completion status
@@ -19,9 +19,9 @@ public class ActivityTaskChunk<T> {
     /**
      * Launch for a Visual Media activity result
      */
-    private ActivityResultLauncher<PickVisualMediaRequest> arLauncher;
+    private ActivityResultLauncher<S> arLauncher;
 
-    public ActivityTaskChunk(TaskCompletionSource<T> tcSource, ActivityResultLauncher<PickVisualMediaRequest> arLauncher) {
+    public ActivityTaskChunk(TaskCompletionSource<T> tcSource, ActivityResultLauncher<S> arLauncher) {
         this.tcSource = tcSource;
         this.arLauncher = arLauncher;
     }
@@ -36,11 +36,11 @@ public class ActivityTaskChunk<T> {
         this.tcSource = tcSource;
     }
 
-    public ActivityResultLauncher<PickVisualMediaRequest> getArLauncher() {
+    public ActivityResultLauncher<S> getArLauncher() {
         return arLauncher;
     }
 
-    public void setArLauncher(ActivityResultLauncher<PickVisualMediaRequest> arLauncher) {
+    public void setArLauncher(ActivityResultLauncher<S> arLauncher) {
         this.arLauncher = arLauncher;
     }
 
