@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
-    id("androidx.navigation.safeargs")
+    //id("androidx.navigation.safeargs")
 }
 
 
@@ -11,9 +11,9 @@ android {
     namespace = "com.example.ezvault"
     compileSdk = 34
 
-    sourceSets {
-        getByName("main").java.srcDir("build/generated/source/navigation-args")
-    }
+//    sourceSets {
+//        getByName("main").java.srcDir("build/generated/source/navigation-args")
+//    }
 
     defaultConfig {
         applicationId = "com.example.ezvault"
