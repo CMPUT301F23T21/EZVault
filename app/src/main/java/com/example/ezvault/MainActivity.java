@@ -1,28 +1,19 @@
 package com.example.ezvault;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuHost;
-import androidx.core.view.MenuProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.ezvault.authentication.authentication.AuthenticationHandler;
-import com.example.ezvault.authentication.authentication.EmailPasswordAuthenticationStrategy;
 import com.example.ezvault.database.FirebaseBundle;
-import com.example.ezvault.utils.TaskUtils;
 
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,9 +22,6 @@ import android.view.View;
 
 import com.example.ezvault.utils.UserManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.HashSet;
 import java.util.Set;
