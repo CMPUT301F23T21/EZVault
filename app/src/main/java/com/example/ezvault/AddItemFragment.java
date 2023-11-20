@@ -1,6 +1,9 @@
 package com.example.ezvault;
 
+import android.content.ContentResolver;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,33 +12,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
-import com.example.ezvault.model.Item;
+import com.example.ezvault.model.Image;
 import com.example.ezvault.model.ItemBuilder;
 import com.example.ezvault.model.User;
+import com.example.ezvault.utils.FileUtils;
+import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.sql.Time;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -64,6 +67,8 @@ public class AddItemFragment extends Fragment {
     @Inject
     protected UserManager userManager;
 
+    private ArrayList<Image> images;
+
     public AddItemFragment() {
         // Required empty public constructor
     }
@@ -89,6 +94,8 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        images = new ArrayList<>();
 
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
@@ -118,8 +125,8 @@ public class AddItemFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_item, container, false);
 
-        EditText itemName = view.findViewById(R.id.edittext_item_name);
-        EditText itemDate = view.findViewById(R.id.edittext_item_date);
+        //EditText itemName = view.findViewById(R.id.edittext_item_name);
+        //EditText itemDate = view.findViewById(R.id.edittext_item_date);
         EditText itemValue = view.findViewById(R.id.edittext_item_value);
         EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
         EditText itemMake = view.findViewById(R.id.edittext_item_make);
@@ -128,11 +135,26 @@ public class AddItemFragment extends Fragment {
         EditText itemDescription = view.findViewById(R.id.edittext_item_description);
         EditText itemComments = view.findViewById(R.id.edittext_item_comment);
 
-
         addItem = view.findViewById(R.id.button_confirm_add_item);
         addItem.setOnClickListener(v -> {
             FirebaseBundle fb = new FirebaseBundle();
             ItemDAO itemDAO = new ItemDAO(fb);
+            ImageDAO imageDAO = new ImageDAO(fb);
+
+            List<Task<String>> imageTasks = new ArrayList<>();
+
+            images.forEach(image -> {
+                imageTasks.add(imageDAO.create(image));
+            });
+
+            Tasks.whenAllSuccess(imageTasks).onSuccessTask(t -> {
+                for (int i = 0; i < images.size(); i++) {
+                    images.get(0).setId((String) t.get(i));
+                }
+
+                return TaskUtils.drop(Tasks.forResult(null));
+
+            }).continueWith(itemCreateTask -> {
 
             // Construct our item
             ItemBuilder itemBuilder = new ItemBuilder()
@@ -145,10 +167,10 @@ public class AddItemFragment extends Fragment {
                     .setSerialNumber(itemSerial.getText().toString())
                     .setComment(itemComments.getText().toString())
                     .setTags(new ArrayList<>())
-                    .setImages(new ArrayList<>());
+                    .setImages((ArrayList<Image>)images.clone());
 
             // Add the new item to our database
-            itemDAO.create(itemBuilder.build()).continueWith(idTask ->{
+            itemDAO.create(itemBuilder.build()).continueWith(idTask -> {
                 String itemId = idTask.getResult();
 
                 // User info
@@ -168,17 +190,87 @@ public class AddItemFragment extends Fragment {
                     rawUser.getItemids().add(itemId); // Add the item to our user database reference
 
                     rawUserDAO.update(uid, rawUser)
-                            .continueWith(updateUserTask -> Navigation.findNavController(view).popBackStack());
+                            .continueWith(updateUserTask -> {
+                                images.clear();
+                                userManager.clearUriCache();
+                                Navigation.findNavController(view).popBackStack();
+                                return null;
+                            });
 
                     return null;
                 });
 
                 return null;
             });
+        return null;
+        });
+        });
+
+
+        ImageView itemPhoto = view.findViewById(R.id.add_item_photo);
+        itemPhoto.setOnClickListener(v -> {
+
+            View viewPopupWindow = inflater.inflate(R.layout.photo_option_dialogue, null);
+            PopupWindow popupWindow = new PopupWindow(viewPopupWindow, 900, 400, true);
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            TextView choose_photo = viewPopupWindow.findViewById(R.id.text_choose_photo);
+            choose_photo.setOnClickListener(popupView -> {
+                popupWindow.dismiss();
+                galleryAction.resolveAll().continueWith(imTask -> {
+                    images.addAll(imTask.getResult());
+                    return null;
+                });
+            });
+
+            TextView take_photo = viewPopupWindow.findViewById(R.id.text_take_photo);
+            take_photo.setOnClickListener(popupView -> {
+                popupWindow.dismiss();
+                Navigation.findNavController(view).navigate(R.id.action_addItemFragment_to_cameraFragment);
+                /*
+                captureAction.resolve().continueWith(imTask -> {
+                   images.add(imTask.getResult());
+
+                    byte[] imageContent = images.get(0).getContents();
+                    Bitmap imageBmp = BitmapFactory.decodeByteArray(imageContent, 0, imageContent.length);
+
+                   itemPhoto.setImageBitmap(imageBmp);
+
+                   return null;
+                });
+                */
+
+            });
 
         });
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadImages(requireContext().getContentResolver());
+        Log.v("EEp", "Resumed");
+    }
+
+    private void createItem(View view){
+
+    }
+
+    private void loadImages(ContentResolver contentResolver){
+        userManager.getUriCache().forEach(uri -> {
+            Log.v("EEp", uri.toString());
+            Image image = FileUtils.imageFromUri(uri, contentResolver);
+
+            Log.v("EEp", String.valueOf(image.getContents().length));
+
+            images.add(image);
+        });
+    }
+
+
+
+
 
 }
