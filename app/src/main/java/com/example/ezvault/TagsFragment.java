@@ -102,6 +102,7 @@ public class TagsFragment extends Fragment {
                     datalist.add(newTag);
                     arrayAdapter.notifyDataSetChanged();
                 }
+
         }});
 
         addTag.setOnClickListener(v -> {

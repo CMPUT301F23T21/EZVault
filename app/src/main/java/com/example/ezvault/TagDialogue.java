@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -113,14 +114,19 @@ public class TagDialogue extends DialogFragment {
 
         //old code
         add.setOnClickListener(v -> {
-            String tagname = tagName.getText().toString();
+            String tagname = tagName.getText().toString().trim();
+
+            if (tagName.length()==0){
+                Toast.makeText(getContext(), "Please enter a tag name", Toast.LENGTH_SHORT).show();
+            }
+            else {
             Tag tag = new Tag(tagname);
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("tagData", tag);
 
             getParentFragmentManager().setFragmentResult("tagResult", bundle);
-            dismiss();
+            dismiss();}
         });
 
         cancel.setOnClickListener(v -> {
