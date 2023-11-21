@@ -12,9 +12,4 @@
         app:showAsAction="ifRoom"
         android:title="Trash"
         android:icon="@drawable/icon_delete"/>
-    <item
-        android:id="@+id/toolbar_filter"
-        app:showAsAction="ifRoom"
-        android:title="Filter"
-        android:icon="@drawable/icon_filter"/>
 </menu>

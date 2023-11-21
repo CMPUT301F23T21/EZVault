@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navgraph"
-    app:startDestination="@id/welcomeFragment"
+    app:startDestination="@id/itemsFragment"
     >
 
     <fragment
@@ -54,9 +54,12 @@
         <action
             android:id="@+id/itemsFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
-        <argument
-            android:name="item_name"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_itemsFragment_to_viewItemFragment"
+            app:destination="@id/viewItemFragment" />
+        <action
+            android:id="@+id/itemsFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -71,11 +74,6 @@
         <action
             android:id="@+id/tagsFragment_to_tagDialogue"
             app:destination="@id/tagDialogue" />
-        <argument
-            android:name="tag_name"
-            app:argType="string"
-            android:defaultValue="guh"
-            />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
@@ -85,20 +83,41 @@
         <action
             android:id="@+id/action_addItemFragment_to_itemsFragment"
             app:destination="@id/itemsFragment" />
+        <action
+            android:id="@+id/action_addItemFragment_to_datePickerFragment"
+            app:destination="@id/datePickerFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.ezvault.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/profileFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
     <dialog
         android:id="@+id/tagDialogue"
         android:name="com.example.ezvault.TagDialogue"
         android:label="TagDialogue"
         tools:layout="@layout/add_tag_dialogue"
-        >
+        />
+    <dialog
+        android:id="@+id/datePickerFragment"
+        android:name="com.example.ezvault.DatePickerFragment"
+        android:label="DatePickerFragment" />
+    <fragment
+        android:id="@+id/viewItemFragment"
+        android:name="com.example.ezvault.ViewItemFragment"
+        android:label="fragment_view_item"
+        tools:layout="@layout/fragment_view_item" />
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.example.ezvault.FilterFragment"
+        android:label="Filter / Sort"
+        tools:layout="@layout/fragment_filter" >
         <action
-            android:id="@+id/tagDialogue_to_tagsFragment"
-            app:destination="@id/tagsFragment" />
-    </dialog>
+            android:id="@+id/action_filterFragment_to_itemsFragment"
+            app:destination="@id/itemsFragment" />
+    </fragment>
 </navigation>

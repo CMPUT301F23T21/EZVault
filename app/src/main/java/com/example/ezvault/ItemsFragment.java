@@ -29,7 +29,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class ItemsFragment extends Fragment {
 
-    FloatingActionButton floatbtn;
+    private FloatingActionButton floatbtn;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,6 +86,12 @@ public class ItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
 
+        TextView filter = view.findViewById(R.id.text_filterSort);
+        filter.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.itemsFragment_to_filterFragment);
+        });
+
+
         floatbtn = view.findViewById(R.id.button_add_item);
 
         floatbtn.setOnClickListener(v -> {
@@ -103,7 +110,7 @@ public class ItemsFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.setAdapter(mItemAdapter);
 
-        mItemAdapter.setItems(userManager.getUser().getItemList().getItems());
+        //mItemAdapter.setItems(userManager.getUser().getItemList().getItems());
 
         // hide the empty items text if items exist
         TextView no_item_warning = view.findViewById(R.id.empty_items);
@@ -118,8 +125,8 @@ public class ItemsFragment extends Fragment {
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
         numItemsView.setText(String.valueOf(mItemAdapter.getItemCount()));
         TextView totalItemValueView = view.findViewById(R.id.text_total_value);
-        double totalItemValue = userManager.getUser().getItemList().getTotalValue();
-        totalItemValueView.setText(String.valueOf(totalItemValue));
+        //double totalItemValue = userManager.getUser().getItemList().getTotalValue();
+        //totalItemValueView.setText(String.valueOf(totalItemValue));
 
         // Inflate the layout for this fragment
         return view;
