@@ -2,15 +2,24 @@ package com.example.ezvault;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.ezvault.model.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+
+import com.example.ezvault.TagsFragmentArgs;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +37,15 @@ public class TagsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Tag tag;
+    private RecyclerView recyclerView;
+    //private String[] datalist;
+    private ArrayList<Tag> datalist;
+    private com.example.ezvault.TagsRecyclerAdapter arrayAdapter;
+
+    private TagsFragmentArgs args;
+
+
 
     public TagsFragment() {
         // Required empty public constructor
@@ -64,14 +82,55 @@ public class TagsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_tags, container, false);
 
+
         addTag = view.findViewById(R.id.button_add_tag);
+        recyclerView = view.findViewById(R.id.recyclerView_tags);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        datalist = new ArrayList<>();
+        arrayAdapter = new com.example.ezvault.TagsRecyclerAdapter(getContext(), datalist);
+        recyclerView.setAdapter(arrayAdapter);
+
+        getParentFragmentManager().setFragmentResultListener("tagInput", getViewLifecycleOwner(), (requestKey, result) -> {
+
+            if (requestKey.equals("tagInput")){
+                Tag newTag = (Tag) result.getSerializable("tag");
+                if (newTag != null){
+                    datalist.add(newTag);
+                    arrayAdapter.notifyDataSetChanged();
+                }
+        }});
+
         addTag.setOnClickListener(v -> {
-            TagDialogue tagDialogue = new TagDialogue();
-            tagDialogue.show(getChildFragmentManager(), "GAH");
+
+
+            Navigation.findNavController(view).navigate(R.id.tagDialogue);
+
+
+
+
+
+
+
         });
 
+
         return view;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getParentFragmentManager().setFragmentResultListener("tagResult", this, ((requestKey, result) -> {
+            if (requestKey.equals("tagResult")){
+                Tag tag = (Tag) result.getSerializable("tagData");
+
+                datalist.add(tag);
+                arrayAdapter.notifyDataSetChanged();
+            }
+        }));
     }
 }
