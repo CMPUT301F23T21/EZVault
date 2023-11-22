@@ -61,4 +61,5 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
+    implementation("com.journeyapps:zxing-android-embedded:4.1.0")
 }
