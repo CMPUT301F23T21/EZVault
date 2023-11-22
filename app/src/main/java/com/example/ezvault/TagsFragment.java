@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.ezvault.model.Tag;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -106,19 +107,17 @@ public class TagsFragment extends Fragment {
         }});
 
         addTag.setOnClickListener(v -> {
-
-
             Navigation.findNavController(view).navigate(R.id.tagDialogue);
-
-
-
-
-
-
-
         });
-
-
+/*
+        TextView noItem = view.findViewById(R.id.empty_tags);
+        if (arrayAdapter.getItemCount() != 0) {
+            noItem.setVisibility(View.GONE);
+        }
+        else{
+            noItem.setVisibility(View.VISIBLE);
+        }
+*/
         return view;
     }
     @Override
@@ -131,7 +130,19 @@ public class TagsFragment extends Fragment {
 
                 datalist.add(tag);
                 arrayAdapter.notifyDataSetChanged();
+
+                updateNoItemVisibility();
             }
         }));
     }
+    private void updateNoItemVisibility(){
+        TextView noItem = requireView().findViewById(R.id.empty_tags);
+        if (datalist.isEmpty()){
+            noItem.setVisibility(View.VISIBLE);
+        }
+        else{
+            noItem.setVisibility(View.GONE);
+        }
+    }
+
 }
