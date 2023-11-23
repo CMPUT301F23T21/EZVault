@@ -80,13 +80,21 @@ public class EditItemDetails extends Fragment {
         dateText.setText(dateString);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.clear();
+        calendar.setTime(raw.getAcquisitionDate().toDate());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         TextInputLayout dateLayout = view.findViewById(R.id.edit_details_date_layout);
         dateLayout.setEndIconOnClickListener(v -> {
             Log.d("EZVault", "Setting new date.");
 
             DatePickerDialog dialog = new DatePickerDialog(getContext());
+            int y = calendar.get(Calendar.YEAR);
+            int m = calendar.get(Calendar.MONTH);
+            int d = calendar.get(Calendar.DAY_OF_MONTH);
+            dialog.updateDate(y, m, d);
             dialog.setOnDateSetListener((datePicker, year, month, day) -> {
                 calendar.set(year, month, day);
 
