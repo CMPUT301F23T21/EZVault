@@ -16,7 +16,6 @@ import com.example.ezvault.model.Item;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -90,7 +89,7 @@ public class ItemsFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
 
-        mItemAdapter = new ItemAdapter(view.getContext(), new ArrayList<Item>(), new ItemAdapter.ItemClickListener() {
+        mItemAdapter = new ItemAdapter(view.getContext(), userManager.getUser().getItemList(), new ItemAdapter.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
