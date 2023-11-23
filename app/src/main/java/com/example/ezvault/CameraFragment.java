@@ -1,10 +1,7 @@
 package com.example.ezvault;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
@@ -13,7 +10,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
@@ -21,11 +17,9 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.UseCaseGroup;
 import androidx.camera.core.ViewPort;
 import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.LifecycleCameraController;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LifecycleOwner;
 
 import com.example.ezvault.utils.UserManager;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -42,34 +36,20 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class CameraFragment extends Fragment {
-
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ImageCapture imageCapture;
     private PreviewView camPreview;
 
     @Inject
     protected UserManager userManager;
-
-    LifecycleCameraController cameraController;
-
     private ExecutorService cameraExecutor;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //cameraController = new LifecycleCameraController(requireContext());
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext());
         cameraExecutor = Executors.newSingleThreadExecutor();
-    }
-
-    private File createTempFile(Activity activity){
-        try {
-            String fileName = "EZVAULT_" + System.currentTimeMillis();
-            return File.createTempFile(fileName, ".jpg", activity.getExternalFilesDir("app_photos"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Nullable
@@ -85,7 +65,32 @@ public class CameraFragment extends Fragment {
         return view;
     }
 
-    private void bindUseCases(@NonNull ProcessCameraProvider cameraProvider, View view) {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        cameraProviderFuture.addListener(() -> {
+            try {
+                bindUseCases(cameraProviderFuture.get());
+            } catch (ExecutionException | InterruptedException e) {
+                // No errors need to be handled for this Future.
+                // This should never be reached.
+            }
+        }, ContextCompat.getMainExecutor(requireContext()));
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        cameraExecutor.shutdown();
+    }
+
+    /**
+     * Initializes the camera and binds it to various use cases
+     * @param cameraProvider Camera to access
+     */
+    private void bindUseCases(@NonNull ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder()
                 .build();
 
@@ -114,28 +119,25 @@ public class CameraFragment extends Fragment {
 
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        cameraProviderFuture.addListener(() -> {
-            try {
-                bindUseCases(cameraProviderFuture.get(), view);
-            } catch (ExecutionException | InterruptedException e) {
-                // No errors need to be handled for this Future.
-                // This should never be reached.
-            }
-        }, ContextCompat.getMainExecutor(requireContext()));
-
+    /**
+     * Creates a temp file to store an image in
+     * @param activity Activity to read an external files path from
+     * @return
+     */
+    private File createTempFile(Activity activity){
+        try {
+            String fileName = "EZVAULT_" + System.currentTimeMillis();
+            return File.createTempFile(fileName, ".jpg", activity.getExternalFilesDir("app_photos"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        cameraExecutor.shutdown();
-    }
-
-    private void takePicture(View v) {
+    /**
+     * Takes a photo and adds the uri to the user's URI cache
+     * @param view
+     */
+    private void takePicture(View view) {
         // Specify where we want to save the file
         ImageCapture.OutputFileOptions outputOpts =
                 new ImageCapture.OutputFileOptions.Builder(createTempFile(requireActivity())).build();
@@ -146,7 +148,6 @@ public class CameraFragment extends Fragment {
                     @Override
                     public void onImageSaved(ImageCapture.OutputFileResults outputFileResults) {
                         userManager.addUri(outputFileResults.getSavedUri());
-                        Log.v("EEp", outputFileResults.getSavedUri().toString());
                     }
 
                     @Override
