@@ -19,9 +19,10 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/add_item_recyclerview"
+                    android:layout_width="309dp"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"/>
-                    
+                    android:orientation="horizontal" />
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -328,6 +329,26 @@
                         android:textColor="@color/black"/>
 
                 </RelativeLayout>
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="36dp"
+                    android:layout_marginBottom="171dp"
+                    app:srcCompat="@drawable/icon_camera" />
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="5dp"
+                    app:srcCompat="@android:drawable/ic_menu_gallery" />
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
