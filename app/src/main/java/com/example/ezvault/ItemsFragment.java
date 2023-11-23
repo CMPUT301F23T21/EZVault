@@ -101,7 +101,7 @@ public class ItemsFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         mRecyclerView.setAdapter(mItemAdapter);
 
-        mItemAdapter.setItems(userManager.getUser().getItemList().getItems());
+        mItemAdapter.setItems(userManager.getUser().getItemList());
 
         // hide the empty items text if items exist
         TextView no_item_warning = view.findViewById(R.id.empty_items);
