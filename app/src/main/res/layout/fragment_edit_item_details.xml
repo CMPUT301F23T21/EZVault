@@ -15,6 +15,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/edit_details_image_recycler"
+                android:layout_width="309dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
