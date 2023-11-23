@@ -2,8 +2,6 @@ package com.example.ezvault;
 
 import android.content.ContentResolver;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuHost;
@@ -22,6 +18,8 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;
@@ -38,7 +36,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -69,6 +69,10 @@ public class AddItemFragment extends Fragment {
 
     private ArrayList<Image> images;
 
+    private AddItemPhotoAdapter photoAdapter;
+
+    private ContentResolver contentResolver;
+
     public AddItemFragment() {
         // Required empty public constructor
     }
@@ -94,8 +98,10 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        contentResolver = requireContext().getContentResolver();
 
         images = new ArrayList<>();
+        photoAdapter = new AddItemPhotoAdapter(requireContext(), images, userManager);
 
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
@@ -121,12 +127,16 @@ public class AddItemFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_item, container, false);
 
-        //EditText itemName = view.findViewById(R.id.edittext_item_name);
-        //EditText itemDate = view.findViewById(R.id.edittext_item_date);
+        syncImages(contentResolver);
+
+        RecyclerView photoRecyclerView = view.findViewById(R.id.add_item_recyclerview);
+        photoRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false));
+        photoRecyclerView.setAdapter(photoAdapter);
+
+        // Get all of our text fields
         EditText itemValue = view.findViewById(R.id.edittext_item_value);
         EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
         EditText itemMake = view.findViewById(R.id.edittext_item_make);
@@ -134,6 +144,7 @@ public class AddItemFragment extends Fragment {
         EditText itemSerial = view.findViewById(R.id.edittext_item_serial);
         EditText itemDescription = view.findViewById(R.id.edittext_item_description);
         EditText itemComments = view.findViewById(R.id.edittext_item_comment);
+        EditText itemDate = view.findViewById(R.id.edittext_item_date);
 
         addItem = view.findViewById(R.id.button_confirm_add_item);
         addItem.setOnClickListener(v -> {
@@ -149,128 +160,111 @@ public class AddItemFragment extends Fragment {
 
             Tasks.whenAllSuccess(imageTasks).onSuccessTask(t -> {
                 for (int i = 0; i < images.size(); i++) {
-                    images.get(0).setId((String) t.get(i));
+                    images.get(i).setId((String) t.get(i));
                 }
 
                 return TaskUtils.drop(Tasks.forResult(null));
 
             }).continueWith(itemCreateTask -> {
 
-            // Construct our item
-            ItemBuilder itemBuilder = new ItemBuilder()
-                    .setMake(itemMake.getText().toString())
-                    .setModel(itemModel.getText().toString())
-                    .setCount(Double.valueOf(itemQuantity.getText().toString()))
-                    .setValue(Double.valueOf(itemValue.getText().toString()))
-                    .setAcquisitionDate(Timestamp.now())
-                    .setDescription(itemDescription.getText().toString())
-                    .setSerialNumber(itemSerial.getText().toString())
-                    .setComment(itemComments.getText().toString())
-                    .setTags(new ArrayList<>())
-                    .setImages((ArrayList<Image>)images.clone());
+                String dateText = itemDate.getText().toString();
+                Date realItemDate;
 
-            // Add the new item to our database
-            itemDAO.create(itemBuilder.build()).continueWith(idTask -> {
-                String itemId = idTask.getResult();
+                if (dateText.isEmpty()){
+                    realItemDate = new Date();
+                } else {
+                    realItemDate = new SimpleDateFormat("dd-MM-yyyy").parse(dateText);
+                }
 
-                // User info
-                User localUser = userManager.getUser();
-                String uid = localUser.getUid();
+                // Construct our item
+                ItemBuilder itemBuilder = new ItemBuilder()
+                        .setMake(itemMake.getText().toString())
+                        .setModel(itemModel.getText().toString())
+                        .setCount(Double.valueOf(itemQuantity.getText().toString()))
+                        .setValue(Double.valueOf(itemValue.getText().toString()))
+                        .setAcquisitionDate(new Timestamp(realItemDate))
+                        .setDescription(itemDescription.getText().toString())
+                        .setSerialNumber(itemSerial.getText().toString())
+                        .setComment(itemComments.getText().toString())
+                        .setTags(new ArrayList<>())
+                        .setImages((ArrayList<Image>)images.clone());
 
-                // Add the item to our local store
-                itemBuilder.setId(itemId);
-                localUser.getItemList().add(itemBuilder.build());
+                // Add the new item to our database
+                itemDAO.create(itemBuilder.build()).continueWith(idTask -> {
+                    String itemId = idTask.getResult();
 
-                RawUserDAO rawUserDAO = new RawUserDAO(fb);
+                    // User info
+                    User localUser = userManager.getUser();
+                    String uid = localUser.getUid();
 
-                // Fetch our raw local user
-                // TODO: Expose raw user so we dont have to fetch every tag/item creation or update
-                rawUserDAO.read(uid).continueWith(rawUserTask -> {
-                    RawUserDAO.RawUser rawUser = rawUserTask.getResult();
-                    rawUser.getItemids().add(itemId); // Add the item to our user database reference
+                    // Add the item to our local store
+                    itemBuilder.setId(itemId);
+                    localUser.getItemList().add(itemBuilder.build());
 
-                    rawUserDAO.update(uid, rawUser)
-                            .continueWith(updateUserTask -> {
-                                images.clear();
-                                userManager.clearUriCache();
-                                Navigation.findNavController(view).popBackStack();
-                                return null;
-                            });
+                    RawUserDAO rawUserDAO = new RawUserDAO(fb);
+
+                    // Fetch our raw local user
+                    // TODO: Expose raw user so we dont have to fetch every tag/item creation or update
+                    rawUserDAO.read(uid).continueWith(rawUserTask -> {
+                        RawUserDAO.RawUser rawUser = rawUserTask.getResult();
+                        rawUser.getItemids().add(itemId); // Add the item to our user database reference
+
+                        rawUserDAO.update(uid, rawUser)
+                                .continueWith(updateUserTask -> {
+                                    images.clear();
+                                    userManager.clearUriCache();
+                                    Navigation.findNavController(view).popBackStack();
+                                    return null;
+                                });
+
+                        return null;
+                    });
 
                     return null;
                 });
+            return null;
+            });
+        });
 
+        // Handle opening the camera
+        ImageButton cameraButton = view.findViewById(R.id.imageButton);
+        cameraButton.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.action_addItemFragment_to_cameraFragment);
+        });
+
+        // Handle opening the gallery
+        ImageButton galleryButton = view.findViewById(R.id.imageButton2);
+        galleryButton.setOnClickListener(v -> {
+            galleryAction.resolveAll().continueWith(imTask -> {
+                userManager.getUriCache().addAll(imTask.getResult());
+                syncImages(contentResolver);
                 return null;
             });
-        return null;
-        });
-        });
-
-
-        ImageView itemPhoto = view.findViewById(R.id.add_item_photo);
-        itemPhoto.setOnClickListener(v -> {
-
-            View viewPopupWindow = inflater.inflate(R.layout.photo_option_dialogue, null);
-            PopupWindow popupWindow = new PopupWindow(viewPopupWindow, 900, 400, true);
-            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-            TextView choose_photo = viewPopupWindow.findViewById(R.id.text_choose_photo);
-            choose_photo.setOnClickListener(popupView -> {
-                popupWindow.dismiss();
-                galleryAction.resolveAll().continueWith(imTask -> {
-                    images.addAll(imTask.getResult());
-                    return null;
-                });
-            });
-
-            TextView take_photo = viewPopupWindow.findViewById(R.id.text_take_photo);
-            take_photo.setOnClickListener(popupView -> {
-                popupWindow.dismiss();
-                Navigation.findNavController(view).navigate(R.id.action_addItemFragment_to_cameraFragment);
-                /*
-                captureAction.resolve().continueWith(imTask -> {
-                   images.add(imTask.getResult());
-
-                    byte[] imageContent = images.get(0).getContents();
-                    Bitmap imageBmp = BitmapFactory.decodeByteArray(imageContent, 0, imageContent.length);
-
-                   itemPhoto.setImageBitmap(imageBmp);
-
-                   return null;
-                });
-                */
-
-            });
-
         });
 
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadImages(requireContext().getContentResolver());
-        Log.v("EEp", "Resumed");
+    /**
+     * Synchronizes the recycler view of Images with the stae of the user's uri cache
+     * @param contentResolver Content resolver used for reading media
+     */
+    private void syncImages(ContentResolver contentResolver){
+        int imLen = images.size();
+        int cacheLen = userManager.getUriCache().size();
+
+        if (imLen == cacheLen) return;
+        else if (imLen < cacheLen) {
+            int numPhotosAdded = cacheLen - imLen;
+            int addedStart = cacheLen - numPhotosAdded;
+
+            for (int i = addedStart; i < cacheLen; i++){
+                Image image = FileUtils
+                        .imageFromUri(userManager.getUriCache().get(i), contentResolver);
+                images.add(image);
+                photoAdapter.notifyItemInserted(i);
+            }
+            photoAdapter.notifyItemRangeInserted(addedStart, cacheLen - 1);
+        }
     }
-
-    private void createItem(View view){
-
-    }
-
-    private void loadImages(ContentResolver contentResolver){
-        userManager.getUriCache().forEach(uri -> {
-            Log.v("EEp", uri.toString());
-            Image image = FileUtils.imageFromUri(uri, contentResolver);
-
-            Log.v("EEp", String.valueOf(image.getContents().length));
-
-            images.add(image);
-        });
-    }
-
-
-
-
-
 }

@@ -1,19 +1,23 @@
 package com.example.ezvault;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.example.ezvault.model.Image;
+import com.example.ezvault.utils.UserManager;
 
-public class AddItemPhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+import java.util.List;
+
+public class AddItemPhotoAdapter extends RecyclerView.Adapter<AddItemPhotoAdapter.ImageHolder> {
 
     // class for each type of different view layout
     public static class PlaceHolder extends RecyclerView.ViewHolder {
@@ -32,62 +36,46 @@ public class AddItemPhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     private final Context context;
-    private ArrayList<MockClass> imageList;
-    public AddItemPhotoAdapter(Context context, ArrayList<MockClass> imageList) {
+    private List<Image> imageList;
+
+    private UserManager userManager;
+
+    public AddItemPhotoAdapter(Context context, List<Image> imageList, UserManager userManager) {
         this.context = context;
         this.imageList = imageList;
+        this.userManager = userManager;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AddItemPhotoAdapter.ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = LayoutInflater.from(context);
         // inflate layout based on which type of image is to be displayed
-        switch (viewType) {
-            case MockClass.TYPE_PLACEHOLDER:
-                view = inflater.inflate(R.layout.placeholder_layout, parent, false);
-                return new PlaceHolder(view);
-            case MockClass.TYPE_PICTURE:
-                view = inflater.inflate(R.layout.photo_layout, parent, false);
-                return new ImageHolder(view);
-        }
-        return null;
+        view = inflater.inflate(R.layout.photo_layout, parent, false);
+        return new ImageHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MockClass mockClass = imageList.get(position);
-        if (mockClass != null) {
-            switch (mockClass.getType()) {
-                case MockClass.TYPE_PLACEHOLDER:
-                    break;
-                case MockClass.TYPE_PICTURE:
-                    // set the image view of the image
-                    ((ImageHolder) holder).image.setImageResource(R.drawable.logo);
+    public void onBindViewHolder(@NonNull AddItemPhotoAdapter.ImageHolder holder, int position) {
+        Image image = imageList.get(position);
 
-                    // set the click listener for the button
-                    ((ImageHolder) holder).deletePhotoButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            }
-        }
+        // Set the thumbnail to the first image, if there are any
+        byte[] imageContent = image.getContents();
+        Bitmap imageBmp = BitmapFactory.decodeByteArray(imageContent, 0, imageContent.length);
+
+        holder.image.setImageBitmap(imageBmp);
+
+        holder.deletePhotoButton.setOnClickListener(v -> {
+            int updatedPosition = holder.getAdapterPosition();
+            imageList.remove(updatedPosition);
+            userManager.getUriCache().remove(updatedPosition);
+            notifyItemRemoved(updatedPosition);
+            notifyItemRangeChanged(updatedPosition, imageList.size() - updatedPosition);
+        });
     }
 
     // returns what type of image layout to be displayed
-    @Override
-    public int getItemViewType(int position) {
-        switch (imageList.get(position).getType()) {
-            case 0:
-                return MockClass.TYPE_PLACEHOLDER;
-            case 1:
-                return MockClass.TYPE_PICTURE;
-        }
-        return super.getItemViewType(position);
-    }
 
     @Override
     public int getItemCount() {
