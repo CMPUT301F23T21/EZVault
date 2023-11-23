@@ -38,6 +38,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         map.put("model", item.getModel());
         map.put("images", item.getImages().stream().map(Image::getId).collect(Collectors.toCollection(ArrayList::new)));
         map.put("tags", item.getTags().stream().map(Tag::getUid).collect(Collectors.toCollection(ArrayList::new)));
+        map.put("serialNumber", item.getSerialNumber());
 
         return map;
     }
@@ -74,6 +75,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         double count = doc.getDouble("count");
         double value = doc.getDouble("value");
         ArrayList<String> tagIds = (ArrayList<String>) doc.get("tags");
+        String serialNumber = doc.getString("serialNumber");
 
         if (tagIds == null) {
             tagIds = new ArrayList<>();
@@ -112,6 +114,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
                             .setValue(value)
                             .setTags(tags)
                             .setImages(images)
+                            .setSerialNumber(serialNumber)
                             .build()
                     );
 
