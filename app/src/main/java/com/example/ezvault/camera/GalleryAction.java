@@ -1,5 +1,6 @@
 package com.example.ezvault.camera;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.activity.ComponentActivity;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.example.ezvault.model.Image;
+import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
@@ -16,10 +18,15 @@ import com.google.android.gms.tasks.Tasks;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * An action that allows the user to select photos from their gallery
  */
-public class GalleryAction extends CameraAction<Image, PickVisualMediaRequest>{
+
+public class GalleryAction extends CameraAction<Uri, PickVisualMediaRequest>{
     public GalleryAction(@NonNull ComponentActivity componentActivity) {
         super(componentActivity);
     }
@@ -32,27 +39,11 @@ public class GalleryAction extends CameraAction<Image, PickVisualMediaRequest>{
     @Override
     void register(LifecycleOwner owner) {
         resolveTaskChunk.setArLauncher(registry.register(getRandomKey(), owner, new ActivityResultContracts.PickVisualMedia(), uri -> {
-            imageFromUri(uri).continueWith(imageTask -> {
-                resolveTaskChunk.getTcSource().setResult(imageTask.getResult());
-                return null;
-            });
-
+            resolveTaskChunk.getTcSource().setResult(uri);
         }));
 
         resolveAllTaskChunk.setArLauncher(registry.register(getRandomKey(), owner, new ActivityResultContracts.PickMultipleVisualMedia(), uris -> {
-            List<Task<Image>> imageTasks = new ArrayList<>();
-
-            uris.forEach(uri -> {
-                imageTasks.add(imageFromUri(uri));
-            });
-
-            // Wait for all images to be processed
-            Tasks.whenAllSuccess(imageTasks).continueWith(allImages -> {
-                Log.v("EEEDED", "ededede");
-                resolveAllTaskChunk.getTcSource().setResult((List<Image>)(List)allImages.getResult());
-                return null;
-            });
-
+            resolveAllTaskChunk.getTcSource().setResult(uris);
         }));
     }
 
@@ -61,7 +52,7 @@ public class GalleryAction extends CameraAction<Image, PickVisualMediaRequest>{
      * @return A Task containing the selected Image
      */
     @Override
-    public Task<Image> resolve() {
+    public Task<Uri> resolve() {
         resolveTaskChunk.setTcSource(new TaskCompletionSource<>());
 
         // Launch the gallery
@@ -77,7 +68,7 @@ public class GalleryAction extends CameraAction<Image, PickVisualMediaRequest>{
      * @return A Task containing the selected Images
      */
     @Override
-    public Task<List<Image>> resolveAll() {
+    public Task<List<Uri>> resolveAll() {
         resolveAllTaskChunk.setTcSource(new TaskCompletionSource<>());
 
         // Launch the gallery

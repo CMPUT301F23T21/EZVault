@@ -11,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.example.ezvault.model.ActivityTaskChunk;
 import com.example.ezvault.model.Image;
+import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 
@@ -19,9 +20,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * A class that encapsulates the behaviour of actions related to the camera.
  */
+
 public abstract class CameraAction<T,S> implements DefaultLifecycleObserver {
 
     /**
@@ -64,33 +70,6 @@ public abstract class CameraAction<T,S> implements DefaultLifecycleObserver {
      * @param owner LifecycleOwner of class to observe
      */
     abstract void register(LifecycleOwner owner);
-
-    /**
-     * Creates an image from a local file URI
-     * @param contentUri Uri to load image data from
-     * @return A Task containing the Image
-     */
-    protected final Task<Image> imageFromUri(Uri contentUri){
-        InputStream imageInput = null;
-
-        try {
-            imageInput = componentActivity.getContentResolver().openInputStream(contentUri);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        // Compress the image while retaining the most detail we can
-        Bitmap imageBmp = BitmapFactory.decodeStream(imageInput);
-        imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-        byte[] imageContent = baos.toByteArray();
-        Image image = new Image();
-        image.setContents(imageContent);
-
-        return Tasks.forResult(image);
-    }
 
     /**
      * Used to retrieve a single user-selected image from the Camera Action
