@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment {
         Button logOutButton = view.findViewById(R.id.log_out_button);
 
         logOutButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.profileFragment_to_welcomeFragment);
+            //Navigation.findNavController(view).navigate(R.id.profileFragment_to_welcomeFragment);
         });
 
         return view;

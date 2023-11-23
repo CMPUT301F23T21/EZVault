@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ezvault.model.Item;
 import com.example.ezvault.utils.UserManager;
@@ -117,17 +116,10 @@ public class ItemsFragment extends Fragment {
         // set the total quantity and total cost text
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
         numItemsView.setText(String.valueOf(mItemAdapter.getItemCount()));
+
         TextView totalItemValueView = view.findViewById(R.id.text_total_value);
         double totalItemValue = userManager.getUser().getItemList().getTotalValue();
         totalItemValueView.setText(String.valueOf(totalItemValue));
-
-        // Toggle the visibility of the Empty Items text field
-        TextView empty_text = view.findViewById(R.id.empty_items);
-        if (mItemAdapter.getItemCount() > 0) {
-            empty_text.setVisibility(View.GONE);
-        } else {
-            empty_text.setVisibility(View.VISIBLE);
-        }
 
         // Inflate the layout for this fragment
         return view;
