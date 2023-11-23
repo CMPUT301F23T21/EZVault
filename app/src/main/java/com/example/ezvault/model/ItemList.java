@@ -5,6 +5,8 @@ package com.example.ezvault.model;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.ezvault.model.utils.ItemListView;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -14,7 +16,7 @@ import java.util.ListIterator;
 /**
  * Represents a list of items
  */
-public class ItemList implements List<Item> {
+public class ItemList implements List<Item>, ItemListView {
     /**
      * The underlying list of items
      */

@@ -35,6 +35,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -61,4 +62,5 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
