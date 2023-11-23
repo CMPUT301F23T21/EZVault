@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
                 if (navDestination.getId() == R.id.itemsFragment) {
+                    userManager.clearUriCache();
                     bottomNavView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                 }
