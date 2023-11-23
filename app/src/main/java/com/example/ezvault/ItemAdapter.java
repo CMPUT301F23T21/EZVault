@@ -54,7 +54,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.itemCount.setText(String.valueOf(currentItem.getCount()) + " Units");
 
         // Set the items cost
-        holder.itemAmount.setText( "$" + String.valueOf(currentItem.getValue()));
+        holder.itemAmount.setText(String.format("$%.2f", currentItem.getValue()));
 
         // Get all the items images
         List<Image> itemImages = currentItem.getImages();

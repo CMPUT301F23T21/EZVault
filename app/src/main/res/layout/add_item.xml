@@ -17,15 +17,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/add_item_photo"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/icon_camera"
-                    android:scaleType="fitCenter"
-                    android:background="#D7C3B8"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_item_photo"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -45,6 +40,7 @@
                     <EditText
                         android:id="@+id/edittext_item_name"
                         android:layout_width="match_parent"
+                        android:maxLines="1"
                         android:layout_height="40dp"
                         android:layout_below="@+id/text_item_name"
                         android:layout_marginLeft="10dp"
@@ -75,6 +71,8 @@
                         android:inputType="date"
                         android:paddingLeft="16dp"
                         android:paddingEnd="13dp"
+                        android:clickable="true"
+                        android:focusable="false"
                         />
 
                     <LinearLayout
@@ -163,6 +161,7 @@
                             <EditText
                                 android:id="@+id/edittext_item_make"
                                 android:layout_width="match_parent"
+                                android:maxLines="1"
                                 android:layout_height="40dp"
                                 android:background="@drawable/background_add_edittext"
                                 android:layout_marginStart="10dp"
@@ -189,6 +188,7 @@
                                 android:id="@+id/edittext_item_model"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
+                                android:maxLines="1"
                                 android:background="@drawable/background_add_edittext"
                                 android:paddingStart="16dp"
                                 android:layout_marginEnd="10dp"
@@ -237,6 +237,7 @@
 
                     <EditText
                         android:id="@+id/edittext_item_serial"
+                        android:maxLines="1"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_below="@id/text_item_serial"
