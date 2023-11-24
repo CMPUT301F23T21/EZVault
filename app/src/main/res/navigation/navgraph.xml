@@ -85,6 +85,9 @@
         <action
             android:id="@+id/action_addItemFragment_to_itemsFragment"
             app:destination="@id/itemsFragment" />
+        <action
+            android:id="@+id/action_addItemFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -101,4 +104,12 @@
             android:id="@+id/tagDialogue_to_tagsFragment"
             app:destination="@id/tagsFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.example.ezvault.CameraFragment"
+        android:label="CameraFragment" >
+        <action
+            android:id="@+id/action_cameraFragment_to_addItemFragment"
+            app:destination="@id/addItemFragment" />
+    </fragment>
 </navigation>

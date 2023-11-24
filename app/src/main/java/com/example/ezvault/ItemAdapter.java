@@ -11,16 +11,15 @@ import android.content.Context;
 import com.example.ezvault.model.Image;
 
 import com.example.ezvault.model.Item;
+import com.example.ezvault.model.utils.ItemListView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
-    private List<Item> itemList;
+    private ItemListView itemListView;
     private LayoutInflater inflater;
     private ItemClickListener itemClickListener;
 
@@ -30,9 +29,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     // Constructor
-    public ItemAdapter(Context context, List<Item> itemList, ItemClickListener listener) {
+    public ItemAdapter(Context context, ItemListView itemListView, ItemClickListener listener) {
         this.inflater = LayoutInflater.from(context);
-        this.itemList = itemList;
+        this.itemListView = itemListView;
         this.itemClickListener = listener;
     }
 
@@ -45,7 +44,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ItemViewHolder holder, int position) {
-        Item currentItem = itemList.get(position);
+        Item currentItem = itemListView.get(position);
 
         // Construct the item name from make and model
         String itemName = currentItem.getMake() + " " + currentItem.getModel();
@@ -55,7 +54,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.itemCount.setText(String.valueOf(currentItem.getCount()) + " Units");
 
         // Set the items cost
-        holder.itemAmount.setText( "$" + String.valueOf(currentItem.getValue()));
+        holder.itemAmount.setText(String.format("$%.2f", currentItem.getValue()));
 
         // Get all the items images
         List<Image> itemImages = currentItem.getImages();
@@ -84,7 +83,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemListView.size();
     }
 
     // ViewHolder class
@@ -105,8 +104,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     // Allows external callers to set a new dataset
-    public void setItems(List<com.example.ezvault.model.Item> items) {
-        this.itemList = items;
+    public void setItems(ItemListView items) {
+        this.itemListView = items;
         notifyDataSetChanged();
     }
 }

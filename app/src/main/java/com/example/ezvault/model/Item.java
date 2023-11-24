@@ -3,8 +3,12 @@
 package com.example.ezvault.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.PropertyName;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +19,7 @@ public class Item {
     /**
      * The ID of the Item
      */
+    @Exclude
     private final String id;
     /**
      * The make of the item
@@ -27,6 +32,7 @@ public class Item {
     /**
      * The time of acquisition, does not include timezone info
      */
+    @PropertyName("date")
     private Timestamp acquisitionDate;
     /**
      * A description of the item
@@ -50,6 +56,7 @@ public class Item {
     /**
      * List of images associated with the item
      */
+    @Exclude
     private ArrayList<Image> images;
 
     /**
@@ -108,6 +115,7 @@ public class Item {
      * Returns the ID of the item.
      * @return The unique identifier for the item.
      */
+    @Exclude
     public String getId() {
         return id;
     }
@@ -116,6 +124,7 @@ public class Item {
      * Returns the acquisition date of the item.
      * @return The specific instant of acquisition.
      */
+    @PropertyName("date")
     public Timestamp getAcquisitionDate() {
         return acquisitionDate;
     }
@@ -172,6 +181,7 @@ public class Item {
      * Get associated images
      * @return List of images associated with the item
      */
+    @Exclude
     public ArrayList<Image> getImages() { return images; }
 
     public void setMake(String make) {
@@ -186,6 +196,7 @@ public class Item {
      * Set the acquisition date.
      * @param acquisitionDate The date of acquisition of the item.
      */
+    @PropertyName("date")
     public void setAcquisitionDate(Timestamp acquisitionDate) {
         this.acquisitionDate = acquisitionDate;
     }
@@ -226,7 +237,20 @@ public class Item {
      * Set the images
      * @param images List of images to be associated with the item.
      */
+
+    @Exclude
     public void setImages(ArrayList<Image> images) {
         this.images = images;
+    }
+
+    @PropertyName("images")
+    public List<String> getImageIds() {return this.images.stream().map(Image::getId).collect(Collectors.toList());}
+    /**
+     * Check if the item has a specified tag
+     * @param tag The tag to check
+     * @return Whether or not the item has the specified tag
+     */
+    public boolean hasTag(Tag tag) {
+        return this.tags.contains(tag);
     }
 }
