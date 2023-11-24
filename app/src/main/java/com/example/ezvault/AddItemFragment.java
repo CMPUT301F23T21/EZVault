@@ -1,5 +1,6 @@
 package com.example.ezvault;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,18 +8,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 /**
  * fragment class that collects the information of a new item
@@ -26,6 +30,7 @@ import androidx.navigation.ui.NavigationUI;
 public class AddItemFragment extends Fragment {
 
     Button addItem;
+    AppCompatImageButton serialScan, descriptionScan;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +40,8 @@ public class AddItemFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private String lastScan;
 
     public AddItemFragment() {
         // Required empty public constructor
@@ -103,7 +110,34 @@ public class AddItemFragment extends Fragment {
             Navigation.findNavController(view).popBackStack();
         });
 
+        serialScan = view.findViewById(R.id.button_serial_scan);
+        descriptionScan = view.findViewById(R.id.button_description_scan);
+
+        serialScan.setOnClickListener(listener);
+        descriptionScan.setOnClickListener(listener);
+
         return view;
+    }
+
+    private View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v.getId() == serialScan.getId()) lastScan = "serial";
+            else lastScan = "desc";
+            IntentIntegrator.forSupportFragment(AddItemFragment.this).initiateScan();
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (lastScan == "serial") {
+            EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
+            SerialText.setText(result.getContents());
+        } else {
+            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
+            DescriptionText.setText(result.getContents());
+        }
     }
 
 }
