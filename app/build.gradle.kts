@@ -11,7 +11,13 @@ android {
     namespace = "com.example.ezvault"
     compileSdk = 34
 
+
     sourceSets {
+        getByName("main").java.srcDir("build/generated/source/navigation-args")
+    }
+
+
+    sourceSets{
         getByName("main").java.srcDir("build/generated/source/navigation-args")
     }
 
@@ -24,6 +30,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         release {

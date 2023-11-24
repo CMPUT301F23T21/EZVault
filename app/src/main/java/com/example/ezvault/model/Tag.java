@@ -2,10 +2,12 @@
 
 package com.example.ezvault.model;
 
+import java.io.Serializable;
+
 /**
  * Represents a tag.
  */
-public class Tag {
+public class Tag implements Serializable {
     /**
      * The identifying string of the tag.
      */

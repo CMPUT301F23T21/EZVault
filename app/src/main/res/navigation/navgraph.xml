@@ -69,6 +69,7 @@
         android:label="Tags"
         tools:layout="@layout/fragment_tags" >
         <action
+
             android:id="@+id/tagsFragment_to_tagDialogue"
             app:destination="@id/tagDialogue" />
         <argument
@@ -76,6 +77,11 @@
             app:argType="string"
             android:defaultValue="guh"
             />
+
+        <argument
+            android:name="Tag"
+            app:argType="com.example.ezvault.model.Tag" />
+
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
@@ -94,11 +100,15 @@
     <dialog
         android:id="@+id/tagDialogue"
         android:name="com.example.ezvault.TagDialogue"
+
         android:label="TagDialogue"
         tools:layout="@layout/add_tag_dialogue"
         >
         <action
-            android:id="@+id/tagDialogue_to_tagsFragment"
-            app:destination="@id/tagsFragment" />
+            android:id="@+id/tagDialogue_to_tagsFragment"></action>
+
+        <action
+            android:id="@+id/action_tagDialogue_to_tagsFragment"
+></action>
     </dialog>
 </navigation>

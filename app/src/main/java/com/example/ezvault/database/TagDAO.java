@@ -8,12 +8,18 @@ import android.util.Log;
 
 import com.example.ezvault.model.Tag;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that deals with operations in the 'tags' collection.
  */
 public class TagDAO extends AbstractDAO<Tag,String> {
     private final String collectionName = "tags";
+
 
     /**
      * Constructs a TagDAO
@@ -78,5 +84,17 @@ public class TagDAO extends AbstractDAO<Tag,String> {
         return firebase.getDb().collection(collectionName)
                 .document(id)
                 .delete();
+    }
+    public Task<List<Tag>> getAllTags() {
+        return firebase.getDb().collection(collectionName)
+                .get()
+                .continueWith(task -> {
+                    List<Tag> tags = new ArrayList<>();
+                    for (DocumentSnapshot document: task.getResult().getDocuments()){
+                        Tag tag = document.toObject(Tag.class);
+                        tags.add(tag);
+                    }
+                    return tags;
+                });
     }
 }
