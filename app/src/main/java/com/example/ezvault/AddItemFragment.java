@@ -21,8 +21,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 
 /**
  * fragment class that collects the information of a new item
@@ -42,6 +43,8 @@ public class AddItemFragment extends Fragment {
     private String mParam2;
 
     private String lastScan;
+
+    private GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder().enableAutoZoom().build();
 
     public AddItemFragment() {
         // Required empty public constructor
@@ -122,22 +125,21 @@ public class AddItemFragment extends Fragment {
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(AddItemFragment.this.getActivity(), options);
             if (v.getId() == serialScan.getId()) lastScan = "serial";
             else lastScan = "desc";
-            IntentIntegrator.forSupportFragment(AddItemFragment.this).initiateScan();
+            scanner.startScan().addOnSuccessListener(
+                    barcode -> {
+                        if (lastScan == "serial") {
+                            EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
+                            SerialText.setText(barcode.getRawValue());
+                        } else {
+                            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
+                            DescriptionText.setText(barcode.getRawValue());
+                        }
+                    }
+            );
         }
     };
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (lastScan == "serial") {
-            EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
-            SerialText.setText(result.getContents());
-        } else {
-            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
-            DescriptionText.setText(result.getContents());
-        }
-    }
 
 }
