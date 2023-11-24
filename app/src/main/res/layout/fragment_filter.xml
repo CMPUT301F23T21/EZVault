@@ -31,7 +31,7 @@
             android:id="@+id/text_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Keyword Search"
+            android:text="Description Keyword Search"
             android:fontFamily="@font/fredoka_one"
             android:textSize="20sp"
             android:layout_below="@+id/divider"
@@ -71,7 +71,11 @@
             android:layout_height="40dp"
             android:layout_below="@+id/text_date_from"
             android:inputType="date"
-            android:drawableRight="@drawable/icon_calendar"/>
+            android:drawableRight="@drawable/icon_calendar"
+            android:clickable="true"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:focusable="false"/>
 
         <TextView
             android:id="@+id/text_date_end"
@@ -89,7 +93,11 @@
             android:layout_height="40dp"
             android:layout_below="@+id/text_date_end"
             android:inputType="date"
-            android:drawableRight="@drawable/icon_calendar"/>
+            android:drawableRight="@drawable/icon_calendar"
+            android:clickable="true"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:focusable="false"/>
 
         <TextView
             android:id="@+id/text_filter_make"

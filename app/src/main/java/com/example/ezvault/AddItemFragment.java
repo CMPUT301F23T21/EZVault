@@ -1,6 +1,8 @@
 package com.example.ezvault;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -8,24 +10,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * fragment class that collects the information of a new item
  */
 public class AddItemFragment extends Fragment {
 
-    Button addItem;
+    private EditText itemDate;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -88,7 +98,7 @@ public class AddItemFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_item, container, false);
 
         EditText itemName = view.findViewById(R.id.edittext_item_name);
-        EditText itemDate = view.findViewById(R.id.edittext_item_date);
+        itemDate = view.findViewById(R.id.edittext_item_date);
         EditText itemValue = view.findViewById(R.id.edittext_item_value);
         EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
         EditText itemMake = view.findViewById(R.id.edittext_item_make);
@@ -98,12 +108,27 @@ public class AddItemFragment extends Fragment {
         EditText itemComments = view.findViewById(R.id.edittext_item_comment);
 
 
-        addItem = view.findViewById(R.id.button_confirm_add_item);
-        addItem.setOnClickListener(v -> {
+        Button addItemButton = view.findViewById(R.id.button_confirm_add_item);
+        addItemButton.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();
         });
 
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+
+        itemDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());
+                datePickerDialog.setOnDateSetListener((DatePicker, year, month, day) -> {
+                    calendar.set(year, month, day);
+
+                    itemDate.setText(format.format(calendar.getTime()));
+                });
+                datePickerDialog.show();
+            }
+        });
         return view;
     }
-
 }

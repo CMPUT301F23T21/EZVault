@@ -83,9 +83,6 @@
         <action
             android:id="@+id/action_addItemFragment_to_itemsFragment"
             app:destination="@id/itemsFragment" />
-        <action
-            android:id="@+id/action_addItemFragment_to_datePickerFragment"
-            app:destination="@id/datePickerFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -102,10 +99,6 @@
         android:label="TagDialogue"
         tools:layout="@layout/add_tag_dialogue"
         />
-    <dialog
-        android:id="@+id/datePickerFragment"
-        android:name="com.example.ezvault.DatePickerFragment"
-        android:label="DatePickerFragment" />
     <fragment
         android:id="@+id/viewItemFragment"
         android:name="com.example.ezvault.ViewItemFragment"
@@ -117,7 +110,7 @@
         android:label="Filter / Sort"
         tools:layout="@layout/fragment_filter" >
         <action
-            android:id="@+id/action_filterFragment_to_itemsFragment"
+            android:id="@+id/filterFragment_to_itemsFragment"
             app:destination="@id/itemsFragment" />
     </fragment>
 </navigation>
