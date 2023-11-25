@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity{
                     bottomNavView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                 }
-                if (navDestination.getId() == R.id.addItemFragment) {
+                if (navDestination.getId() == R.id.addItemFragment || navDestination.getId() == R.id.filterFragment) {
                     bottomNavView.setVisibility(View.GONE);
                 }
             }
