@@ -117,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
-        android:name="com.example.ezvault.FilterFragment"
+        android:name="com.example.ezvault.view.FilterFragment"
         android:label="Filter / Sort"
         tools:layout="@layout/fragment_filter" >
         <action

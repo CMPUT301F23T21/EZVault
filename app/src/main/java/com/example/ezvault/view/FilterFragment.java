@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.ezvault.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
