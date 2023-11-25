@@ -4,9 +4,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.ezvault.model.utils.filter.IItemFilter;
+import com.example.ezvault.model.utils.filter.ItemConjunctionFilter;
+import com.example.ezvault.model.utils.filter.ItemDateFilter;
+import com.example.ezvault.model.utils.filter.ItemKeywordFilter;
+import com.example.ezvault.model.utils.filter.ItemMakeFilter;
+
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,9 +22,13 @@ import java.util.Locale;
  * A view model for the filter fragment.
  */
 public class FilterViewModel extends ViewModel {
-    private final MutableLiveData<String> startDate = new MutableLiveData<>();
-    private final MutableLiveData<String> endDate = new MutableLiveData<>();
-    private final MutableLiveData<String> make = new MutableLiveData<>();
+    private Date startDate = null;
+    private Date endDate = null;
+    private String make = null;
+    private final MutableLiveData<String> startDateText = new MutableLiveData<>();
+    private final MutableLiveData<String> endDateText = new MutableLiveData<>();
+
+    private List<String> keywords;
 
     private final SimpleDateFormat format;
 
@@ -29,25 +41,23 @@ public class FilterViewModel extends ViewModel {
     }
 
     public LiveData<String> getStartDate() {
-        return startDate;
+        return startDateText;
     }
 
     public LiveData<String> getEndDate() {
-        return endDate;
-    }
-
-    public LiveData<String> getMake() {
-        return make;
+        return endDateText;
     }
 
     public void setStartDate(int year, int month, int day) {
         calendar.set(year, month, day);
-        startDate.setValue(format.format(calendar.getTime()));
+        startDate = calendar.getTime();
+        startDateText.setValue(format.format(startDate));
     }
 
     public void setEndDate(int year, int month, int day) {
         calendar.set(year, month, day);
-        endDate.setValue(format.format(calendar.getTime()));
+        endDate = calendar.getTime();
+        endDateText.setValue(format.format(endDate));
     }
 
     private List<String> parseKeywords(String input) {
@@ -56,10 +66,30 @@ public class FilterViewModel extends ViewModel {
 
     // TODO
     public void setKeywords(String input) {
+        keywords = parseKeywords(input);
     }
 
     // TODO
     public void setMake(String input) {
+        make = input;
+    }
+
+    public IItemFilter getFilter() {
+        Instant start = null;
+        Instant end = null;
+
+        if (startDate != null) {
+            start = startDate.toInstant();
+        }
+
+        if (endDate != null) {
+            end = endDate.toInstant();
+        }
+
+        ItemDateFilter dateFilter = new ItemDateFilter(start, end);
+        ItemKeywordFilter keywordFilter = new ItemKeywordFilter(keywords);
+        ItemMakeFilter makeFilter = new ItemMakeFilter(make);
+        return new ItemConjunctionFilter(dateFilter, makeFilter, keywordFilter);
     }
 
     @FunctionalInterface

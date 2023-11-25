@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.ezvault.R;
+import com.example.ezvault.model.utils.filter.IItemFilter;
 import com.example.ezvault.viewmodel.FilterViewModel;
 
 import java.util.function.Consumer;
@@ -25,6 +26,7 @@ import java.util.function.Consumer;
  * Fragment for the filtering UI.
  */
 public class FilterFragment extends Fragment {
+    private FilterViewModel viewModel;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -42,9 +44,13 @@ public class FilterFragment extends Fragment {
 
     private void setupApplyButton(View view) {
         Button applyButton = view.findViewById(R.id.button_filter_apply);
-        applyButton.setOnClickListener(v ->
-            Navigation.findNavController(view).navigate(R.id.filterFragment_to_itemsFragment)
-        );
+        applyButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            IItemFilter filter = viewModel.getFilter();
+            bundle.putSerializable("filter", filter);
+            Navigation.findNavController(view)
+                    .navigate(R.id.filterFragment_to_itemsFragment, bundle);
+        });
     }
 
     private void setupTextWatcher(TextView view, Consumer<String> consumer) {
@@ -70,7 +76,7 @@ public class FilterFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_filter, container, false);
-        FilterViewModel viewModel = new ViewModelProvider(this).get(FilterViewModel.class);
+        viewModel = new ViewModelProvider(this).get(FilterViewModel.class);
 
         EditText dateStart = view.findViewById(R.id.edittext_filter_date_start);
         EditText dateEnd = view.findViewById(R.id.edittext_filter_date_end);

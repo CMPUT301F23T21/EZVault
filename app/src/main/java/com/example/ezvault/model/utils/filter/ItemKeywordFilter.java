@@ -23,6 +23,10 @@ public class ItemKeywordFilter implements IItemFilter {
      */
     @Override
     public boolean keep(Item item) {
+        if (keywords == null) {
+            return true;
+        }
+
         for (String keyword : keywords) {
             if (!item.getDescription().contains(keyword)) {
                 return false;
