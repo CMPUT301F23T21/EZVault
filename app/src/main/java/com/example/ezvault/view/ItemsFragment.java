@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view;
 
 import android.os.Bundle;
 
@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.ezvault.model.Item;
+import com.example.ezvault.ItemAdapter;
+import com.example.ezvault.R;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

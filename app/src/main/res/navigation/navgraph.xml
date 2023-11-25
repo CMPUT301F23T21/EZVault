@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemsFragment"
-        android:name="com.example.ezvault.ItemsFragment"
+        android:name="com.example.ezvault.view.ItemsFragment"
         android:label="Items"
         tools:layout="@layout/fragment_items" >
         <action
