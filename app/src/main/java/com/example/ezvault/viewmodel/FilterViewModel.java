@@ -100,27 +100,21 @@ public class FilterViewModel extends ViewModel {
         make = input;
     }
 
-    public void apply() {
-        Instant start = null;
-        Instant end = null;
+    private MainItemFilter createFilter() {
+        Instant start = startDate.getValue() != null ? startDate.getValue().toInstant() : null;
+        Instant end = endDate.getValue() != null ? endDate.getValue().toInstant() : null;
 
-        if (startDate.getValue() != null) {
-            start = startDate.getValue().toInstant();
-        }
-
-        if (endDate.getValue() != null) {
-            end = endDate.getValue().toInstant();
-        }
-
-        ItemDateFilter dateFilter = new ItemDateFilter(start, end);
-        ItemKeywordFilter keywordFilter = new ItemKeywordFilter(keywords);
-        ItemMakeFilter makeFilter = new ItemMakeFilter(make);
         MainItemFilter filter = new MainItemFilter();
-        filter.setMakeFilter(makeFilter);
-        filter.setKeywordFilter(keywordFilter);
-        filter.setDateFilter(dateFilter);
+        filter.setDateFilter(new ItemDateFilter(start, end));
+        filter.setMakeFilter(new ItemMakeFilter(make));
+        filter.setKeywordFilter(new ItemKeywordFilter(keywords));
 
-        // set filter to use
+        return filter;
+    }
+
+    public void apply() {
+        MainItemFilter filter = createFilter();
+
         filterRepository.setFilter(filter);
     }
 
