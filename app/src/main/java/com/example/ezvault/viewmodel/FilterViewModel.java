@@ -2,6 +2,7 @@ package com.example.ezvault.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.data.FilterRepository;
@@ -28,26 +29,41 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
  */
 @HiltViewModel
 public class FilterViewModel extends ViewModel {
-    private Date startDate = null;
-    private Date endDate = null;
-    private String make = null;
-    private final MutableLiveData<String> startDateText = new MutableLiveData<>();
-    private final MutableLiveData<String> endDateText = new MutableLiveData<>();
+    private final MutableLiveData<Date> startDate = new MutableLiveData<>();
+    private final MutableLiveData<Date> endDate = new MutableLiveData<>();
+    private String make;
+    private final LiveData<String> startDateText;
+    private final LiveData<String> endDateText;
 
     private List<String> keywords;
-
-    private final SimpleDateFormat format;
 
     private final Calendar calendar;
 
     private final FilterRepository filterRepository;
 
+    private String formatDate(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
+        if (date != null) {
+            return format.format(date);
+        } else {
+            return null;
+        }
+    }
+
     @Inject
     public FilterViewModel(FilterRepository filterRepository) {
         this.filterRepository = filterRepository;
-        format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
         calendar = Calendar.getInstance();
         calendar.clear();
+
+        // set cached values
+        startDate.setValue(filterRepository.getStartDate());
+        endDate.setValue(filterRepository.getEndDate());
+        make = filterRepository.getMake();
+        keywords = filterRepository.getKeywords();
+
+        startDateText = Transformations.map(startDate, this::formatDate);
+        endDateText = Transformations.map(endDate, this::formatDate);
     }
 
     public LiveData<String> getStartDate() {
@@ -60,14 +76,12 @@ public class FilterViewModel extends ViewModel {
 
     public void setStartDate(int year, int month, int day) {
         calendar.set(year, month, day);
-        startDate = calendar.getTime();
-        startDateText.setValue(format.format(startDate));
+        startDate.setValue(calendar.getTime());
     }
 
     public void setEndDate(int year, int month, int day) {
         calendar.set(year, month, day);
-        endDate = calendar.getTime();
-        endDateText.setValue(format.format(endDate));
+        endDate.setValue(calendar.getTime());
     }
 
     private List<String> parseKeywords(String input) {
@@ -88,19 +102,34 @@ public class FilterViewModel extends ViewModel {
         Instant start = null;
         Instant end = null;
 
-        if (startDate != null) {
-            start = startDate.toInstant();
+        if (startDate.getValue() != null) {
+            start = startDate.getValue().toInstant();
         }
 
-        if (endDate != null) {
-            end = endDate.toInstant();
+        if (endDate.getValue() != null) {
+            end = endDate.getValue().toInstant();
         }
 
         ItemDateFilter dateFilter = new ItemDateFilter(start, end);
         ItemKeywordFilter keywordFilter = new ItemKeywordFilter(keywords);
         ItemMakeFilter makeFilter = new ItemMakeFilter(make);
         IItemFilter filter = new ItemConjunctionFilter(dateFilter, makeFilter, keywordFilter);
+
+        filterRepository.setMake(make);
+        filterRepository.setKeywords(keywords);
+        filterRepository.setStartDate(startDate.getValue());
+        filterRepository.setEndDate(endDate.getValue());
+
+        // set filter to use
         filterRepository.setFilter(filter);
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
     }
 
     @FunctionalInterface

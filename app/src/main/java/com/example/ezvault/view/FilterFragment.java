@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.ezvault.R;
 import com.example.ezvault.viewmodel.FilterViewModel;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -29,6 +30,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class FilterFragment extends Fragment {
     private FilterViewModel viewModel;
+    private EditText keywords;
+    private EditText make;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -70,6 +73,18 @@ public class FilterFragment extends Fragment {
         view.addTextChangedListener(textWatcher);
     }
 
+    private void restorePreviousInput() {
+        // restore previous values
+        String makeText = viewModel.getMake();
+        if (makeText != null) {
+            make.setText(makeText);
+        }
+        List<String> keywordsRaw = viewModel.getKeywords();
+        if (keywordsRaw != null) {
+            keywords.setText(String.join(" ", keywordsRaw));
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,13 +101,15 @@ public class FilterFragment extends Fragment {
         createDatePicker(dateStart, viewModel::setStartDate);
         createDatePicker(dateEnd, viewModel::setEndDate);
 
-        EditText keywords = view.findViewById(R.id.edittext_filter_search);
-        EditText make = view.findViewById(R.id.edittext_filter_make);
+        keywords = view.findViewById(R.id.edittext_filter_search);
+        make = view.findViewById(R.id.edittext_filter_make);
 
         setupTextWatcher(keywords, viewModel::setKeywords);
         setupTextWatcher(make, viewModel::setMake);
 
         setupApplyButton(view);
+
+        restorePreviousInput();
 
         return view;
     }
