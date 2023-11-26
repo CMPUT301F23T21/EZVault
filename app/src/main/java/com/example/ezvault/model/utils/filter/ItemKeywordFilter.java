@@ -2,19 +2,19 @@ package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Item filter based on inclusion of keywords in the description
  */
 public class ItemKeywordFilter implements IItemFilter {
-    private Collection<String> keywords;
+    private final List<String> keywords;
 
     /**
      * Create a filter based on keyword
      * @param keywords The keywords to test for.
      */
-    public ItemKeywordFilter(Collection<String> keywords) {
+    public ItemKeywordFilter(List<String> keywords) {
         this.keywords = keywords;
     }
 
@@ -33,5 +33,9 @@ public class ItemKeywordFilter implements IItemFilter {
             }
         }
         return true;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
     }
 }

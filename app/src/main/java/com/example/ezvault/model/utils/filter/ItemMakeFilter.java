@@ -24,4 +24,8 @@ public class ItemMakeFilter implements IItemFilter {
     public boolean keep(Item item) {
         return make == null || make.equals(item.getMake());
     }
+
+    public String getMake() {
+        return make;
+    }
 }

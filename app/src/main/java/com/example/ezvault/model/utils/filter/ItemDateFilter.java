@@ -100,4 +100,12 @@ public class ItemDateFilter implements IItemFilter {
         Instant instant = Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanoseconds());
         return checkStart(instant) && checkEnd(instant);
     }
+
+    public Instant getStart() {
+        return start;
+    }
+
+    public Instant getEnd() {
+        return end;
+    }
 }
