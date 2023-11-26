@@ -3,6 +3,8 @@ package com.example.ezvault.view;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -47,14 +49,6 @@ public class FilterFragment extends Fragment {
         });
     }
 
-    private void setupApplyButton(View view) {
-        Button applyButton = view.findViewById(R.id.button_filter_apply);
-        applyButton.setOnClickListener(v -> {
-            viewModel.apply();
-            Navigation.findNavController(view).navigate(R.id.filterFragment_to_itemsFragment);
-        });
-    }
-
     private void setupTextWatcher(TextView view, Consumer<String> consumer) {
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -85,13 +79,30 @@ public class FilterFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_filter, container, false);
+        return inflater.inflate(R.layout.fragment_filter, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(FilterViewModel.class);
 
+        setupDatePickers(view);
+
+        setupEditTexts(view);
+
+        setupApplyButton(view);
+        setupResetButton(view);
+
+        restorePreviousInput();
+    }
+
+    private void setupDatePickers(View view) {
         EditText dateStart = view.findViewById(R.id.edittext_filter_date_start);
         EditText dateEnd = view.findViewById(R.id.edittext_filter_date_end);
 
@@ -100,17 +111,30 @@ public class FilterFragment extends Fragment {
 
         createDatePicker(dateStart, viewModel::setStartDate);
         createDatePicker(dateEnd, viewModel::setEndDate);
+    }
 
+    private void setupApplyButton(View view) {
+        Button applyButton = view.findViewById(R.id.button_filter_apply);
+        applyButton.setOnClickListener(v -> {
+            viewModel.apply();
+            Navigation.findNavController(view).navigate(R.id.filterFragment_to_itemsFragment);
+        });
+    }
+
+    private void setupResetButton(View view) {
+        Button resetButton = view.findViewById(R.id.button_filter_reset);
+        resetButton.setOnClickListener(v -> {
+            viewModel.reset();
+            make.setText("");
+            keywords.setText("");
+        });
+    }
+
+    private void setupEditTexts(View view) {
         keywords = view.findViewById(R.id.edittext_filter_search);
-        make = view.findViewById(R.id.edittext_filter_make);
-
         setupTextWatcher(keywords, viewModel::setKeywords);
+
+        make = view.findViewById(R.id.edittext_filter_make);
         setupTextWatcher(make, viewModel::setMake);
-
-        setupApplyButton(view);
-
-        restorePreviousInput();
-
-        return view;
     }
 }
