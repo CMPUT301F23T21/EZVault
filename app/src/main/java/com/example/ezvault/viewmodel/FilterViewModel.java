@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.ezvault.data.FilterRepository;
 import com.example.ezvault.model.utils.filter.IItemFilter;
 import com.example.ezvault.model.utils.filter.ItemConjunctionFilter;
 import com.example.ezvault.model.utils.filter.ItemDateFilter;
@@ -18,9 +19,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
 /**
  * A view model for the filter fragment.
  */
+@HiltViewModel
 public class FilterViewModel extends ViewModel {
     private Date startDate = null;
     private Date endDate = null;
@@ -34,7 +40,11 @@ public class FilterViewModel extends ViewModel {
 
     private final Calendar calendar;
 
-    public FilterViewModel() {
+    private final FilterRepository filterRepository;
+
+    @Inject
+    public FilterViewModel(FilterRepository filterRepository) {
+        this.filterRepository = filterRepository;
         format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
         calendar = Calendar.getInstance();
         calendar.clear();
@@ -74,7 +84,7 @@ public class FilterViewModel extends ViewModel {
         make = input;
     }
 
-    public IItemFilter getFilter() {
+    public void apply() {
         Instant start = null;
         Instant end = null;
 
@@ -89,7 +99,8 @@ public class FilterViewModel extends ViewModel {
         ItemDateFilter dateFilter = new ItemDateFilter(start, end);
         ItemKeywordFilter keywordFilter = new ItemKeywordFilter(keywords);
         ItemMakeFilter makeFilter = new ItemMakeFilter(make);
-        return new ItemConjunctionFilter(dateFilter, makeFilter, keywordFilter);
+        IItemFilter filter = new ItemConjunctionFilter(dateFilter, makeFilter, keywordFilter);
+        filterRepository.setFilter(filter);
     }
 
     @FunctionalInterface

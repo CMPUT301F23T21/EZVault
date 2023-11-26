@@ -17,14 +17,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.ezvault.R;
-import com.example.ezvault.model.utils.filter.IItemFilter;
 import com.example.ezvault.viewmodel.FilterViewModel;
 
 import java.util.function.Consumer;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * Fragment for the filtering UI.
  */
+@AndroidEntryPoint
 public class FilterFragment extends Fragment {
     private FilterViewModel viewModel;
 
@@ -45,11 +47,8 @@ public class FilterFragment extends Fragment {
     private void setupApplyButton(View view) {
         Button applyButton = view.findViewById(R.id.button_filter_apply);
         applyButton.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            IItemFilter filter = viewModel.getFilter();
-            bundle.putSerializable("filter", filter);
-            Navigation.findNavController(view)
-                    .navigate(R.id.filterFragment_to_itemsFragment, bundle);
+            viewModel.apply();
+            Navigation.findNavController(view).navigate(R.id.filterFragment_to_itemsFragment);
         });
     }
 

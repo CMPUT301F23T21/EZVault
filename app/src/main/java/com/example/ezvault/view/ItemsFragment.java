@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.example.ezvault.ItemAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.model.utils.ItemListView;
-import com.example.ezvault.model.utils.filter.IItemFilter;
 import com.example.ezvault.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -51,11 +50,6 @@ public class ItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
         ItemViewModel viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
-
-        if (getArguments() != null) {
-            IItemFilter filter = (IItemFilter) getArguments().getSerializable("filter");
-            viewModel.setItemFilter(filter);
-        }
 
         TextView filter = view.findViewById(R.id.text_filterSort);
         filter.setOnClickListener(v ->
