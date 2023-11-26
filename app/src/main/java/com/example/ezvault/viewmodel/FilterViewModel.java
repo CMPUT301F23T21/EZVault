@@ -28,16 +28,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
  */
 @HiltViewModel
 public class FilterViewModel extends ViewModel {
+    // live data set from view
     private final MutableLiveData<Date> startDate = new MutableLiveData<>();
     private final MutableLiveData<Date> endDate = new MutableLiveData<>();
-    private String make;
+
+    // live data dependent on the dates
     private final LiveData<String> startDateText;
     private final LiveData<String> endDateText;
 
+    // non-live state
+    private String make;
     private List<String> keywords;
 
-    private final Calendar calendar;
-
+    private final Calendar calendar = Calendar.getInstance();
     private final FilterRepository filterRepository;
 
     private String formatDate(Date date) {
@@ -49,21 +52,28 @@ public class FilterViewModel extends ViewModel {
         }
     }
 
+    private void initializePreviousState() {
+        MainItemFilter prevFilter = filterRepository.getFilter().getValue();
+
+        if (prevFilter == null) return;
+
+        startDate.setValue(prevFilter.getStartDate());
+        endDate.setValue(prevFilter.getEndDate());
+        make = prevFilter.getMake();
+        keywords = prevFilter.getKeywords();
+    }
+
     @Inject
     public FilterViewModel(FilterRepository filterRepository) {
         this.filterRepository = filterRepository;
-        calendar = Calendar.getInstance();
+
+        // reset calendar so seconds, millis are zeroed
         calendar.clear();
 
         // set previous values
-        MainItemFilter prevFilter = filterRepository.getFilter().getValue();
-        if (prevFilter != null) {
-            startDate.setValue(prevFilter.getStartDate());
-            endDate.setValue(prevFilter.getEndDate());
-            make = prevFilter.getMake();
-            keywords = prevFilter.getKeywords();
-        }
+        initializePreviousState();
 
+        // set date displays to track date state
         startDateText = Transformations.map(startDate, this::formatDate);
         endDateText = Transformations.map(endDate, this::formatDate);
     }
@@ -86,11 +96,11 @@ public class FilterViewModel extends ViewModel {
         endDate.setValue(calendar.getTime());
     }
 
+    // TODO
     private List<String> parseKeywords(String input) {
         return Arrays.asList(input.split(" "));
     }
 
-    // TODO
     public void setKeywords(String input) {
         keywords = parseKeywords(input);
     }
