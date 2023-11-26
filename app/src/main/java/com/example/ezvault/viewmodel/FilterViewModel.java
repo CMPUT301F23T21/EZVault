@@ -6,11 +6,10 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.data.FilterRepository;
-import com.example.ezvault.model.utils.filter.IItemFilter;
-import com.example.ezvault.model.utils.filter.ItemConjunctionFilter;
 import com.example.ezvault.model.utils.filter.ItemDateFilter;
 import com.example.ezvault.model.utils.filter.ItemKeywordFilter;
 import com.example.ezvault.model.utils.filter.ItemMakeFilter;
+import com.example.ezvault.model.utils.filter.MainItemFilter;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -56,11 +55,14 @@ public class FilterViewModel extends ViewModel {
         calendar = Calendar.getInstance();
         calendar.clear();
 
-        // set cached values
-        startDate.setValue(filterRepository.getStartDate());
-        endDate.setValue(filterRepository.getEndDate());
-        make = filterRepository.getMake();
-        keywords = filterRepository.getKeywords();
+        // set previous values
+        MainItemFilter prevFilter = filterRepository.getFilter().getValue();
+        if (prevFilter != null) {
+            startDate.setValue(prevFilter.getStartDate());
+            endDate.setValue(prevFilter.getEndDate());
+            make = prevFilter.getMake();
+            keywords = prevFilter.getKeywords();
+        }
 
         startDateText = Transformations.map(startDate, this::formatDate);
         endDateText = Transformations.map(endDate, this::formatDate);
@@ -113,12 +115,10 @@ public class FilterViewModel extends ViewModel {
         ItemDateFilter dateFilter = new ItemDateFilter(start, end);
         ItemKeywordFilter keywordFilter = new ItemKeywordFilter(keywords);
         ItemMakeFilter makeFilter = new ItemMakeFilter(make);
-        IItemFilter filter = new ItemConjunctionFilter(dateFilter, makeFilter, keywordFilter);
-
-        filterRepository.setMake(make);
-        filterRepository.setKeywords(keywords);
-        filterRepository.setStartDate(startDate.getValue());
-        filterRepository.setEndDate(endDate.getValue());
+        MainItemFilter filter = new MainItemFilter();
+        filter.setMakeFilter(makeFilter);
+        filter.setKeywordFilter(keywordFilter);
+        filter.setDateFilter(dateFilter);
 
         // set filter to use
         filterRepository.setFilter(filter);

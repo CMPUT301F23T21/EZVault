@@ -7,57 +7,18 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.example.ezvault.model.utils.filter.IItemFilter;
+import com.example.ezvault.model.utils.filter.MainItemFilter;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 public class FilterRepository {
-    private String make = null;
-    private List<String> keywords = null;
-    private Date endDate = null;
-    private Date startDate = null;
-
-    public String getMake() {
-        return make;
-    }
-
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public List<String> getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(List<String> keywords) {
-        this.keywords = keywords;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    private final MutableLiveData<IItemFilter> itemFilter;
+    private final MutableLiveData<MainItemFilter> itemFilter;
 
     @Inject
     public FilterRepository() {
-        Log.d("EZVault", "Creating Filter Repository!");
         itemFilter = new MutableLiveData<>(null);
     }
 
@@ -65,13 +26,11 @@ public class FilterRepository {
         return Transformations.map(itemFilter, Objects::isNull);
     }
 
-    public LiveData<IItemFilter> getFilter() {
-        Log.d("EZVault", "Getting filter, null: " + (itemFilter.getValue() == null));
+    public LiveData<MainItemFilter> getFilter() {
         return itemFilter;
     }
 
-    public void setFilter(@Nullable IItemFilter itemFilter) {
-        Log.d("EZVault", "Setting filter, null: " + (itemFilter == null));
+    public void setFilter(@Nullable MainItemFilter itemFilter) {
         this.itemFilter.setValue(itemFilter);
     }
 }

@@ -13,6 +13,7 @@ import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.model.utils.filter.IItemFilter;
 import com.example.ezvault.model.utils.filter.ItemListFilter;
+import com.example.ezvault.model.utils.filter.MainItemFilter;
 import com.example.ezvault.utils.UserManager;
 
 import javax.inject.Inject;
@@ -23,7 +24,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class ItemViewModel extends ViewModel {
     private final LiveData<ItemList> itemList;
     private final MediatorLiveData<ItemListView> itemListView;
-    private final LiveData<IItemFilter> filter;
+    private final LiveData<MainItemFilter> filter;
 
     @Inject
     public ItemViewModel(UserManager userManager, FilterRepository filterRepository) {

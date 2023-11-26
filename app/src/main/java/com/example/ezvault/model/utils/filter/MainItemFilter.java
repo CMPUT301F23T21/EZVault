@@ -2,6 +2,7 @@ package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -21,11 +22,13 @@ public class MainItemFilter implements IItemFilter {
     }
 
     public Date getStartDate() {
-        return dateFilter != null ? Date.from(dateFilter.getStart()) : null;
+        Instant instant = dateFilter != null ? dateFilter.getStart() : null;
+        return instant != null ? Date.from(instant) : null;
     }
 
     public Date getEndDate() {
-        return dateFilter != null ? Date.from(dateFilter.getEnd()) : null;
+        Instant instant = dateFilter != null ? dateFilter.getEnd() : null;
+        return instant != null ? Date.from(instant) : null;
     }
 
     public void setKeywordFilter(ItemKeywordFilter keywordFilter) {
