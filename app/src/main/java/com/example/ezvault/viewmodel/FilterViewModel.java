@@ -118,6 +118,15 @@ public class FilterViewModel extends ViewModel {
         filterRepository.setFilter(filter);
     }
 
+    public void reset() {
+        startDate.setValue(null);
+        endDate.setValue(null);
+        make = null;
+        keywords = null;
+
+        apply();
+    }
+
     public String getMake() {
         return make;
     }
