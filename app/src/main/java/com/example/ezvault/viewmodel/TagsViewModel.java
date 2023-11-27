@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.TagDAO;
+import com.example.ezvault.database.UserService;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,9 +22,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class TagsViewModel extends ViewModel {
     private final MutableLiveData<List<Tag>> tags = new MutableLiveData<>();
     private final FirebaseBundle firebase = new FirebaseBundle();
+    private final UserManager userManager;
 
     @Inject
     public TagsViewModel(UserManager userManager) {
+        this.userManager = userManager;
         tags.setValue(userManager.getUser().getItemList().getTags());
     }
 
@@ -31,15 +35,10 @@ public class TagsViewModel extends ViewModel {
     }
 
     public void addTag(String name) {
-        TagDAO tagDAO = new TagDAO(firebase);
+        UserService userService = new UserService(new FirebaseBundle());
         Tag tag = new Tag(name);
-        Task<String> task = tagDAO.create(tag);
-        // TODO make new list
-        task.addOnSuccessListener(id -> {
-            List<Tag> current = tags.getValue();
-            assert current != null;
-            current.add(tag);
-            tags.setValue(current);
-        });
+        userService.addTag(userManager.getUser(), tag);
+        tags.getValue().add(tag);
+        tags.setValue(new ArrayList<>(tags.getValue()));
     }
 }

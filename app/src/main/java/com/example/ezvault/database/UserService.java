@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Provides operations involving users and the database.
@@ -73,5 +74,21 @@ public class UserService {
         User user = new User(userName, uid, new ItemList());
         RawUser rawUser = new RawUser(userName, new ArrayList<>(), new ArrayList<>());
         return rawUserDAO.update(uid, rawUser).onSuccessTask(v -> Tasks.forResult(user));
+    }
+
+    public Task<String> addTag(User user, Tag tag) {
+        TagDAO tagDAO = new TagDAO(new FirebaseBundle());
+        Task<String> tagIdTask = tagDAO.create(tag);
+        return tagIdTask.onSuccessTask(tagId -> {
+            ArrayList<Tag> tags = user.getItemList().getTags();
+            tags.add(tag);
+            RawUserDAO userDAO = new RawUserDAO(new FirebaseBundle());
+            Task<RawUser> rawUserTask = userDAO.read(user.getUid());
+            return rawUserTask.onSuccessTask(rawUser -> {
+                rawUser.getTagids().add(tagId);
+                return TaskUtils.onSuccess(rawUserDAO.update(user.getUid(), rawUser),
+                        v -> tagId);
+            });
+        });
     }
 }
