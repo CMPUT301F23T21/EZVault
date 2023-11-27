@@ -34,6 +34,7 @@ public class TagsViewModel extends ViewModel {
         TagDAO tagDAO = new TagDAO(firebase);
         Tag tag = new Tag(name);
         Task<String> task = tagDAO.create(tag);
+        // TODO make new list
         task.addOnSuccessListener(id -> {
             List<Tag> current = tags.getValue();
             assert current != null;
