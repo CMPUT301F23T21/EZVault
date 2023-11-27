@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ezvault.R;
@@ -35,6 +37,18 @@ public class TagRecyclerAdapter extends RecyclerView.Adapter<TagRecyclerAdapter.
     public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
         Tag tag = tagList.get(position);
         holder.bind(tag);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = holder.getAdapterPosition();
+
+                Toast.makeText(v.getContext(), "Clicked on position " + position, Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(v).navigate(R.id.action_tagsFragment_to_fragment_tagger_item);
+                
+            }
+        });
+
     }
 
     @Override

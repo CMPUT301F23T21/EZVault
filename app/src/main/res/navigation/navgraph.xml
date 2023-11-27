@@ -76,6 +76,9 @@
             app:argType="string"
             android:defaultValue="guh"
             />
+        <action
+            android:id="@+id/action_tagsFragment_to_fragment_tagger_item"
+            app:destination="@id/fragment_tagger_item" />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
@@ -111,5 +114,18 @@
         <action
             android:id="@+id/action_cameraFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_tagger_item"
+        android:name="com.example.ezvault.fragment_tagger_item"
+        android:label="Brother"
+
+        tools:layout="@layout/fragment_fragment_tagger_item"
+        >
+
+        <action
+            android:id="@+id/action_fragment_tagger_item_to_tagsFragment"
+            app:destination="@id/tagsFragment" />
+
     </fragment>
 </navigation>

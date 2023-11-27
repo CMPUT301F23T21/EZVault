@@ -10,20 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/empty_tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Tags have been added"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:visibility="visible"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/button_add_tag"
+            android:id="@+id/add_item_tagger_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -35,7 +24,7 @@
             app:layout_constraintRight_toRightOf="parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tag_recycler"
+            android:id="@+id/item_tagger_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

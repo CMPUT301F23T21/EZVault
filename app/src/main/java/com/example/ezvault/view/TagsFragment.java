@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.ezvault.R;
 import com.example.ezvault.view.adapter.TagRecyclerAdapter;
@@ -52,5 +53,19 @@ public class TagsFragment extends Fragment{
         viewModel.getTags().observe(getViewLifecycleOwner(), adapter::setTagList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
+        TextView no_tags = view.findViewById(R.id.empty_tags);
+        viewModel.getTags().observe(getViewLifecycleOwner(), tags -> {
+            if (tags != null && !tags.isEmpty()) {
+                no_tags.setVisibility(View.GONE);
+            }
+            else {
+                no_tags.setVisibility(View.VISIBLE);
+            }
+
+        });
+
+
     }
+
 }
