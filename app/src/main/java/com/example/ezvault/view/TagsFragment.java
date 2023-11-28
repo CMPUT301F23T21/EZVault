@@ -79,7 +79,7 @@ public class TagsFragment extends Fragment{
 
         sorting_tag_button.setOnClickListener(v->{
             List<Tag> tags = userManager.getUser().getItemList().getTags();
-            List<Tag> sortTags = tags.stream().sorted(Comparator.comparing(Tag::getIdentifier)).collect(Collectors.toList());
+            List<Tag> sortTags = tags.stream().sorted(Comparator.comparing(Tag -> Tag.getIdentifier().toLowerCase())).collect(Collectors.toList());
             viewModel.setTags(sortTags);
         });
 
