@@ -8,6 +8,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,13 @@ import android.widget.TextView;
 import com.example.ezvault.ItemAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.model.utils.ItemListView;
+import com.example.ezvault.utils.UserManager;
 import com.example.ezvault.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -28,6 +32,9 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ItemsFragment extends Fragment {
+    @Inject
+    UserManager userManager;
+
     private ItemAdapter itemAdapter;
 
     public ItemsFragment() {
@@ -37,7 +44,13 @@ public class ItemsFragment extends Fragment {
     private void setupRecycler(View view, ItemListView itemListView) {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        itemAdapter = new ItemAdapter(requireContext(), itemListView, (v,p) -> {});
+        itemAdapter = new ItemAdapter(requireContext(), itemListView, (v, position) -> {
+            Log.d("EZVault", userManager.getUser().getItemList().get(position).getModel());
+            com.example.ezvault.ItemViewModel viewModel = new ViewModelProvider(getActivity())
+                    .get(com.example.ezvault.ItemViewModel.class);
+            viewModel.set(userManager.getUser().getItemList().get(position));
+            Navigation.findNavController(view).navigate(R.id.action_itemsFragment_to_editItemDetails);
+        });
         recyclerView.setAdapter(itemAdapter);
     }
 

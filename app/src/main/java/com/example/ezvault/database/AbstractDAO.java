@@ -5,6 +5,8 @@ The subclasses should specialize in accessing the database for a specific type o
 
 package com.example.ezvault.database;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.Transaction;
@@ -112,6 +114,8 @@ public abstract class AbstractDAO<T, ID> {
         }
         for (ID id : ids) {
             task = task.onSuccessTask(ts -> {
+                Log.d("EZVault", "Got to id/task: " + ts.size());
+                Log.d("EZVault", "With: " + id.getClass().toString());
                 Task<T> tTask = read(id);
                 return tTask.continueWith(t -> {
                     ts.add(tTask.getResult());

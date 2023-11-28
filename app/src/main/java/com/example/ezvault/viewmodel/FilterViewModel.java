@@ -128,7 +128,7 @@ public class FilterViewModel extends ViewModel {
 
     // TODO
     public void setMake(String input) {
-        make = input;
+        make = input.equals("") ? null : input;
     }
 
     private MainItemFilter createFilter() {

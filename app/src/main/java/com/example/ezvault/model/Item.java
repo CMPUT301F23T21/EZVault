@@ -233,6 +233,14 @@ public class Item {
         this.tags = tags;
     }
 
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public void setCount(double count) {
+        this.count = count;
+    }
+
     /**
      * Set the images
      * @param images List of images to be associated with the item.
