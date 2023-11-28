@@ -1,7 +1,9 @@
 package com.example.ezvault;
 
 import android.content.ContentResolver;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,12 +11,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
@@ -45,13 +50,17 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * fragment class that collects the information of a new item
  */
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
-    Button addItem;
+    private Button addItem;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -137,6 +146,7 @@ public class AddItemFragment extends Fragment {
         photoRecyclerView.setAdapter(photoAdapter);
 
         // Get all of our text fields
+        EditText itemName = view.findViewById(R.id.edittext_item_name);
         EditText itemValue = view.findViewById(R.id.edittext_item_value);
         EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
         EditText itemMake = view.findViewById(R.id.edittext_item_make);
@@ -242,6 +252,22 @@ public class AddItemFragment extends Fragment {
             });
         });
 
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+
+        itemDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext());
+                datePickerDialog.setOnDateSetListener((DatePicker, year, month, day) -> {
+                    calendar.set(year, month, day);
+
+                    itemDate.setText(format.format(calendar.getTime()));
+                });
+                datePickerDialog.show();
+            }
+        });
         return view;
     }
 

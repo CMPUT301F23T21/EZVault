@@ -24,4 +24,12 @@ public interface ItemListView extends Iterable<Item> {
      * @return The item at that position.
      */
     Item get(int position);
+
+    default double getTotalValue() {
+        double total = 0.0;
+        for (Item item : this) {
+            total += item.getValue() * item.getCount();
+        }
+        return total;
+    }
 }
