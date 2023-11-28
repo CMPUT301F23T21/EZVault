@@ -67,6 +67,7 @@ public class FilterViewModel extends ViewModel {
         endDate.setValue(prevFilter.getEndDate());
         make = prevFilter.getMake();
         keywords = prevFilter.getKeywords();
+        tags = prevFilter.getTags();
     }
 
     @Inject
@@ -105,11 +106,11 @@ public class FilterViewModel extends ViewModel {
 
     // TODO better tag input
     public void setTags(String input) {
-        List<String> tagNames = Arrays.asList(input.split(" "));
+        String[] tagNames = input.split(",\\s*");
         tags = new ArrayList<>();
         for (String tagName : tagNames) {
             for (Tag tag : userManager.getUser().getItemList().getTags()) {
-                if (tag.getIdentifier().equals(tagName)) {
+                if (tag.getContents().equals(tagName)) {
                     tags.add(tag);
                     break;
                 }
@@ -139,7 +140,7 @@ public class FilterViewModel extends ViewModel {
         filter.setDateFilter(new ItemDateFilter(start, end));
         filter.setMakeFilter(new ItemMakeFilter(make));
         filter.setKeywordFilter(new ItemKeywordFilter(keywords));
-        filter.setTagFilter(new ItemTagFilter(tags));
+        filter.setTagFilter(new ItemTagFilter(tags != null ? tags : new ArrayList<>()));
 
         return filter;
     }
@@ -166,7 +167,9 @@ public class FilterViewModel extends ViewModel {
     public List<String> getKeywords() {
         return keywords;
     }
-
+    public List<Tag> getTags() {
+        return tags;
+    }
     @FunctionalInterface
     public interface DateConsumer {
         void accept(int year, int month, int day);

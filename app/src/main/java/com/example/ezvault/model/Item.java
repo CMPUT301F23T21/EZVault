@@ -259,6 +259,11 @@ public class Item {
      * @return Whether or not the item has the specified tag
      */
     public boolean hasTag(Tag tag) {
-        return this.tags.contains(tag);
+        for (Tag possibleTag : tags) {
+            if (possibleTag.getUid().equals(tag.getUid())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
