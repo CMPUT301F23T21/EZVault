@@ -51,7 +51,7 @@ public class TagRecyclerAdapter extends RecyclerView.Adapter<TagRecyclerAdapter.
         }
 
         public void bind(Tag tag) {
-            tagIdentifierView.setText(tag.getIdentifier());
+            tagIdentifierView.setText(tag.getContents());
         }
     }
 }

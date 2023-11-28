@@ -10,13 +10,14 @@ import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemBuilder;
 import com.example.ezvault.model.Tag;
-import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class ItemDAO extends AbstractDAO<Item, String> {
     private final String collectionName = "items";
@@ -24,6 +25,23 @@ public class ItemDAO extends AbstractDAO<Item, String> {
     private final TagDAO tagDAO;
 
     private final ImageDAO imageDAO;
+
+    private HashMap<String, Object> toMap(Item item) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("comment", item.getComment());
+        map.put("count", item.getCount());
+        map.put("value", item.getValue());
+        map.put("date", item.getAcquisitionDate());
+        map.put("description", item.getDescription());
+        map.put("make", item.getMake());
+        map.put("model", item.getModel());
+        map.put("images", item.getImages().stream().map(Image::getId).collect(Collectors.toCollection(ArrayList::new)));
+        map.put("tags", item.getTags().stream().map(Tag::getUid).collect(Collectors.toCollection(ArrayList::new)));
+        map.put("serialNumber", item.getSerialNumber());
+
+        return map;
+    }
 
     /**
      * Constructs an AbstractDAO
@@ -44,7 +62,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
     @Override
     public Task<String> create(Item item) {
         return firebase.getDb().collection(collectionName)
-                .add(item)
+                .add(toMap(item))
                 .continueWith(itemTask -> itemTask.getResult().getId());
     }
 
@@ -57,6 +75,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         double count = doc.getDouble("count");
         double value = doc.getDouble("value");
         ArrayList<String> tagIds = (ArrayList<String>) doc.get("tags");
+        String serialNumber = doc.getString("serialNumber");
 
         if (tagIds == null) {
             tagIds = new ArrayList<>();
@@ -74,7 +93,6 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         return Tasks.whenAllSuccess(tagsTask, imagesTask)
                 .onSuccessTask(tasks -> {
                     ArrayList<Tag> tags = (ArrayList<Tag>)tasks.get(0);
-
                     if (tags == null) {
                         tags = new ArrayList<>();
                     }
@@ -96,6 +114,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
                             .setValue(value)
                             .setTags(tags)
                             .setImages(images)
+                            .setSerialNumber(serialNumber)
                             .build()
                     );
 
@@ -128,7 +147,7 @@ public class ItemDAO extends AbstractDAO<Item, String> {
         Log.v("EZVault", "Updating item: " + id);
         return firebase.getDb().collection(collectionName)
                 .document(id)
-                .set(item);
+                .set(toMap(item));
     }
 
     /**
