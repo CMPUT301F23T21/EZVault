@@ -69,7 +69,7 @@ public class AddItemFragment extends Fragment {
 
     private ArrayList<Image> images;
 
-    private AddItemPhotoAdapter photoAdapter;
+    private PhotoAdapter photoAdapter;
 
     private ContentResolver contentResolver;
 
@@ -101,7 +101,7 @@ public class AddItemFragment extends Fragment {
         contentResolver = requireContext().getContentResolver();
 
         images = new ArrayList<>();
-        photoAdapter = new AddItemPhotoAdapter(requireContext(), images, userManager);
+        photoAdapter = new PhotoAdapter(requireContext(), images, userManager);
 
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
@@ -246,7 +246,7 @@ public class AddItemFragment extends Fragment {
     }
 
     /**
-     * Synchronizes the recycler view of Images with the stae of the user's uri cache
+     * Synchronizes the recycler view of Images with the state of the user's uri cache
      * @param contentResolver Content resolver used for reading media
      */
     private void syncImages(ContentResolver contentResolver){
