@@ -17,7 +17,7 @@ import com.example.ezvault.utils.UserManager;
 
 import java.util.List;
 
-public class AddItemPhotoAdapter extends RecyclerView.Adapter<AddItemPhotoAdapter.ImageHolder> {
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder> {
 
     // class for each type of different view layout
     public static class PlaceHolder extends RecyclerView.ViewHolder {
@@ -40,7 +40,7 @@ public class AddItemPhotoAdapter extends RecyclerView.Adapter<AddItemPhotoAdapte
 
     private UserManager userManager;
 
-    public AddItemPhotoAdapter(Context context, List<Image> imageList, UserManager userManager) {
+    public PhotoAdapter(Context context, List<Image> imageList, UserManager userManager) {
         this.context = context;
         this.imageList = imageList;
         this.userManager = userManager;
@@ -48,7 +48,7 @@ public class AddItemPhotoAdapter extends RecyclerView.Adapter<AddItemPhotoAdapte
 
     @NonNull
     @Override
-    public AddItemPhotoAdapter.ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PhotoAdapter.ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = LayoutInflater.from(context);
         // inflate layout based on which type of image is to be displayed
@@ -57,7 +57,7 @@ public class AddItemPhotoAdapter extends RecyclerView.Adapter<AddItemPhotoAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AddItemPhotoAdapter.ImageHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PhotoAdapter.ImageHolder holder, int position) {
         Image image = imageList.get(position);
 
         // Set the thumbnail to the first image, if there are any
@@ -68,8 +68,11 @@ public class AddItemPhotoAdapter extends RecyclerView.Adapter<AddItemPhotoAdapte
 
         holder.deletePhotoButton.setOnClickListener(v -> {
             int updatedPosition = holder.getAdapterPosition();
-            imageList.remove(updatedPosition);
-            userManager.getUriCache().remove(updatedPosition);
+
+            Image removedImage = imageList.remove(updatedPosition);
+            if (removedImage.getId() == null) {
+                userManager.getUriCache().remove(updatedPosition);
+            }
             notifyItemRemoved(updatedPosition);
             notifyItemRangeChanged(updatedPosition, imageList.size() - updatedPosition);
         });
