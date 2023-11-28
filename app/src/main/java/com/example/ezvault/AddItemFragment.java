@@ -2,6 +2,7 @@ package com.example.ezvault;
 
 import android.content.ContentResolver;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +23,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
@@ -43,6 +47,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,6 +71,8 @@ public class AddItemFragment extends Fragment {
 
     Button addItem;
     AppCompatImageButton serialScan, descriptionScan;
+
+    private static final String TAG = "AddItem";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -275,8 +288,7 @@ public class AddItemFragment extends Fragment {
                             EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
                             SerialText.setText(barcode.getRawValue());
                         } else {
-                            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
-                            DescriptionText.setText(barcode.getRawValue());
+                            updateDescription(barcode.getRawValue());
                         }
                     }
             );
@@ -304,5 +316,72 @@ public class AddItemFragment extends Fragment {
             }
             photoAdapter.notifyItemRangeInserted(addedStart, cacheLen - 1);
         }
+    }
+
+    public void updateDescription(String UPC) {
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String UPCurl = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + URLEncoder.encode(UPC);
+                    URL url = null;
+
+                    // Store exit status for processing - 0 is normal, 2 is network error, 1 is item not found
+                    int code = 0;
+
+                    // Create the URL object
+                    try {
+                        url = new URL(UPCurl);
+                    } catch (MalformedURLException e) {
+                        code = 2;
+                        Log.e(TAG, "Malformed URL");
+                    }
+
+                    URLConnection connection;
+                    String itemname = "";
+                    try {
+                        connection = url.openConnection();
+                        connection.connect();
+                        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) connection.getContent()));
+                        Log.i(TAG, root.toString());
+                        JsonObject rootobj = root.getAsJsonObject();
+                        if (rootobj.isEmpty() || rootobj.get("items").getAsJsonArray().isEmpty()) {
+                            code = 1;
+                            Log.i(TAG, "No items found");
+                        } else {
+                            itemname = rootobj.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
+                        }
+                    } catch (IOException e) {
+                        code = 2;
+                        Log.e("TAG", e.toString());
+                    }
+
+                    String finalItemname = itemname;
+                    Log.i(TAG, itemname);
+                    int finalCode = code;
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            // Stuff that updates the UI
+                            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
+                            DescriptionText.setText(finalItemname);
+
+                            // TODO: Inform user of errors
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+
     }
 }
