@@ -23,6 +23,7 @@ public class TagsViewModel extends ViewModel {
     private final MutableLiveData<List<Tag>> tags = new MutableLiveData<>();
     private final FirebaseBundle firebase = new FirebaseBundle();
     private final UserManager userManager;
+    private boolean isSortedAlphabetically = true;
 
     @Inject
     public TagsViewModel(UserManager userManager) {
@@ -44,4 +45,9 @@ public class TagsViewModel extends ViewModel {
     public void setTags(List<Tag> tagList){
         tags.setValue(tagList);
     }
+    public boolean toggleSortingOrder(){
+        isSortedAlphabetically = !isSortedAlphabetically;
+        return isSortedAlphabetically;
+    }
+
 }

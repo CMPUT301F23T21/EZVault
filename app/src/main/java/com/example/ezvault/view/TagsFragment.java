@@ -78,9 +78,28 @@ public class TagsFragment extends Fragment{
         FloatingActionButton sorting_tag_button = view.findViewById(R.id.sort_tag_button);
 
         sorting_tag_button.setOnClickListener(v->{
+            //Gets the list of tags
             List<Tag> tags = userManager.getUser().getItemList().getTags();
-            List<Tag> sortTags = tags.stream().sorted(Comparator.comparing(Tag -> Tag.getIdentifier().toLowerCase())).collect(Collectors.toList());
-            viewModel.setTags(sortTags);
+
+            boolean isSorted = viewModel.toggleSortingOrder();
+            List<Tag> sortedTags;
+
+            if(isSorted){
+                sortedTags = tags.stream()
+                        .sorted(Comparator.comparing(Tag -> Tag.getIdentifier().toLowerCase()))
+                        .collect(Collectors.toList());
+            }
+            else{
+                sortedTags = tags.stream()
+                        .sorted((tag1, tag2) -> tag2.getIdentifier().toLowerCase().compareTo(tag1.getIdentifier().toLowerCase()))
+                        .collect(Collectors.toList());
+            }
+
+
+            //Sorts the list of tags
+            //List<Tag> sortTags = tags.stream().sorted(Comparator.comparing(Tag -> Tag.getIdentifier().toLowerCase())).collect(Collectors.toList());
+            //Sets the placements for the tag list
+            viewModel.setTags(sortedTags);
         });
 
     }
