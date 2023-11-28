@@ -6,13 +6,17 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.data.FilterRepository;
+import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.utils.filter.ItemDateFilter;
 import com.example.ezvault.model.utils.filter.ItemKeywordFilter;
 import com.example.ezvault.model.utils.filter.ItemMakeFilter;
+import com.example.ezvault.model.utils.filter.ItemTagFilter;
 import com.example.ezvault.model.utils.filter.MainItemFilter;
+import com.example.ezvault.utils.UserManager;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,9 +43,11 @@ public class FilterViewModel extends ViewModel {
     // non-live state
     private String make;
     private List<String> keywords;
+    private List<Tag> tags;
 
     private final Calendar calendar = Calendar.getInstance();
     private final FilterRepository filterRepository;
+    private final UserManager userManager;
 
     private String formatDate(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
@@ -64,7 +70,8 @@ public class FilterViewModel extends ViewModel {
     }
 
     @Inject
-    public FilterViewModel(FilterRepository filterRepository) {
+    public FilterViewModel(UserManager userManager, FilterRepository filterRepository) {
+        this.userManager = userManager;
         this.filterRepository = filterRepository;
 
         // reset calendar so seconds, millis are zeroed
@@ -96,6 +103,20 @@ public class FilterViewModel extends ViewModel {
         endDate.setValue(calendar.getTime());
     }
 
+    // TODO better tag input
+    public void setTags(String input) {
+        List<String> tagNames = Arrays.asList(input.split(" "));
+        tags = new ArrayList<>();
+        for (String tagName : tagNames) {
+            for (Tag tag : userManager.getUser().getItemList().getTags()) {
+                if (tag.getIdentifier().equals(tagName)) {
+                    tags.add(tag);
+                    break;
+                }
+            }
+        }
+    }
+
     // TODO
     private List<String> parseKeywords(String input) {
         return Arrays.asList(input.split(" "));
@@ -118,6 +139,7 @@ public class FilterViewModel extends ViewModel {
         filter.setDateFilter(new ItemDateFilter(start, end));
         filter.setMakeFilter(new ItemMakeFilter(make));
         filter.setKeywordFilter(new ItemKeywordFilter(keywords));
+        filter.setTagFilter(new ItemTagFilter(tags));
 
         return filter;
     }
