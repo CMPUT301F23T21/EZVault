@@ -61,18 +61,6 @@ public class ItemList implements List<Item>, ItemListView {
     }
 
     /**
-     * Get the total value of the list
-     * @return The total value of the list
-     */
-    public double getTotalValue() {
-        double total = 0.0;
-        for (Item item : this) {
-            total += item.getValue() * item.getCount();
-        }
-        return total;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
