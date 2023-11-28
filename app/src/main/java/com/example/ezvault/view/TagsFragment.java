@@ -16,9 +16,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ezvault.R;
+import com.example.ezvault.model.Tag;
+import com.example.ezvault.utils.UserManager;
 import com.example.ezvault.view.adapter.TagRecyclerAdapter;
 import com.example.ezvault.viewmodel.TagsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -27,6 +35,8 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class TagsFragment extends Fragment{
+    @Inject
+    public UserManager userManager;
     public TagsFragment() {
         // Required empty public constructor
     }
@@ -65,6 +75,13 @@ public class TagsFragment extends Fragment{
 
         });
 
+        FloatingActionButton sorting_tag_button = view.findViewById(R.id.sort_tag_button);
+
+        sorting_tag_button.setOnClickListener(v->{
+            List<Tag> tags = userManager.getUser().getItemList().getTags();
+            List<Tag> sortTags = tags.stream().sorted(Comparator.comparing(Tag::getIdentifier)).collect(Collectors.toList());
+            viewModel.setTags(sortTags);
+        });
 
     }
 

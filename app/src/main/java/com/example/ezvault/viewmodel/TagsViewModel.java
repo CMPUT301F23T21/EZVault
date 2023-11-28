@@ -41,4 +41,7 @@ public class TagsViewModel extends ViewModel {
         tags.getValue().add(tag);
         tags.setValue(new ArrayList<>(tags.getValue()));
     }
+    public void setTags(List<Tag> tagList){
+        tags.setValue(tagList);
+    }
 }
