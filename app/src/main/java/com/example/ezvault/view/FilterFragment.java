@@ -19,10 +19,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.ezvault.R;
+import com.example.ezvault.model.Tag;
 import com.example.ezvault.viewmodel.FilterViewModel;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -34,6 +36,7 @@ public class FilterFragment extends Fragment {
     private FilterViewModel viewModel;
     private EditText keywords;
     private EditText make;
+    private EditText tags;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -76,6 +79,11 @@ public class FilterFragment extends Fragment {
         List<String> keywordsRaw = viewModel.getKeywords();
         if (keywordsRaw != null) {
             keywords.setText(String.join(" ", keywordsRaw));
+        }
+        List<Tag> prevTags = viewModel.getTags();
+        if (prevTags != null) {
+            tags.setText(prevTags.stream().map(Tag::getContents)
+                .collect(Collectors.joining(", ")));
         }
     }
 
@@ -136,5 +144,8 @@ public class FilterFragment extends Fragment {
 
         make = view.findViewById(R.id.edittext_filter_make);
         setupTextWatcher(make, viewModel::setMake);
+
+        tags = view.findViewById(R.id.edittext_filter_tags);
+        setupTextWatcher(tags, viewModel::setTags);
     }
 }

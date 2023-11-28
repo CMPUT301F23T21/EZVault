@@ -1,6 +1,7 @@
 package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
+import com.example.ezvault.model.Tag;
 
 import java.time.Instant;
 import java.util.Date;
@@ -10,11 +11,13 @@ public class MainItemFilter implements IItemFilter {
     private ItemKeywordFilter keywordFilter = null;
     private ItemDateFilter dateFilter = null;
     private ItemMakeFilter makeFilter = null;
+    private ItemTagFilter tagFilter = null;
 
     public boolean keep(Item item) {
         return (keywordFilter == null || keywordFilter.keep(item))
                 && (dateFilter == null || dateFilter.keep(item))
-                && (makeFilter == null || makeFilter.keep(item));
+                && (makeFilter == null || makeFilter.keep(item))
+                && (tagFilter == null || tagFilter.keep(item));
     }
 
     public void setDateFilter(ItemDateFilter dateFilter) {
@@ -29,6 +32,14 @@ public class MainItemFilter implements IItemFilter {
     public Date getEndDate() {
         Instant instant = dateFilter != null ? dateFilter.getEnd() : null;
         return instant != null ? Date.from(instant) : null;
+    }
+
+    public void setTagFilter(ItemTagFilter tagFilter) {
+        this.tagFilter = tagFilter;
+    }
+
+    public List<Tag> getTags() {
+        return tagFilter.getTags();
     }
 
     public void setKeywordFilter(ItemKeywordFilter keywordFilter) {
