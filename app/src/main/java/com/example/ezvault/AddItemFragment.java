@@ -79,7 +79,6 @@ import java.util.Locale;
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
-    Button addItem;
     AppCompatImageButton serialScan, descriptionScan;
 
     private static final String TAG = "AddItem";
