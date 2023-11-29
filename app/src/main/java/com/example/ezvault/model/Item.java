@@ -233,6 +233,14 @@ public class Item {
         this.tags = tags;
     }
 
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public void setCount(double count) {
+        this.count = count;
+    }
+
     /**
      * Set the images
      * @param images List of images to be associated with the item.
@@ -251,6 +259,11 @@ public class Item {
      * @return Whether or not the item has the specified tag
      */
     public boolean hasTag(Tag tag) {
-        return this.tags.contains(tag);
+        for (Tag possibleTag : tags) {
+            if (possibleTag.getUid().equals(tag.getUid())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

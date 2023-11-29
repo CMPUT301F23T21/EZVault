@@ -3,7 +3,6 @@ package com.example.ezvault.model.utils.filter;
 import androidx.annotation.NonNull;
 
 import com.example.ezvault.model.Item;
-import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.utils.ItemListView;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class ItemListFilter implements ItemListView {
     /**
      * The underlying item list.
      */
-    protected final ItemList itemList;
+    protected final ItemListView itemListView;
     /**
      * The indices that are the positions
      * of the valid items that comply with the filter.
@@ -36,11 +35,11 @@ public class ItemListFilter implements ItemListView {
 
     /**
      * Create a new filter on an item-list
-     * @param itemList The list of items to filter on.
+     * @param itemListView The view of a list of items to filter on.
      */
-    public ItemListFilter(ItemList itemList, IItemFilter itemFilter) {
+    public ItemListFilter(ItemListView itemListView, IItemFilter itemFilter) {
         this.indices = new ArrayList<>();
-        this.itemList = itemList;
+        this.itemListView = itemListView;
         this.itemFilter = itemFilter;
     }
 
@@ -50,8 +49,8 @@ public class ItemListFilter implements ItemListView {
      */
     private boolean validate() {
         indices.clear();
-        for (int i = 0; i < itemList.size(); i++) {
-            if (itemFilter.keep(itemList.get(i))) {
+        for (int i = 0; i < itemListView.size(); i++) {
+            if (itemFilter.keep(itemListView.get(i))) {
                 indices.add(i);
             }
         }
@@ -92,7 +91,7 @@ public class ItemListFilter implements ItemListView {
             @Override
             public Item next() {
                 if (hasNext()) {
-                    Item next = itemList.get(indices.get(index));
+                    Item next = itemListView.get(indices.get(index));
                     index++;
                     return next;
                 } else {
@@ -130,6 +129,6 @@ public class ItemListFilter implements ItemListView {
     @Override
     public final Item get(int position) {
         updateIndices();
-        return itemList.get(indices.get(position));
+        return itemListView.get(indices.get(position));
     }
 }

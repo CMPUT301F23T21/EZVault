@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemsFragment"
-        android:name="com.example.ezvault.ItemsFragment"
+        android:name="com.example.ezvault.view.ItemsFragment"
         android:label="Items"
         tools:layout="@layout/fragment_items" >
         <action
@@ -57,6 +57,15 @@
         <argument
             android:name="item_name"
             app:argType="string" />
+        <action
+            android:id="@+id/action_itemsFragment_to_editItemDetails"
+            app:destination="@id/editItemDetails" />
+        <action
+            android:id="@+id/action_itemsFragment_to_viewItemFragment"
+            app:destination="@id/viewItemFragment" />
+        <action
+            android:id="@+id/itemsFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -65,17 +74,12 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/tagsFragment"
-        android:name="com.example.ezvault.TagsFragment"
+        android:name="com.example.ezvault.view.TagsFragment"
         android:label="Tags"
         tools:layout="@layout/fragment_tags" >
         <action
             android:id="@+id/tagsFragment_to_tagDialogue"
             app:destination="@id/tagDialogue" />
-        <argument
-            android:name="tag_name"
-            app:argType="string"
-            android:defaultValue="guh"
-            />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
@@ -93,17 +97,22 @@
         android:id="@+id/profileFragment"
         android:name="com.example.ezvault.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/profileFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
     <dialog
         android:id="@+id/tagDialogue"
-        android:name="com.example.ezvault.TagDialogue"
+        android:name="com.example.ezvault.view.TagDialogue"
         android:label="TagDialogue"
         tools:layout="@layout/add_tag_dialogue"
-        >
-        <action
-            android:id="@+id/tagDialogue_to_tagsFragment"
-            app:destination="@id/tagsFragment" />
-    </dialog>
+        />
+    <fragment
+        android:id="@+id/viewItemFragment"
+        android:name="com.example.ezvault.ViewItemFragment"
+        android:label="fragment_view_item"
+        tools:layout="@layout/fragment_view_item" />
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.example.ezvault.CameraFragment"
@@ -111,5 +120,26 @@
         <action
             android:id="@+id/action_cameraFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_editItemDetails"
+            app:destination="@id/editItemDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.example.ezvault.view.FilterFragment"
+        android:label="Filter / Sort"
+        tools:layout="@layout/fragment_filter" >
+        <action
+            android:id="@+id/filterFragment_to_itemsFragment"
+            app:destination="@id/itemsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editItemDetails"
+        android:name="com.example.ezvault.EditItemDetails"
+        android:label="Edit Item"
+        tools:layout="@layout/fragment_edit_item_details" >
+        <action
+            android:id="@+id/action_editItemDetails_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
     </fragment>
 </navigation>

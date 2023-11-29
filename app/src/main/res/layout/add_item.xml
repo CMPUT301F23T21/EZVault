@@ -71,8 +71,10 @@
                         android:inputType="date"
                         android:paddingLeft="16dp"
                         android:paddingEnd="13dp"
-                        android:clickable="true"
+                        android:clickable="false"
                         android:focusable="false"
+                        android:cursorVisible="false"
+                        android:focusableInTouchMode="false"
                         />
 
                     <LinearLayout
