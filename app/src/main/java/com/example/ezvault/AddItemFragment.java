@@ -368,9 +368,18 @@ public class AddItemFragment extends Fragment {
 
                             // Stuff that updates the UI
                             EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
-                            DescriptionText.setText(finalItemname);
 
-                            // TODO: Inform user of errors
+                            switch (finalCode) {
+                                case 0:
+                                    DescriptionText.setText(finalItemname);
+                                    break;
+                                case 1:
+                                    DescriptionText.setText("No items found");
+                                    break;
+                                case 2:
+                                    DescriptionText.setText("Network error");
+                                    break;
+                            }
                         }
                     });
 
