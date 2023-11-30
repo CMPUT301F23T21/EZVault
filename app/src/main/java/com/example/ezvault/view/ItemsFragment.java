@@ -1,9 +1,11 @@
 package com.example.ezvault.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -53,6 +56,11 @@ public class ItemsFragment extends Fragment {
 
     private ItemViewModel viewModel;
 
+    // UI elements that have cross-function utilization and need exposed access
+
+    private TextView itemCount;
+    private TextView itemValue;
+
 
     public ItemsFragment() {
         // Required empty public constructor
@@ -67,6 +75,8 @@ public class ItemsFragment extends Fragment {
     private void setupRecycler(View view, ItemListView itemListView) {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        ImageButton selectedButton = view.findViewById(R.id.exit_select_mode_button);
 
         itemAdapter = new ItemAdapter(requireContext(), itemListView, new ItemAdapter.ItemClickListener() {
             @Override
@@ -87,6 +97,7 @@ public class ItemsFragment extends Fragment {
             public void onLongClick(View view, int position) {
                 if (!itemAdapter.editMode) {
                     itemAdapter.editMode = true;
+                    selectedButton.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -103,6 +114,7 @@ public class ItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
 
+
         TextView filter = view.findViewById(R.id.text_filterSort);
         filter.setOnClickListener(v ->
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_filterFragment)
@@ -115,15 +127,22 @@ public class ItemsFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
 
-        TextView totalItemValueView = view.findViewById(R.id.text_total_value);
-        TextView numItemsView = view.findViewById(R.id.text_number_of_items);
+        ImageButton deleteItemsButton = view.findViewById(R.id.delete_items_button);
+        deleteItemsButton.setOnClickListener(v -> {
+            deleteSelected();
+        });
 
-        Switch edit_switch = view.findViewById(R.id.edit_switch);
-        edit_switch.setOnClickListener(v -> {
-            // The edit switch is temporary and will be replaced, not sure of its functionality yet
+
+        ImageButton exitSelectButton = view.findViewById(R.id.exit_select_mode_button);
+        exitSelectButton.setVisibility(View.GONE);
+        exitSelectButton.setOnClickListener(v -> {
             itemAdapter.editMode = false;
             itemAdapter.clearSelected();
+            exitSelectButton.setVisibility(View.GONE);
         });
+
+        TextView totalItemValueView = view.findViewById(R.id.text_total_value);
+        TextView numItemsView = view.findViewById(R.id.text_number_of_items);
 
         viewModel.getTotalValue().observe(getViewLifecycleOwner(), total -> {
             Locale locale = Locale.getDefault();
@@ -155,38 +174,53 @@ public class ItemsFragment extends Fragment {
     // Delete the item
 
 
-    private void deleteItemImages(Item item){
-        ImageDAO imageDAO = new ImageDAO(new FirebaseBundle());
+    private void deleteItemImages(Item item, ImageDAO imageDAO){
         item.getImages().forEach(image -> {
             imageDAO.delete(image.getId());
         });
     }
 
     private void deleteSelected(){
-        ItemDAO itemDAO;
+        FirebaseBundle fb = new FirebaseBundle();
+        ItemDAO itemDAO = new ItemDAO(fb);
+        ImageDAO imageDAO = new ImageDAO(fb);
+        RawUserDAO rawUserDAO = new RawUserDAO(fb);
 
-        RawUserDAO rawUserDAO = new RawUserDAO(new FirebaseBundle());
         User currUser = userManager.getUser();
 
-        List<String> itemStr = itemAdapter.getUnselectedItems()
-                .stream()
+        List<Item> unselectedItems = itemAdapter.getUnselectedItems();
+        List<Item> selectedItems = itemAdapter.getSelectedItems();
+
+        List<String> itemStr = unselectedItems.stream()
                 .map(item -> item.getId())
                 .collect(Collectors.toList());
 
         List<String> tagIds = currUser.getItemList()
                 .getTags()
-                .stream().
-                map(tag -> tag.getUid())
+                .stream()
+                .map(tag -> tag.getUid())
                 .collect(Collectors.toList());
 
         rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(), (ArrayList<String>) tagIds, (ArrayList<String>) itemStr))
                         .continueWith(t -> {
+                            for (int i = 0; i < selectedItems.size(); i++){
+                                Item item = selectedItems.get(i);
+
+                                itemDAO.delete(item.getId());
+                                deleteItemImages(item, imageDAO);
+
+                                userManager.getUser()
+                                        .getItemList()
+                                        .remove(item);
+
+                                itemAdapter.notifyItemRemoved(i);
+                            };
+
+                            viewModel.synchronizeItems(userManager.getUser().getItemList());
+                            itemAdapter.notifyDataSetChanged();
                             return null;
                         });
 
-        itemAdapter.getSelectedItems().forEach(item -> {
-            deleteItemImages(item);
-        });
     }
 
     @Override
