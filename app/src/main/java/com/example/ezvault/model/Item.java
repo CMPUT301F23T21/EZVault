@@ -69,6 +69,9 @@ public class Item {
      */
     private double count;
 
+    @Exclude
+    private boolean selected;
+
     /**
      * Create an item with a serial number.
      * @param id The id of the item
@@ -93,6 +96,7 @@ public class Item {
         this.images = images;
         this.count = count;
         this.value = value;
+        this.selected = false;
     }
 
     /**
@@ -265,5 +269,15 @@ public class Item {
             }
         }
         return false;
+    }
+
+    @Exclude
+    public void setSelected(boolean selected){
+        this.selected = selected;
+    }
+
+    @Exclude
+    public boolean isSelected(){
+        return this.selected;
     }
 }
