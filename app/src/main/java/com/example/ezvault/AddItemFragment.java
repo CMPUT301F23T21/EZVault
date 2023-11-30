@@ -2,6 +2,8 @@ package com.example.ezvault;
 
 import android.content.ContentResolver;
 import android.app.DatePickerDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -29,6 +33,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
+import com.example.ezvault.model.SerialPrediction;
+import com.example.ezvault.model.SerialPredictor;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -72,6 +78,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * fragment class that collects the information of a new item
@@ -107,6 +114,8 @@ public class AddItemFragment extends Fragment {
     private PhotoAdapter photoAdapter;
 
     private ContentResolver contentResolver;
+
+    private ArrayAdapter<String> serialAdapter;
 
     public AddItemFragment() {
         // Required empty public constructor
@@ -177,10 +186,17 @@ public class AddItemFragment extends Fragment {
         EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
         EditText itemMake = view.findViewById(R.id.edittext_item_make);
         EditText itemModel = view.findViewById(R.id.edittext_item_model);
-        EditText itemSerial = view.findViewById(R.id.edittext_item_serial);
+        AutoCompleteTextView itemSerial = view.findViewById(R.id.edittext_item_serial);
         EditText itemDescription = view.findViewById(R.id.edittext_item_description);
         EditText itemComments = view.findViewById(R.id.edittext_item_comment);
         EditText itemDate = view.findViewById(R.id.edittext_item_date);
+
+        serialAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.select_dialog_singlechoice);
+        itemSerial.setOnClickListener(v -> itemSerial.showDropDown());
+        itemSerial.setOnFocusChangeListener((v,f) -> itemSerial.showDropDown());
+
+        itemSerial.setAdapter(serialAdapter);
 
         addItem = view.findViewById(R.id.button_confirm_add_item);
         addItem.setOnClickListener(v -> {
@@ -281,7 +297,7 @@ public class AddItemFragment extends Fragment {
         serialScan = view.findViewById(R.id.button_serial_scan);
         descriptionScan = view.findViewById(R.id.button_description_scan);
 
-        serialScan.setOnClickListener(listener);
+        serialScan.setOnClickListener(serialListener);
         descriptionScan.setOnClickListener(listener);
 
         SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
@@ -302,6 +318,22 @@ public class AddItemFragment extends Fragment {
         });
         return view;
     }
+
+    private View.OnClickListener serialListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Task<Image> imageTask = TaskUtils.onSuccess(galleryAction.resolve(), uri ->
+                    FileUtils.imageFromUri(uri, contentResolver));
+            imageTask.onSuccessTask(image -> {
+                Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
+                return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
+                        predictions -> {
+                            serialAdapter.addAll(predictions.stream().map(SerialPrediction::getContents).collect(Collectors.toList()));
+                            serialAdapter.notifyDataSetChanged();
+                        });
+            });
+        }
+    };
 
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
