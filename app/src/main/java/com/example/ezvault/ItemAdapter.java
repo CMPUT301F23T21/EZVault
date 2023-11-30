@@ -2,7 +2,9 @@ package com.example.ezvault;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,6 +18,8 @@ import com.example.ezvault.model.utils.ItemListView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
@@ -23,17 +27,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private LayoutInflater inflater;
     private ItemClickListener itemClickListener;
 
+    public boolean editMode;
+
     // Interface for click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+        void onLongClick(View view, int position);
     }
 
     // Constructor
-    public ItemAdapter(Context context, ItemListView itemListView, ItemClickListener listener) {
+    public ItemAdapter(@NonNull Context context, @NonNull ItemListView itemListView, ItemClickListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.itemListView = itemListView;
         this.itemClickListener = listener;
+        this.editMode = false;
     }
+
+
 
     @NonNull
     @Override
@@ -67,16 +77,39 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             holder.itemImage.setImageBitmap(imageBmp);
         }
 
+        holder.itemView.setBackgroundColor(currentItem.isSelected() ? 0xff0000ff : 0xffd7c3b8);
+
         // Set the click listener for the item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get the current clicked position
                 int adapterPosition = holder.getAdapterPosition();
-                // Check if a click listener is set and the position is valid
-                if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
-                    itemClickListener.onItemClick(v, adapterPosition);
+                if (!editMode) {
+                    // Check if a click listener is set and the position is valid
+                    if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                        itemClickListener.onItemClick(v, adapterPosition);
+                    }
+                } else{
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        Item selectedItem = itemListView.get(adapterPosition);
+                        selectedItem.setSelected(!selectedItem.isSelected());
+
+                        holder.itemView.setBackgroundColor(selectedItem.isSelected() ? 0xff0000ff : 0xffd7c3b8);
+                    }
                 }
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int adapterPosition = holder.getAdapterPosition();
+
+                if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION){
+                    itemClickListener.onLongClick(v, adapterPosition);
+                }
+                return false;
             }
         });
     }
@@ -101,6 +134,40 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemCount = itemView.findViewById(R.id.quantity_text);
             itemAmount = itemView.findViewById(R.id.cost_text);
         }
+    }
+
+    public void clearSelected(){
+        itemListView.forEach(item -> {
+            if (item.isSelected()){
+                item.setSelected(false);
+            }
+        });
+    }
+
+    public List<Item> getSelectedItems(){
+        List<Item> selected = new ArrayList<>();
+
+        itemListView.forEach(item -> {
+            if (item.isSelected()){
+                selected.add(item);
+            }
+        });
+
+        return selected;
+
+    }
+
+    public List<Item> getUnselectedItems(){
+        List<Item> unselected = new ArrayList<>();
+
+        itemListView.forEach(item -> {
+            if (!item.isSelected()){
+                unselected.add(item);
+            }
+        });
+
+        return unselected;
+
     }
 
     // Allows external callers to set a new dataset
