@@ -22,7 +22,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class ItemViewModel extends ViewModel {
-    private final LiveData<ItemList> itemList;
+    private final MutableLiveData<ItemList> itemList;
     private final MediatorLiveData<ItemListView> itemListView;
     private final LiveData<MainItemFilter> filter;
 
@@ -46,6 +46,10 @@ public class ItemViewModel extends ViewModel {
         }
     }
 
+    public void synchronizeItems(ItemList items){
+        itemList.setValue(items);
+    }
+
     public LiveData<ItemListView> getItemListView() {
         Log.d("EZVault", "Getting item list view.");
         return itemListView;
@@ -58,4 +62,6 @@ public class ItemViewModel extends ViewModel {
     public LiveData<Integer> getNumberOfItems() {
         return Transformations.map(itemListView, ItemListView::size);
     }
+
+
 }
