@@ -311,7 +311,7 @@ public class AddItemFragment extends Fragment {
             else lastScan = "desc";
             scanner.startScan().addOnSuccessListener(
                     barcode -> {
-                        if (lastScan == "serial") {
+                        if (lastScan.equals("serial")) {
                             EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
                             SerialText.setText(barcode.getRawValue());
                         } else {
