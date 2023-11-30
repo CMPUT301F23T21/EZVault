@@ -43,8 +43,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         this.editMode = false;
     }
 
-
-
     @NonNull
     @Override
     public ItemAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -70,6 +68,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         List<Image> itemImages = currentItem.getImages();
 
         // Set the thumbnail to the first image, if there are any
+        holder.itemImage.setImageDrawable(null);
         if (itemImages.size() > 0) {
             byte[] imageContent = currentItem.getImages().get(0).getContents();
             Bitmap imageBmp = BitmapFactory.decodeByteArray(imageContent, 0, imageContent.length);
@@ -77,7 +76,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             holder.itemImage.setImageBitmap(imageBmp);
         }
 
-        holder.itemView.setBackgroundColor(currentItem.isSelected() ? 0xff0000ff : 0xffd7c3b8);
+        holder.itemView.setBackgroundColor(currentItem.isSelected() ? 0xffffdab9 : 0xffd7c3b8);
 
         // Set the click listener for the item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +94,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                         Item selectedItem = itemListView.get(adapterPosition);
                         selectedItem.setSelected(!selectedItem.isSelected());
 
-                        holder.itemView.setBackgroundColor(selectedItem.isSelected() ? 0xff0000ff : 0xffd7c3b8);
+                        holder.itemView.setBackgroundColor(selectedItem.isSelected() ? 0xffffdab9 : 0xffd7c3b8);
                     }
                 }
             }
@@ -142,6 +141,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
                 item.setSelected(false);
             }
         });
+        notifyDataSetChanged();
     }
 
     public List<Item> getSelectedItems(){
