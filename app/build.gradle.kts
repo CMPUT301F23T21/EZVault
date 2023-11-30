@@ -61,6 +61,9 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
 
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
+    implementation ("com.google.code.gson:gson:2.10.1")
+
     implementation("androidx.camera:camera-core:1.3.0")
     implementation ("androidx.camera:camera-camera2:1.3.0")
     implementation ("androidx.camera:camera-lifecycle:1.3.0")
