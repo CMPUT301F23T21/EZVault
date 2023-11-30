@@ -120,6 +120,13 @@
             android:layout_marginRight="10dp"
             android:backgroundTint="@color/EZGuardOrange"/>
 
+        <Switch
+            android:id="@+id/edit_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/text_filterSort"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
