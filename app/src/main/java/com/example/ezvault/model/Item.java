@@ -72,6 +72,9 @@ public class Item {
     @Exclude
     private boolean selected;
 
+    @Exclude
+    private boolean deleteMode;
+
     /**
      * Create an item with a serial number.
      * @param id The id of the item
@@ -275,4 +278,5 @@ public class Item {
     public boolean isSelected(){
         return this.selected;
     }
+
 }

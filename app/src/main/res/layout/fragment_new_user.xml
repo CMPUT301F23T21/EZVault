@@ -87,14 +87,14 @@
         android:drawablePadding="12dp"
         android:ems="10"
         android:fontFamily="@font/fredoka_one"
-        android:hint="New Username"
+        android:hint="Email"
         android:inputType="text"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/create_username_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText

@@ -120,24 +120,6 @@
             android:layout_marginRight="10dp"
             android:backgroundTint="@color/EZGuardOrange"/>
 
-        <ImageButton
-            android:id="@+id/exit_select_mode_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/icon_cancel"
-            android:background="#00000000"
-            app:layout_constraintBottom_toTopOf="@id/divider"
-            app:layout_constraintRight_toRightOf="parent"/>
-
-        <ImageButton
-            android:id="@+id/delete_items_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/icon_delete"
-            android:background="#00000000"
-            app:layout_constraintBottom_toTopOf="@id/divider"
-            app:layout_constraintLeft_toLeftOf="parent"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -58,9 +58,6 @@ public class ItemsFragment extends Fragment {
 
     // UI elements that have cross-function utilization and need exposed access
 
-    private TextView itemCount;
-    private TextView itemValue;
-
 
     public ItemsFragment() {
         // Required empty public constructor
@@ -76,7 +73,6 @@ public class ItemsFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        ImageButton selectedButton = view.findViewById(R.id.exit_select_mode_button);
 
         itemAdapter = new ItemAdapter(requireContext(), itemListView, new ItemAdapter.ItemClickListener() {
             @Override
@@ -93,13 +89,6 @@ public class ItemsFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_itemsFragment_to_editItemDetails);
             }
 
-            @Override
-            public void onLongClick(View view, int position) {
-                if (!itemAdapter.editMode) {
-                    itemAdapter.editMode = true;
-                    selectedButton.setVisibility(View.VISIBLE);
-                }
-            }
         });
 
         recyclerView.setAdapter(itemAdapter);
@@ -114,32 +103,19 @@ public class ItemsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_items, container, false);
 
-
+        // navigation to filter fragment
         TextView filter = view.findViewById(R.id.text_filterSort);
         filter.setOnClickListener(v ->
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_filterFragment)
         );
 
+        // navigation to add item fragment
         FloatingActionButton floatingButton = view.findViewById(R.id.button_add_item);
-
         floatingButton.setOnClickListener(v -> {
             itemAdapter.clearSelected(); // We don't want them to persist over to item creation
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
 
-        ImageButton deleteItemsButton = view.findViewById(R.id.delete_items_button);
-        deleteItemsButton.setOnClickListener(v -> {
-            deleteSelected();
-        });
-
-
-        ImageButton exitSelectButton = view.findViewById(R.id.exit_select_mode_button);
-        exitSelectButton.setVisibility(View.GONE);
-        exitSelectButton.setOnClickListener(v -> {
-            itemAdapter.editMode = false;
-            itemAdapter.clearSelected();
-            exitSelectButton.setVisibility(View.GONE);
-        });
 
         TextView totalItemValueView = view.findViewById(R.id.text_total_value);
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
@@ -180,7 +156,7 @@ public class ItemsFragment extends Fragment {
         });
     }
 
-    private void deleteSelected(){
+    public void deleteSelected(){
         FirebaseBundle fb = new FirebaseBundle();
         ItemDAO itemDAO = new ItemDAO(fb);
         ImageDAO imageDAO = new ImageDAO(fb);
@@ -190,6 +166,8 @@ public class ItemsFragment extends Fragment {
 
         List<Item> unselectedItems = itemAdapter.getUnselectedItems();
         List<Item> selectedItems = itemAdapter.getSelectedItems();
+
+        System.out.println("list:" +selectedItems);
 
         List<String> itemStr = unselectedItems.stream()
                 .map(item -> item.getId())
@@ -227,5 +205,14 @@ public class ItemsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         itemAdapter.clearSelected();
+    }
+
+    public void deleteMode(boolean mode) {
+        itemAdapter.deleteMode = mode;
+        itemAdapter.notifyDataSetChanged();
+    }
+
+    public int getSelectedCount() {
+        return itemAdapter.getSelectedItems().size();
     }
 }
