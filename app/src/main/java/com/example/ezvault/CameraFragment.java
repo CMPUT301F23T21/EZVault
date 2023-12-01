@@ -1,11 +1,21 @@
 package com.example.ezvault;
 
+import android.animation.ArgbEvaluator;
+import android.animation.IntEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -19,8 +29,13 @@ import androidx.camera.core.ViewPort;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
+import com.example.ezvault.model.Image;
+import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.UserManager;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -68,6 +83,19 @@ public class CameraFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        MenuHost menuHost = (MenuHost) requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.clear();
+            }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
 
         cameraProviderFuture.addListener(() -> {
             try {
@@ -127,7 +155,11 @@ public class CameraFragment extends Fragment {
     private File createTempFile(Activity activity){
         try {
             String fileName = "EZVAULT_" + System.currentTimeMillis();
-            return File.createTempFile(fileName, ".jpg", activity.getExternalFilesDir("app_photos"));
+
+            File tempImgFile = File.createTempFile(fileName, ".jpg", activity.getExternalFilesDir("app_photos"));
+            tempImgFile.deleteOnExit();
+
+            return tempImgFile;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -147,7 +179,10 @@ public class CameraFragment extends Fragment {
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(ImageCapture.OutputFileResults outputFileResults) {
-                        userManager.addUri(outputFileResults.getSavedUri());
+                       Image newImage =  FileUtils.imageFromUri(outputFileResults.getSavedUri(),
+                               requireContext().getContentResolver());
+
+                       userManager.addLocalImage(newImage);
                     }
 
                     @Override
@@ -155,6 +190,17 @@ public class CameraFragment extends Fragment {
 
                     }
                 }
+
         );
+
+        view.getRootView().setForeground(new ColorDrawable(Color.WHITE));
+        view.getRootView().animate()
+                .setDuration(350)
+                .alpha(0.80f)
+                .withEndAction(() -> {
+                    view.getRootView().setAlpha(1.0f);
+                    view.getRootView().setForeground(null);
+                }).start();
+
     }
 }
