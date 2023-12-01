@@ -68,6 +68,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -328,7 +329,12 @@ public class AddItemFragment extends Fragment {
                 Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
                 return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
                         predictions -> {
-                            serialAdapter.addAll(predictions.stream().map(SerialPrediction::getContents).collect(Collectors.toList()));
+                            serialAdapter.addAll(predictions
+                                    .stream()
+                                    .sorted(Comparator.comparing(SerialPrediction::getConfidence)
+                                            .reversed())
+                                    .map(SerialPrediction::getContents)
+                                    .collect(Collectors.toList()));
                             serialAdapter.notifyDataSetChanged();
                         });
             });
@@ -354,7 +360,7 @@ public class AddItemFragment extends Fragment {
         }
     };
 
-    /**
+    /*
      * Synchronizes the recycler view of Images with the state of the user's uri cache
      * @param contentResolver Content resolver used for reading media
      */

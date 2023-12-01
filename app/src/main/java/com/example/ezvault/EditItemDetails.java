@@ -2,6 +2,8 @@ package com.example.ezvault;
 
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,6 +29,8 @@ import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
+import com.example.ezvault.model.SerialPrediction;
+import com.example.ezvault.model.SerialPredictor;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
@@ -36,6 +42,7 @@ import com.google.firebase.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -74,6 +81,7 @@ public class EditItemDetails extends Fragment {
      * Allows for the selection of photos from the photo gallery
      */
     private GalleryAction galleryAction;
+    private ArrayAdapter<String> serialAdapter;
 
     public EditItemDetails() {
         // Required empty public constructor
@@ -130,7 +138,7 @@ public class EditItemDetails extends Fragment {
         EditText commentText = view.findViewById(R.id.edit_details_comment);
         EditText countText = view.findViewById(R.id.edit_details_count);
         EditText valueText = view.findViewById(R.id.edit_details_value);
-        EditText serialText = view.findViewById(R.id.edit_details_serial_number);
+        AutoCompleteTextView serialText = view.findViewById(R.id.edit_details_serial_number);
         EditText dateText = view.findViewById(R.id.edit_details_date);
 
         Item raw = itemModel.getValue();
@@ -172,6 +180,30 @@ public class EditItemDetails extends Fragment {
                 dateText.setText(format.format(calendar.getTime()));
             });
             dialog.show();
+        });
+
+        serialText.setOnClickListener(v -> serialText.showDropDown());
+        serialText.setOnFocusChangeListener((v,f) -> serialText.showDropDown());
+        serialAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.select_dialog_singlechoice);
+        serialText.setAdapter(serialAdapter);
+        TextInputLayout serialLayout = view.findViewById(R.id.edit_details_serial_layout);
+        serialLayout.setEndIconOnClickListener(v -> {
+            Log.d("EZVAultT", "Serial edit layout thing");
+            Task<Image> imageTask = TaskUtils.onSuccess(galleryAction.resolve(), uri ->
+                    FileUtils.imageFromUri(uri, contentResolver));
+            imageTask.onSuccessTask(image -> {
+                Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
+                return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
+                        predictions -> {
+                            serialAdapter.addAll(predictions
+                                    .stream()
+                                    .sorted(Comparator.comparing(SerialPrediction::getConfidence)
+                                            .reversed())
+                                    .map(SerialPrediction::getContents)
+                                    .collect(Collectors.toList()));
+                            serialAdapter.notifyDataSetChanged();
+                        });
+            });
         });
 
 
