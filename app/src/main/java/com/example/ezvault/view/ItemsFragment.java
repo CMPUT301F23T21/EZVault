@@ -289,8 +289,8 @@ public class ItemsFragment extends Fragment {
                     new AlertDialog.Builder(requireContext())
                             .setMessage("Are you sure you want to delete " + itemAdapter.getSelectedCount() + " item(s)?")
                             .setPositiveButton("Confirm", (dialog, which) -> {
-                                deleteSelected();
                                 toggleDeleteMode(false);
+                                deleteSelected();
                                 menuHost.invalidateMenu();
                             })
                             .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
