@@ -1,8 +1,10 @@
 package com.example.ezvault;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ezvault.model.Image;
+import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.UserManager;
 
 import java.util.List;
@@ -38,12 +41,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
     private final Context context;
     private List<Image> imageList;
 
-    private UserManager userManager;
-
-    public PhotoAdapter(Context context, List<Image> imageList, UserManager userManager) {
+    public PhotoAdapter(Context context, List<Image> imageList) {
         this.context = context;
         this.imageList = imageList;
-        this.userManager = userManager;
     }
 
     @NonNull
@@ -69,10 +69,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
         holder.deletePhotoButton.setOnClickListener(v -> {
             int updatedPosition = holder.getAdapterPosition();
 
-            Image removedImage = imageList.remove(updatedPosition);
-            if (removedImage.getId() == null) {
-                userManager.getUriCache().remove(updatedPosition);
+            if (updatedPosition == RecyclerView.NO_POSITION){
+                return;
             }
+
+            imageList.remove(updatedPosition);
+
             notifyItemRemoved(updatedPosition);
             notifyItemRangeChanged(updatedPosition, imageList.size() - updatedPosition);
         });
