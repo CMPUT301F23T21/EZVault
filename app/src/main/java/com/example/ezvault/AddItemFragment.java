@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -323,20 +324,25 @@ public class AddItemFragment extends Fragment {
     private View.OnClickListener serialListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Task<Image> imageTask = TaskUtils.onSuccess(galleryAction.resolve(), uri ->
-                    FileUtils.imageFromUri(uri, contentResolver));
-            imageTask.onSuccessTask(image -> {
+            galleryAction.resolve().continueWithTask(uriTask-> {
+                Uri uri = uriTask.getResult();
+
+                if (uri == null) { return null; } // Null if the user didn't select an image
+
+                Image image = FileUtils.imageFromUri(uri, contentResolver);
                 Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
+
                 return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
-                        predictions -> {
-                            serialAdapter.addAll(predictions
-                                    .stream()
-                                    .sorted(Comparator.comparing(SerialPrediction::getConfidence)
-                                            .reversed())
-                                    .map(SerialPrediction::getContents)
-                                    .collect(Collectors.toList()));
-                            serialAdapter.notifyDataSetChanged();
-                        });
+                    predictions -> {
+                        serialAdapter.addAll(predictions
+                                .stream()
+                                .sorted(Comparator.comparing(SerialPrediction::getConfidence)
+                                        .reversed())
+                                .map(SerialPrediction::getContents)
+                                .collect(Collectors.toList()));
+
+                        serialAdapter.notifyDataSetChanged();
+                    });
             });
         }
     };
