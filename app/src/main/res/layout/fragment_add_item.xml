@@ -232,7 +232,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_marginStart="25dp"/>
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/edittext_item_serial"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -247,7 +247,7 @@
                         android:id="@+id/button_serial_scan"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/icon_barcode_scan"
+                        android:src="@drawable/icon_camera"
                         android:background="@null"
                         android:layout_below="@id/text_item_serial"
                         android:layout_alignParentRight="true"

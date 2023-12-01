@@ -72,9 +72,6 @@ public class Item {
     @Exclude
     private boolean selected;
 
-    @Exclude
-    private boolean deleteMode;
-
     /**
      * Create an item with a serial number.
      * @param id The id of the item
@@ -266,7 +263,22 @@ public class Item {
      * @return Whether or not the item has the specified tag
      */
     public boolean hasTag(Tag tag) {
-        return this.tags.contains(tag);
+        for (Tag possibleTag : tags) {
+            if (possibleTag.getUid().equals(tag.getUid())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Exclude
+    public void setSelected(boolean selected){
+        this.selected = selected;
+    }
+
+    @Exclude
+    public boolean isSelected(){
+        return this.selected;
     }
 
     @Exclude

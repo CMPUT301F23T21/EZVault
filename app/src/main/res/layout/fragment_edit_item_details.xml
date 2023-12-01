@@ -156,13 +156,14 @@
                 android:paddingVertical="14dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
+                android:id="@+id/edit_details_serial_layout"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/icon_camera"
                 app:cursorColor="@color/EZGuardOrange"
                 app:hintTextColor="@color/EZGuardOrange"
                 app:boxStrokeColor="@color/EZGuardOrange"
                 android:hint="Serial Number">
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/edit_details_serial_number"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"/>

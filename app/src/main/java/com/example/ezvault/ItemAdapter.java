@@ -38,6 +38,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     // Interface for click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+        void onLongClick(View view, int position);
     }
 
     // Constructor
@@ -96,15 +97,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         // Get the current clicked position
         int adapterPosition = holder.getAdapterPosition();
-        // call implementation
+     
+        // Set the click listener for the item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // Check if a click listener is set and the position is valid
                 if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                  // call implementation
                     itemClickListener.onItemClick(v, adapterPosition);
                 }
+                return false;
             }
         });
 
