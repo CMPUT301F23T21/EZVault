@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,11 +13,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
 import com.example.ezvault.database.TagDAO;
 import com.example.ezvault.model.Item;
+import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.utils.UserManager;
@@ -36,6 +40,8 @@ import com.example.ezvault.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -132,6 +138,8 @@ public class ItemsFragment extends Fragment {
             deleteSelected();
         });
 
+        ImageButton tagItemsButton = view.findViewById(R.id.tag_items_button);
+        tagItemsButton.setOnClickListener(v -> tagSelected());
 
         ImageButton exitSelectButton = view.findViewById(R.id.exit_select_mode_button);
         exitSelectButton.setVisibility(View.GONE);
@@ -178,6 +186,37 @@ public class ItemsFragment extends Fragment {
         item.getImages().forEach(image -> {
             imageDAO.delete(image.getId());
         });
+    }
+
+    private void tagSelected() {
+        if (itemAdapter.getSelectedItems().isEmpty()) return;
+        for (Item item : itemAdapter.getSelectedItems()) {
+            Log.d("EZVaultT", "Selected: " + item.getId());
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        EditText input = new EditText(requireContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setTitle("Tag Items");
+
+        builder.setPositiveButton("Tag", (dialog, x) -> {
+            String inputText = input.getText().toString();
+            HashSet<String> tagNames =
+                    new HashSet<>(Arrays.asList(inputText.split("\\s*,\\s*")));
+            HashSet<Tag> tags = new HashSet<>();
+            for (Tag tag : userManager.getUser().getItemList().getTags()) {
+                if (tagNames.contains(tag.getContents())) {
+                    tags.add(tag);
+                }
+            }
+            for (Item item : itemAdapter.getSelectedItems()) {
+                for (Tag tag : tags) {
+                    item.getTags().add(tag);
+                    new ItemDAO(new FirebaseBundle()).update(item.getId(), item);
+                }
+            }
+        });
+        builder.show();
     }
 
     private void deleteSelected(){

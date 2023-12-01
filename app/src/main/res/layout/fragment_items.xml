@@ -138,6 +138,15 @@
             app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
+        <ImageButton
+            android:id="@+id/tag_items_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_tag"
+            android:background="#00000000"
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintLeft_toRightOf="@id/delete_items_button"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
