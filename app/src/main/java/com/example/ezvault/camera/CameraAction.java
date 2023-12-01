@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -88,6 +89,6 @@ public abstract class CameraAction<T,S> implements DefaultLifecycleObserver {
      * @return a tagged and timestamped String
      */
     protected final String getRandomKey(){
-        return "EZ_VAULT_" + System.currentTimeMillis();
+        return "EZ_" + UUID.randomUUID().toString();
     }
 }

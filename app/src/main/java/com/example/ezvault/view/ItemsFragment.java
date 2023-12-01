@@ -17,13 +17,18 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.EditText;
+
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -37,6 +42,9 @@ import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
 import com.example.ezvault.database.TagDAO;
 import com.example.ezvault.model.Item;
+
+import com.example.ezvault.model.Tag;
+
 import com.example.ezvault.model.User;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.utils.UserManager;
@@ -45,6 +53,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+
+import java.util.Arrays;
+import java.util.HashSet;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -69,6 +81,9 @@ public class ItemsFragment extends Fragment {
 
     private FloatingActionButton floatingButton;
 
+    ImageButton tagItemsButton;
+
+
     public ItemsFragment() {
         // Required empty public constructor
     }
@@ -82,7 +97,6 @@ public class ItemsFragment extends Fragment {
     private void setupRecycler(View view, ItemListView itemListView) {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
 
         itemAdapter = new ItemAdapter(requireContext(), itemListView, new ItemAdapter.ItemClickListener() {
             @Override
@@ -98,7 +112,6 @@ public class ItemsFragment extends Fragment {
 
                 Navigation.findNavController(view).navigate(R.id.action_itemsFragment_to_editItemDetails);
             }
-
         });
 
         recyclerView.setAdapter(itemAdapter);
@@ -126,6 +139,9 @@ public class ItemsFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
         });
 
+        tagItemsButton = view.findViewById(R.id.tag_items_button);
+        tagItemsButton.setOnClickListener(v -> tagSelected());
+        tagItemsButton.setVisibility(View.GONE);
 
         TextView totalItemValueView = view.findViewById(R.id.text_total_value);
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
@@ -163,9 +179,42 @@ public class ItemsFragment extends Fragment {
         });
     }
 
-    private void deleteSelected(){
-        itemAdapter.deleteMode = false;
 
+    private void tagSelected() {
+        if (itemAdapter.getSelectedItems().isEmpty()) return;
+
+        for (Item item : itemAdapter.getSelectedItems()) {
+            Log.d("EZVaultT", "Selected: " + item.getId());
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        EditText input = new EditText(requireContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setTitle("Tag Items");
+
+        builder.setPositiveButton("Tag", (dialog, x) -> {
+            String inputText = input.getText().toString();
+            HashSet<String> tagNames =
+                    new HashSet<>(Arrays.asList(inputText.split("\\s*,\\s*")));
+
+            HashSet<Tag> tags = new HashSet<>();
+            for (Tag tag : userManager.getUser().getItemList().getTags()) {
+                if (tagNames.contains(tag.getContents())) {
+                    tags.add(tag);
+                }
+            }
+            for (Item item : itemAdapter.getSelectedItems()) {
+                for (Tag tag : tags) {
+                    item.getTags().add(tag);
+                    new ItemDAO(new FirebaseBundle()).update(item.getId(), item);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void deleteSelected(){
         FirebaseBundle fb = new FirebaseBundle();
         ItemDAO itemDAO = new ItemDAO(fb);
         ImageDAO imageDAO = new ImageDAO(fb);
@@ -175,8 +224,6 @@ public class ItemsFragment extends Fragment {
 
         List<Item> unselectedItems = itemAdapter.getUnselectedItems();
         List<Item> selectedItems = itemAdapter.getSelectedItems();
-
-        System.out.println("list:" +selectedItems);
 
         List<String> itemStr = unselectedItems.stream()
                 .map(item -> item.getId())
@@ -236,13 +283,14 @@ public class ItemsFragment extends Fragment {
                 int menuId = menuItem.getItemId();
 
                 if (menuId == R.id.toolbar_trash || menuId == R.id.edit_item_cancel){
-                    toggleDeleteMode();
+                    toggleDeleteMode(true);
                     menuHost.invalidateMenu();
                 } else if (menuId == R.id.edit_item_confirm && !itemAdapter.getSelectedItems().isEmpty()) {
                     new AlertDialog.Builder(requireContext())
                             .setMessage("Are you sure you want to delete " + itemAdapter.getSelectedCount() + " item(s)?")
                             .setPositiveButton("Confirm", (dialog, which) -> {
                                 deleteSelected();
+                                toggleDeleteMode(false);
                                 menuHost.invalidateMenu();
                             })
                             .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
@@ -255,13 +303,16 @@ public class ItemsFragment extends Fragment {
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
-    private void toggleDeleteMode(){
+    private void toggleDeleteMode(boolean updateAdapter){
         boolean isDeleting = !itemAdapter.deleteMode;
         itemAdapter.deleteMode = isDeleting;
 
         floatingButton.setVisibility(isDeleting ? View.GONE : View.VISIBLE);
+        tagItemsButton.setVisibility(isDeleting ? View.VISIBLE : View.GONE);
 
-        itemAdapter.notifyDataSetChanged();
+        if (updateAdapter) {
+            itemAdapter.notifyDataSetChanged();
+        }
     }
 
 }

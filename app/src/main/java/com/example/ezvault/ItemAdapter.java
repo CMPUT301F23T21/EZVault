@@ -31,8 +31,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private ItemListView itemListView;
     private LayoutInflater inflater;
     private ItemClickListener itemClickListener;
-
-    private View view;
     public boolean deleteMode;
 
     // Interface for click events
@@ -51,7 +49,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @NonNull
     @Override
     public ItemAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        view = inflater.inflate(R.layout.item_layout, parent, false);
+        View view = inflater.inflate(R.layout.item_layout, parent, false);
         return new ItemViewHolder(view);
     }
 
@@ -94,16 +92,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             checkBox.setChecked(false);
         }
 
-        // Get the current clicked position
-        int adapterPosition = holder.getAdapterPosition();
-        // call implementation
+        // Set the click listener for the item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+                // Get the current clicked position
+                int adapterPosition = holder.getAdapterPosition();
+
                 // Check if a click listener is set and the position is valid
                 if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
                     itemClickListener.onItemClick(v, adapterPosition);
+
                 }
             }
         });
@@ -112,6 +112,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Get the current clicked position
+                int adapterPosition = holder.getAdapterPosition();
+
                 itemListView.get(adapterPosition).setSelected(isChecked);
             }
         });

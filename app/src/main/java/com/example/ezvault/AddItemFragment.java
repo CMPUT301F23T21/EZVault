@@ -2,7 +2,11 @@ package com.example.ezvault;
 
 import android.content.ContentResolver;
 import android.app.DatePickerDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,12 +23,25 @@ import android.widget.ImageButton;
 import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
+
+import android.widget.ImageButton;
+
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
+
+import com.example.ezvault.model.SerialPrediction;
+import com.example.ezvault.model.SerialPredictor;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,8 +60,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +80,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * fragment class that collects the information of a new item
@@ -60,6 +88,9 @@ import java.util.Locale;
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
+    AppCompatImageButton serialScan, descriptionScan;
+
+    private static final String TAG = "AddItem";
     private Button addItem;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -71,6 +102,10 @@ public class AddItemFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private String lastScan;
+
+    private GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder().enableAutoZoom().build();
+
     private GalleryAction galleryAction;
 
     @Inject
@@ -81,6 +116,8 @@ public class AddItemFragment extends Fragment {
     private PhotoAdapter photoAdapter;
 
     private ContentResolver contentResolver;
+
+    private ArrayAdapter<String> serialAdapter;
 
     public AddItemFragment() {
         // Required empty public constructor
@@ -151,10 +188,17 @@ public class AddItemFragment extends Fragment {
         EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
         EditText itemMake = view.findViewById(R.id.edittext_item_make);
         EditText itemModel = view.findViewById(R.id.edittext_item_model);
-        EditText itemSerial = view.findViewById(R.id.edittext_item_serial);
+        AutoCompleteTextView itemSerial = view.findViewById(R.id.edittext_item_serial);
         EditText itemDescription = view.findViewById(R.id.edittext_item_description);
         EditText itemComments = view.findViewById(R.id.edittext_item_comment);
         EditText itemDate = view.findViewById(R.id.edittext_item_date);
+
+        serialAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.select_dialog_singlechoice);
+        itemSerial.setOnClickListener(v -> itemSerial.showDropDown());
+        itemSerial.setOnFocusChangeListener((v,f) -> itemSerial.showDropDown());
+
+        itemSerial.setAdapter(serialAdapter);
 
         addItem = view.findViewById(R.id.button_confirm_add_item);
         addItem.setOnClickListener(v -> {
@@ -252,6 +296,12 @@ public class AddItemFragment extends Fragment {
             });
         });
 
+        serialScan = view.findViewById(R.id.button_serial_scan);
+        descriptionScan = view.findViewById(R.id.button_description_scan);
+
+        serialScan.setOnClickListener(serialListener);
+        descriptionScan.setOnClickListener(listener);
+
         SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         calendar.clear();
@@ -271,7 +321,52 @@ public class AddItemFragment extends Fragment {
         return view;
     }
 
-    /**
+    private View.OnClickListener serialListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            galleryAction.resolve().continueWithTask(uriTask-> {
+                Uri uri = uriTask.getResult();
+
+                if (uri == null) { return null; } // Null if the user didn't select an image
+
+                Image image = FileUtils.imageFromUri(uri, contentResolver);
+                Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
+
+                return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
+                    predictions -> {
+                        serialAdapter.addAll(predictions
+                                .stream()
+                                .sorted(Comparator.comparing(SerialPrediction::getConfidence)
+                                        .reversed())
+                                .map(SerialPrediction::getContents)
+                                .collect(Collectors.toList()));
+
+                        serialAdapter.notifyDataSetChanged();
+                    });
+            });
+        }
+    };
+
+    private View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(AddItemFragment.this.getActivity(), options);
+            if (v.getId() == serialScan.getId()) lastScan = "serial";
+            else lastScan = "desc";
+            scanner.startScan().addOnSuccessListener(
+                    barcode -> {
+                        if (lastScan.equals("serial")) {
+                            EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
+                            SerialText.setText(barcode.getRawValue());
+                        } else {
+                            updateDescription(barcode.getRawValue());
+                        }
+                    }
+            );
+        }
+    };
+
+    /*
      * Synchronizes the recycler view of Images with the state of the user's uri cache
      * @param contentResolver Content resolver used for reading media
      */
@@ -292,5 +387,81 @@ public class AddItemFragment extends Fragment {
             }
             photoAdapter.notifyItemRangeInserted(addedStart, cacheLen - 1);
         }
+    }
+
+    public void updateDescription(String UPC) {
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String UPCurl = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + URLEncoder.encode(UPC);
+                    URL url = null;
+
+                    // Store exit status for processing - 0 is normal, 2 is network error, 1 is item not found
+                    int code = 0;
+
+                    // Create the URL object
+                    try {
+                        url = new URL(UPCurl);
+                    } catch (MalformedURLException e) {
+                        code = 2;
+                        Log.e(TAG, "Malformed URL");
+                    }
+
+                    URLConnection connection;
+                    String itemname = "";
+                    try {
+                        connection = url.openConnection();
+                        connection.connect();
+                        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) connection.getContent()));
+                        Log.i(TAG, root.toString());
+                        JsonObject rootobj = root.getAsJsonObject();
+                        if (rootobj.isEmpty() || rootobj.get("items").getAsJsonArray().isEmpty()) {
+                            code = 1;
+                            Log.i(TAG, "No items found");
+                        } else {
+                            itemname = rootobj.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
+                        }
+                    } catch (IOException e) {
+                        code = 2;
+                        Log.e("TAG", e.toString());
+                    }
+
+                    String finalItemname = itemname;
+                    Log.i(TAG, itemname);
+                    int finalCode = code;
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            // Stuff that updates the UI
+                            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
+
+                            switch (finalCode) {
+                                case 0:
+                                    DescriptionText.setText(finalItemname);
+                                    break;
+                                case 1:
+                                    DescriptionText.setText("No items found");
+                                    break;
+                                case 2:
+                                    DescriptionText.setText("Network error");
+                                    break;
+                            }
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+
     }
 }
