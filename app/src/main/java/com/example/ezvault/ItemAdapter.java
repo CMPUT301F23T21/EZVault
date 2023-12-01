@@ -161,7 +161,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         });
 
         return selected;
-
     }
 
     public List<Item> getUnselectedItems(){
@@ -175,6 +174,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         return unselected;
 
+    }
+
+    public int getSelectedCount(){
+        return getSelectedItems().size();
     }
 
     // Allows external callers to set a new dataset
