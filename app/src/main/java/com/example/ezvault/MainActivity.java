@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.ezvault.database.FirebaseBundle;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -106,55 +107,27 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Fragment itemsFragment = navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
+        Integer currentDestination = navController.getCurrentDestination().getId();
 
         // enter delete mode if on items fragment
-        if (item.getItemId() == R.id.toolbar_trash) {
-            if (navController.getCurrentDestination().getId() == R.id.itemsFragment) {
-                mainMenu = false;
-                invalidateOptionsMenu();
-                if (itemsFragment != null) {
-                    if (itemsFragment instanceof ItemsFragment) {
-                        ((ItemsFragment) itemsFragment).deleteMode(true);
-                    }
-                }
-            }
+        if (item.getItemId() == R.id.toolbar_trash && currentDestination == R.id.itemsFragment) {
+            itemsDeleteMode(itemsFragment, currentDestination, 0);
             return false;
         }
 
         // exit delete mode
-        if (item.getItemId() == R.id.edit_item_cancel) {
-            mainMenu = true;
-            ((ItemsFragment) itemsFragment).deleteMode(false);
-            invalidateOptionsMenu();
+        else if (item.getItemId() == R.id.edit_item_cancel && currentDestination == R.id.itemsFragment) {
+            itemsDeleteMode(itemsFragment, currentDestination, 1);
             return false;
         }
 
         // delete selected items in the items fragment
-        if (item.getItemId() == R.id.edit_item_confirm) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            if (((ItemsFragment) itemsFragment).getSelectedCount() > 0) {
-                builder.setMessage("Delete Selected Items?")
-                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mainMenu = true;
-                                ((ItemsFragment) itemsFragment).deleteSelected();
-                                ((ItemsFragment) itemsFragment).deleteMode(false);
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder.create().show();
-            }
-            mainMenu = true;
-            invalidateOptionsMenu();
+        else if (item.getItemId() == R.id.edit_item_confirm && currentDestination == R.id.itemsFragment) {
+            itemsDeleteMode(itemsFragment, currentDestination, 2);
             return false;
         }
+
+        // navigate to selected fragment
         else {
             return NavigationUI.onNavDestinationSelected(item, navController);
         }
@@ -166,5 +139,60 @@ public class MainActivity extends AppCompatActivity{
             navController.navigateUp();
         }
         return super.onSupportNavigateUp();
+    }
+
+    private void itemsDeleteMode(Fragment itemsFragment ,Integer currentDestination ,Integer mode) {
+        // check if given fragment is correct
+        if (itemsFragment instanceof ItemsFragment) {
+            // enter delete mode
+            if (mode == 0) {
+                bottomNavView.setVisibility(View.GONE);
+                ((ItemsFragment) itemsFragment).hideButton();
+                if (currentDestination == R.id.itemsFragment) {
+                    mainMenu = false;
+                    invalidateOptionsMenu();
+                    ((ItemsFragment) itemsFragment).deleteMode(true);
+                }
+            }
+
+            // exit delete mode
+            else if (mode == 1) {
+                mainMenu = true;
+                ((ItemsFragment) itemsFragment).deleteMode(false);
+                invalidateOptionsMenu();
+                bottomNavView.setVisibility(View.VISIBLE);
+                ((ItemsFragment) itemsFragment).showButton();
+            }
+
+            // delete selected items
+            else if (mode == 2) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                // only delete if there are items selected
+                if (((ItemsFragment) itemsFragment).getSelectedCount() > 0) {
+                    builder.setMessage("Delete Selected Items?")
+                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ((ItemsFragment) itemsFragment).deleteSelected();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    builder.create().show();
+                }
+                ((ItemsFragment) itemsFragment).deleteMode(false);
+                mainMenu = true;
+                invalidateOptionsMenu();
+                bottomNavView.setVisibility(View.VISIBLE);
+                ((ItemsFragment) itemsFragment).showButton();
+            }
+            else {
+                Log.d("deleteMode", "Invalid Mode Selected");
+            }
+        }
     }
 }

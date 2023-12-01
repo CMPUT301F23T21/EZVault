@@ -58,6 +58,7 @@ public class ItemsFragment extends Fragment {
 
     // UI elements that have cross-function utilization and need exposed access
 
+    private FloatingActionButton floatingButton;
 
     public ItemsFragment() {
         // Required empty public constructor
@@ -110,7 +111,7 @@ public class ItemsFragment extends Fragment {
         );
 
         // navigation to add item fragment
-        FloatingActionButton floatingButton = view.findViewById(R.id.button_add_item);
+        floatingButton = view.findViewById(R.id.button_add_item);
         floatingButton.setOnClickListener(v -> {
             itemAdapter.clearSelected(); // We don't want them to persist over to item creation
             Navigation.findNavController(view).navigate(R.id.itemsFragment_to_addItemFragment);
@@ -198,7 +199,6 @@ public class ItemsFragment extends Fragment {
                             itemAdapter.notifyDataSetChanged();
                             return null;
                         });
-
     }
 
     @Override
@@ -215,4 +215,15 @@ public class ItemsFragment extends Fragment {
     public int getSelectedCount() {
         return itemAdapter.getSelectedItems().size();
     }
+
+    public void hideButton() {
+        floatingButton.setVisibility(View.GONE);
+        return;
+    }
+
+    public void showButton() {
+        floatingButton.setVisibility(View.VISIBLE);
+        return;
+    }
+
 }

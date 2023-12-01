@@ -94,10 +94,24 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             checkBox.setChecked(false);
         }
 
+        // Get the current clicked position
+        int adapterPosition = holder.getAdapterPosition();
+        // call implementation
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Check if a click listener is set and the position is valid
+                if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                    itemClickListener.onItemClick(v, adapterPosition);
+                }
+            }
+        });
+
+        // item is checked if checkbox is checked
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int adapterPosition = holder.getAdapterPosition();
                 itemListView.get(adapterPosition).setSelected(isChecked);
             }
         });
