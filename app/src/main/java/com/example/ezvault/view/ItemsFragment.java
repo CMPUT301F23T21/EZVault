@@ -193,7 +193,7 @@ public class ItemsFragment extends Fragment {
         builder.setView(input);
         builder.setTitle("Tag Items");
 
-        builder.setPositiveButton("Tag", (dialog, x) -> {
+        builder.setPositiveButton("Add Tag(s)", (dialog, x) -> {
             String inputText = input.getText().toString();
             HashSet<String> tagNames =
                     new HashSet<>(Arrays.asList(inputText.split("\\s*,\\s*")));
@@ -211,6 +211,8 @@ public class ItemsFragment extends Fragment {
                 }
             }
         });
+        builder.setNegativeButton("Cancel", (dialog, x) -> dialog.dismiss());
+
         builder.show();
     }
 
