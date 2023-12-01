@@ -1,11 +1,14 @@
 package com.example.ezvault;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
@@ -14,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.ezvault.database.FirebaseBundle;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +25,7 @@ import android.view.View;
 
 
 import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.view.ItemsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashSet;
@@ -32,12 +37,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity{
-    FirebaseBundle firebase = new FirebaseBundle();
     BottomNavigationView bottomNavView;
     Toolbar toolbar;
     NavController navController;
+    NavHostFragment navHostFragment;
     @Inject
     UserManager userManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +67,7 @@ public class MainActivity extends AppCompatActivity{
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinations).build();
 
         // setup bottom navigation bar with navController
-        NavHostFragment navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
+        navHostFragment = (NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavView, navController);
 
@@ -95,7 +101,9 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+
         inflater.inflate(R.menu.toolbar_menu, menu);
+
         return true;
     }
 
@@ -111,4 +119,5 @@ public class MainActivity extends AppCompatActivity{
         }
         return super.onSupportNavigateUp();
     }
+
 }

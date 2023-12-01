@@ -10,7 +10,6 @@
         android:id="@+id/item_image"
         android:layout_width="150dp"
         android:layout_height="match_parent"
-        android:paddingHorizontal="10dp"
         android:layout_marginVertical="2dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,6 +19,7 @@
         android:id="@+id/item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:text="Item Name"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -33,17 +33,18 @@
         android:src="@drawable/icon_forward_icon"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@null"/>
+        android:background="@null"
+        android:visibility="visible"/>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/item_image"
-        app:layout_constraintRight_toLeftOf="@+id/view_details_button"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_name"
+        android:layout_marginRight="24dp"
         android:orientation="horizontal">
 
         <TextView
@@ -51,6 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
             android:text="00 Units"
             android:fontFamily="@font/paytone_one"
             android:autoSizeTextType="uniform"
@@ -61,6 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
             android:autoSizeTextType="uniform"
             android:text="Total Amount"
             android:gravity="start"
@@ -77,5 +80,15 @@
         app:layout_constraintStart_toEndOf="@id/item_image"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <CheckBox
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/item_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="visible"
+        android:layout_marginRight="7dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

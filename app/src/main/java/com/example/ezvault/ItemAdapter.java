@@ -7,7 +7,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.content.Context;
 import com.example.ezvault.model.Image;
@@ -21,18 +25,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private ItemListView itemListView;
     private LayoutInflater inflater;
     private ItemClickListener itemClickListener;
-
-    public boolean editMode;
+    public boolean deleteMode;
 
     // Interface for click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
-        void onLongClick(View view, int position);
     }
 
     // Constructor
@@ -40,7 +43,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         this.inflater = LayoutInflater.from(context);
         this.itemListView = itemListView;
         this.itemClickListener = listener;
-        this.editMode = false;
+        this.deleteMode = false;
     }
 
     @NonNull
@@ -53,6 +56,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemAdapter.ItemViewHolder holder, int position) {
         Item currentItem = itemListView.get(position);
+
+        CheckBox checkBox = holder.itemView.findViewById(R.id.item_checkbox);
 
         // Construct the item name from make and model
         String itemName = currentItem.getMake() + " " + currentItem.getModel();
@@ -76,39 +81,41 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             holder.itemImage.setImageBitmap(imageBmp);
         }
 
-        holder.itemView.setBackgroundColor(currentItem.isSelected() ? 0xffffdab9 : 0xffd7c3b8);
+        // show or hide checkbox if in delete mode
+        if (deleteMode) {
+            holder.itemView.findViewById(R.id.view_details_button).setVisibility(View.GONE);
+            checkBox.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.itemView.findViewById(R.id.view_details_button).setVisibility(View.VISIBLE);
+            checkBox.setVisibility(View.GONE);
+            checkBox.setChecked(false);
+        }
 
         // Set the click listener for the item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // Get the current clicked position
                 int adapterPosition = holder.getAdapterPosition();
-                if (!editMode) {
-                    // Check if a click listener is set and the position is valid
-                    if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
-                        itemClickListener.onItemClick(v, adapterPosition);
-                    }
-                } else{
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        Item selectedItem = itemListView.get(adapterPosition);
-                        selectedItem.setSelected(!selectedItem.isSelected());
 
-                        holder.itemView.setBackgroundColor(selectedItem.isSelected() ? 0xffffdab9 : 0xffd7c3b8);
-                    }
+                // Check if a click listener is set and the position is valid
+                if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                    itemClickListener.onItemClick(v, adapterPosition);
+
                 }
             }
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        // item is checked if checkbox is checked
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Get the current clicked position
                 int adapterPosition = holder.getAdapterPosition();
 
-                if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION){
-                    itemClickListener.onLongClick(v, adapterPosition);
-                }
-                return false;
+                itemListView.get(adapterPosition).setSelected(isChecked);
             }
         });
     }
@@ -125,13 +132,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         TextView itemCount;
         TextView itemAmount;
 
-
+        CheckBox checkBox;
+        ImageButton imageButton;
         ItemViewHolder(View itemView) {
             super(itemView);
             itemName = itemView.findViewById(R.id.item_name);
             itemImage = itemView.findViewById(R.id.item_image);
             itemCount = itemView.findViewById(R.id.quantity_text);
             itemAmount = itemView.findViewById(R.id.cost_text);
+            checkBox = itemView.findViewById(R.id.item_checkbox);
+            imageButton = itemView.findViewById(R.id.view_details_button);
         }
     }
 
@@ -154,7 +164,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         });
 
         return selected;
-
     }
 
     public List<Item> getUnselectedItems(){
@@ -170,9 +179,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     }
 
+    public int getSelectedCount(){
+        return getSelectedItems().size();
+    }
+
     // Allows external callers to set a new dataset
     public void setItems(ItemListView items) {
         this.itemListView = items;
         notifyDataSetChanged();
     }
+
 }
