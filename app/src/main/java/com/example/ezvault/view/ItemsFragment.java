@@ -1,12 +1,17 @@
 package com.example.ezvault.view;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +29,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.ezvault.ItemAdapter;
+import com.example.ezvault.MainActivity;
 import com.example.ezvault.R;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
@@ -33,6 +41,7 @@ import com.example.ezvault.model.User;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.utils.UserManager;
 import com.example.ezvault.viewmodel.ItemViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -143,13 +152,10 @@ public class ItemsFragment extends Fragment {
         setupRecycler(view, viewModel.getItemListView().getValue());
         viewModel.getItemListView().observe(getViewLifecycleOwner(), this::displayList);
 
+        setupToolbar();
+
         return view;
     }
-
-    // Delete item from raw user
-    // Delete the images
-    // Delete the item
-
 
     private void deleteItemImages(Item item, ImageDAO imageDAO){
         item.getImages().forEach(image -> {
@@ -157,7 +163,9 @@ public class ItemsFragment extends Fragment {
         });
     }
 
-    public void deleteSelected(){
+    private void deleteSelected(){
+        itemAdapter.deleteMode = false;
+
         FirebaseBundle fb = new FirebaseBundle();
         ItemDAO itemDAO = new ItemDAO(fb);
         ImageDAO imageDAO = new ImageDAO(fb);
@@ -196,6 +204,7 @@ public class ItemsFragment extends Fragment {
                             };
 
                             viewModel.synchronizeItems(userManager.getUser().getItemList());
+
                             itemAdapter.notifyDataSetChanged();
                             return null;
                         });
@@ -204,26 +213,55 @@ public class ItemsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+
+        itemAdapter.deleteMode = false;
         itemAdapter.clearSelected();
     }
 
-    public void deleteMode(boolean mode) {
-        itemAdapter.deleteMode = mode;
+    private void setupToolbar(){
+        MenuHost menuHost = (MenuHost) requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.clear();
+
+                if(itemAdapter.deleteMode) {
+                    menuInflater.inflate(R.menu.toolbar_edit_item_menu, menu);
+                } else {
+                    menuInflater.inflate(R.menu.toolbar_menu, menu);
+                }
+            }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                int menuId = menuItem.getItemId();
+
+                if (menuId == R.id.toolbar_trash || menuId == R.id.edit_item_cancel){
+                    toggleDeleteMode();
+                    menuHost.invalidateMenu();
+                } else if (menuId == R.id.edit_item_confirm && !itemAdapter.getSelectedItems().isEmpty()) {
+                    new AlertDialog.Builder(requireContext())
+                            .setMessage("Are you sure you want to delete " + itemAdapter.getSelectedCount() + " item(s)?")
+                            .setPositiveButton("Confirm", (dialog, which) -> {
+                                deleteSelected();
+                                menuHost.invalidateMenu();
+                            })
+                            .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                            .create()
+                            .show();
+                }
+
+                return false;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
+    private void toggleDeleteMode(){
+        boolean isDeleting = !itemAdapter.deleteMode;
+        itemAdapter.deleteMode = isDeleting;
+
+        floatingButton.setVisibility(isDeleting ? View.GONE : View.VISIBLE);
+
         itemAdapter.notifyDataSetChanged();
-    }
-
-    public int getSelectedCount() {
-        return itemAdapter.getSelectedItems().size();
-    }
-
-    public void hideButton() {
-        floatingButton.setVisibility(View.GONE);
-        return;
-    }
-
-    public void showButton() {
-        floatingButton.setVisibility(View.VISIBLE);
-        return;
     }
 
 }

@@ -37,14 +37,13 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity{
-    FirebaseBundle firebase = new FirebaseBundle();
     BottomNavigationView bottomNavView;
     Toolbar toolbar;
     NavController navController;
     NavHostFragment navHostFragment;
     @Inject
     UserManager userManager;
-    private boolean mainMenu = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,43 +93,15 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if (mainMenu) {
-            inflater.inflate(R.menu.toolbar_menu, menu);
-        }
-        else {
-            inflater.inflate(R.menu.toolbar_edit_item_menu, menu);
-            mainMenu = true;
-        }
+
+        inflater.inflate(R.menu.toolbar_menu, menu);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Fragment itemsFragment = navHostFragment.getChildFragmentManager().getPrimaryNavigationFragment();
-        Integer currentDestination = navController.getCurrentDestination().getId();
-
-        // enter delete mode if on items fragment
-        if (item.getItemId() == R.id.toolbar_trash && currentDestination == R.id.itemsFragment) {
-            itemsDeleteMode(itemsFragment, currentDestination, 0);
-            return false;
-        }
-
-        // exit delete mode
-        else if (item.getItemId() == R.id.edit_item_cancel && currentDestination == R.id.itemsFragment) {
-            itemsDeleteMode(itemsFragment, currentDestination, 1);
-            return false;
-        }
-
-        // delete selected items in the items fragment
-        else if (item.getItemId() == R.id.edit_item_confirm && currentDestination == R.id.itemsFragment) {
-            itemsDeleteMode(itemsFragment, currentDestination, 2);
-            return false;
-        }
-
-        // navigate to selected fragment
-        else {
-            return NavigationUI.onNavDestinationSelected(item, navController);
-        }
+        return NavigationUI.onNavDestinationSelected(item, navController);
     }
 
     @Override
@@ -141,58 +112,4 @@ public class MainActivity extends AppCompatActivity{
         return super.onSupportNavigateUp();
     }
 
-    private void itemsDeleteMode(Fragment itemsFragment ,Integer currentDestination ,Integer mode) {
-        // check if given fragment is correct
-        if (itemsFragment instanceof ItemsFragment) {
-            // enter delete mode
-            if (mode == 0) {
-                bottomNavView.setVisibility(View.GONE);
-                ((ItemsFragment) itemsFragment).hideButton();
-                if (currentDestination == R.id.itemsFragment) {
-                    mainMenu = false;
-                    invalidateOptionsMenu();
-                    ((ItemsFragment) itemsFragment).deleteMode(true);
-                }
-            }
-
-            // exit delete mode
-            else if (mode == 1) {
-                mainMenu = true;
-                ((ItemsFragment) itemsFragment).deleteMode(false);
-                invalidateOptionsMenu();
-                bottomNavView.setVisibility(View.VISIBLE);
-                ((ItemsFragment) itemsFragment).showButton();
-            }
-
-            // delete selected items
-            else if (mode == 2) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                // only delete if there are items selected
-                if (((ItemsFragment) itemsFragment).getSelectedCount() > 0) {
-                    builder.setMessage("Delete Selected Items?")
-                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ((ItemsFragment) itemsFragment).deleteSelected();
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    builder.create().show();
-                }
-                ((ItemsFragment) itemsFragment).deleteMode(false);
-                mainMenu = true;
-                invalidateOptionsMenu();
-                bottomNavView.setVisibility(View.VISIBLE);
-                ((ItemsFragment) itemsFragment).showButton();
-            }
-            else {
-                Log.d("deleteMode", "Invalid Mode Selected");
-            }
-        }
-    }
 }
