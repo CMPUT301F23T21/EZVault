@@ -162,7 +162,8 @@
                 app:endIconDrawable="@drawable/icon_camera"
                 app:cursorColor="@color/EZGuardOrange"
                 app:hintTextColor="@color/EZGuardOrange"
-                app:boxStrokeColor="@color/EZGuardOrange"
+		app:boxStrokeColor="@color/EZGuardOrange"
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:hint="Serial Number">
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/edit_details_serial_number"
