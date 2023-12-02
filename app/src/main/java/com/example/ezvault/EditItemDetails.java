@@ -363,7 +363,7 @@ public class EditItemDetails extends Fragment {
             scanner.startScan().addOnSuccessListener(
                     barcode -> {
                         upcAPI api = new upcAPI();
-                        api.upcLookup(barcode.getRawValue(), getView().findViewById(R.id.edittext_item_description), getActivity());
+                        api.upcLookup(barcode.getRawValue(), getView().findViewById(R.id.edit_details_description), getActivity());
                     }
             );
         }
