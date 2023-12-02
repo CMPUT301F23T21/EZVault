@@ -118,8 +118,8 @@
     <fragment
         android:id="@+id/fragment_tagger_item"
         android:name="com.example.ezvault.fragment_tagger_item"
-        android:label="Brother"
 
+        android:label="brother"
         tools:layout="@layout/fragment_fragment_tagger_item"
         >
 

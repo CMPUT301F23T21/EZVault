@@ -7,17 +7,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.ezvault.R;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.view.adapter.SwipeToDeleteTags;
 import com.example.ezvault.view.adapter.TagRecyclerAdapter;
 import com.example.ezvault.viewmodel.TagsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -37,6 +43,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class TagsFragment extends Fragment{
     @Inject
     public UserManager userManager;
+
+
     public TagsFragment() {
         // Required empty public constructor
     }
@@ -62,7 +70,17 @@ public class TagsFragment extends Fragment{
         TagRecyclerAdapter adapter = new TagRecyclerAdapter();
         viewModel.getTags().observe(getViewLifecycleOwner(), adapter::setTagList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
         recyclerView.setAdapter(adapter);
+
+
+        //Let's you swipe to delete
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteTags(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
+
 
         TextView no_tags = view.findViewById(R.id.empty_tags);
         viewModel.getTags().observe(getViewLifecycleOwner(), tags -> {
@@ -94,14 +112,10 @@ public class TagsFragment extends Fragment{
                         .sorted((tag1, tag2) -> tag2.getIdentifier().toLowerCase().compareTo(tag1.getIdentifier().toLowerCase()))
                         .collect(Collectors.toList());
             }
-
-
             //Sorts the list of tags
-            //List<Tag> sortTags = tags.stream().sorted(Comparator.comparing(Tag -> Tag.getIdentifier().toLowerCase())).collect(Collectors.toList());
             //Sets the placements for the tag list
             viewModel.setTags(sortedTags);
         });
 
     }
-
 }

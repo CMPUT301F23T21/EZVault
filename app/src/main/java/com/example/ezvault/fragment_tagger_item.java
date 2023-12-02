@@ -1,5 +1,6 @@
 package com.example.ezvault;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -30,11 +31,22 @@ public class fragment_tagger_item extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragment_tagger_item, container, false);
 
         taggerbtn = view.findViewById(R.id.add_item_tagger_button);
+        /*
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            String tagName = bundle.getString("Tag");
+
+            if (getActivity() != null && getActivity() instanceof AppCompatActivity){
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(tagName);
+            }
+
+        }
+
 
         taggerbtn.setOnClickListener(v -> {
             Toast.makeText(v.getContext(),"Working", Toast.LENGTH_SHORT).show();
         });
-
+*/
 
         return view;
     }
