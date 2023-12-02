@@ -84,6 +84,7 @@
                 android:paddingVertical="14dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
+                android:id="@+id/edit_details_desc_layout"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/icon_barcode_scan"
                 app:cursorColor="@color/EZGuardOrange"
@@ -161,7 +162,8 @@
                 app:endIconDrawable="@drawable/icon_camera"
                 app:cursorColor="@color/EZGuardOrange"
                 app:hintTextColor="@color/EZGuardOrange"
-                app:boxStrokeColor="@color/EZGuardOrange"
+		app:boxStrokeColor="@color/EZGuardOrange"
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:hint="Serial Number">
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/edit_details_serial_number"
@@ -177,6 +179,7 @@
                 android:layout_marginEnd="14dp"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/icon_calendar"
+                app:endIconContentDescription="pick date"
                 app:cursorColor="@color/EZGuardOrange"
                 app:hintTextColor="@color/EZGuardOrange"
                 app:boxStrokeColor="@color/EZGuardOrange"

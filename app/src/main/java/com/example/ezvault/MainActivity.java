@@ -79,13 +79,21 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
                 if (navDestination.getId() == R.id.itemsFragment) {
-                    userManager.clearUriCache();
+                    userManager.clearLocalImages();
                     bottomNavView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
-                }
-                if (navDestination.getId() == R.id.addItemFragment || navDestination.getId() == R.id.filterFragment) {
+                } else if (navDestination.getId() == R.id.addItemFragment
+                        || navDestination.getId() == R.id.filterFragment
+                        || navDestination.getId() == R.id.cameraFragment
+                        || navDestination.getId() == R.id.editItemDetails) {
+
                     bottomNavView.setVisibility(View.GONE);
+                } else if (navDestination.getId() == R.id.welcomeFragment){
+                    bottomNavView.setVisibility(View.GONE);
+                    toolbar.setVisibility(View.GONE);
                 }
+
+
             }
         });
     }

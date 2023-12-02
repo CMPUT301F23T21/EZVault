@@ -2,12 +2,18 @@ package com.example.ezvault;
 
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -16,6 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,6 +33,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;
@@ -58,6 +69,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class EditItemDetails extends Fragment {
 
+    private Button saveButton;
+
     /**
      * View model of item that is being currently edited
      */
@@ -84,6 +97,8 @@ public class EditItemDetails extends Fragment {
     private GalleryAction galleryAction;
     private ArrayAdapter<String> serialAdapter;
 
+    private boolean canInteract;
+
     public EditItemDetails() {
         // Required empty public constructor
     }
@@ -92,17 +107,36 @@ public class EditItemDetails extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        canInteract = true;
+
         itemModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class).get();
 
         images = new ArrayList<>();
         images.addAll(itemModel.getValue().getImages());
 
         contentResolver = requireContext().getContentResolver();
-        photoAdapter = new PhotoAdapter(requireContext(), images, userManager);
+        photoAdapter = new PhotoAdapter(requireContext(), images);
 
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
 
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        MenuHost menuHost = (MenuHost) requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.clear();
+            }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return !canInteract;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
 
     @Override
@@ -111,7 +145,14 @@ public class EditItemDetails extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_item_details, container, false);
 
-        syncImages(contentResolver);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return !canInteract;
+            }
+        });
+
+        userManager.synchronizeToAdapter(images, photoAdapter);
 
         RecyclerView photoRecyclerView = view.findViewById(R.id.edit_details_image_recycler);
         photoRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -126,13 +167,21 @@ public class EditItemDetails extends Fragment {
 
         galleryButton.setOnClickListener(v -> {
             galleryAction.resolveAll().continueWith(imTask -> {
-                userManager.getUriCache().addAll(imTask.getResult());
-                syncImages(contentResolver);
+                List<Uri> uris = imTask.getResult();
+
+                if (uris != null && uris.size() > 0){
+                    uris.forEach(uri -> {
+                        userManager.addLocalImage(FileUtils.imageFromUri(uri, contentResolver));
+                    });
+
+                    userManager.synchronizeToAdapter(images, photoAdapter);
+                }
+
                 return null;
             });
         });
 
-        Button saveButton = view.findViewById(R.id.edit_details_save);
+        saveButton = view.findViewById(R.id.edit_details_save);
         EditText makeText = view.findViewById(R.id.edit_details_make);
         EditText modelText = view.findViewById(R.id.edit_details_model);
         EditText descText = view.findViewById(R.id.edit_details_description);
@@ -217,7 +266,7 @@ public class EditItemDetails extends Fragment {
 
         //update to new values on save
         saveButton.setOnClickListener(v -> {
-            saveButton.setEnabled(false);
+            toggleInteractable();
 
             String make = makeText.getText().toString();
             String model = modelText.getText().toString();
@@ -274,43 +323,27 @@ public class EditItemDetails extends Fragment {
                                 new ItemDAO(fb)
                                         .update(raw.getId(), raw)
                                         .addOnSuccessListener(x -> {
-                                            userManager.clearUriCache();
-                                            saveButton.setEnabled(true);
+                                            userManager.clearLocalImages();
+                                            toggleInteractable();
+
+                                            Toast.makeText(requireContext(),
+                                                    "Item has been updated!",
+                                                    Toast.LENGTH_SHORT).show();
                                         });
 
                                 return TaskUtils.drop(Tasks.forResult(null));
                             }));
-
-
         });
 
         return view;
     }
 
-    /**
-     * Synchronizes the recycler view of Images with the state of the user's uri cache
-     * @param contentResolver Content resolver used for reading media
-     */
-    private void syncImages(ContentResolver contentResolver){
-        int nonDbImLen = (int) images.stream()
-                .filter(im -> im.getId() == null)
-                .count();
+    private void toggleInteractable(){
+        canInteract = !canInteract;
 
-        int imLen = images.size();
-        int lenDiff = imLen - nonDbImLen;
-        int cacheLen = userManager.getUriCache().size();
-
-        if (nonDbImLen < cacheLen) {
-            int numPhotosAdded = cacheLen - nonDbImLen;
-            int addedStart = cacheLen - numPhotosAdded;
-
-            for (int i = addedStart; i < cacheLen; i++){
-                Image image = FileUtils
-                        .imageFromUri(userManager.getUriCache().get(i), contentResolver);
-                images.add(image);
-                photoAdapter.notifyItemInserted(i + lenDiff);
-            }
-            photoAdapter.notifyItemRangeInserted(addedStart + lenDiff, cacheLen + lenDiff - 1);
-        }
+        saveButton.setEnabled(canInteract);
+        saveButton.setClickable(canInteract);
+        saveButton.getBackground().setAlpha(canInteract ? 255 : 112);
     }
+
 }

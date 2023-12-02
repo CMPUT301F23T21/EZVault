@@ -10,6 +10,8 @@
         android:id="@+id/item_image"
         android:layout_width="150dp"
         android:layout_height="match_parent"
+        android:layout_marginVertical="2dp"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -17,6 +19,7 @@
         android:id="@+id/item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:text="Item Name"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -49,6 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
             android:text="00 Units"
             android:fontFamily="@font/paytone_one"
             android:autoSizeTextType="uniform"
@@ -59,6 +63,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
             android:autoSizeTextType="uniform"
             android:text="Total Amount"
             android:gravity="start"
