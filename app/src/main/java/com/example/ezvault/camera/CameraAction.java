@@ -51,7 +51,10 @@ public abstract class CameraAction<T,S> implements DefaultLifecycleObserver {
      */
     protected ActivityTaskChunk<List<T>, S> resolveAllTaskChunk;
 
-
+    /**
+     * Constructor for CameraAction
+     * @param componentActivity Activity used for content resolving
+     */
     public CameraAction (@NonNull ComponentActivity componentActivity){
         this.componentActivity = componentActivity;
         this.registry = componentActivity.getActivityResultRegistry();
