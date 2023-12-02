@@ -1,5 +1,6 @@
 /**
  * Intent testing relating to user story 01.01.01
+ * and user story 01.02.01
  */
 
 package com.example.ezvault;
@@ -49,7 +50,7 @@ import dagger.hilt.android.testing.HiltAndroidTest;
 @RunWith(AndroidJUnit4.class)
 @HiltAndroidTest
 @LargeTest
-public class HaveItemsTest {
+public class ItemsTest {
     HiltAndroidRule hiltRule = new HiltAndroidRule(this);
     ActivityScenarioRule<MainActivity> scenarioRule
             = new ActivityScenarioRule<>(MainActivity.class);
@@ -182,6 +183,7 @@ public class HaveItemsTest {
     /**
      * Ensure that all details are displayed for an item.
      * Ensure that they are correct.
+     * For user story 01.01.01 and 01.02.01
      */
     @Test
     public void itemDetails() {
