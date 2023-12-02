@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
@@ -75,6 +76,12 @@ public class LoginFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.loginFragment_to_itemsFragment);
             }).addOnFailureListener(e -> {
                 loginButton.setEnabled(true);
+
+                Toast.makeText(requireContext(),
+                        "Invalid credentials, please try again",
+                        Toast.LENGTH_SHORT)
+                        .show();
+
                 Log.e("EZVault", "Failed login.", e);
             });
         });
