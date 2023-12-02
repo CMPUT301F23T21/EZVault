@@ -37,7 +37,7 @@ public class TagsViewModel extends ViewModel {
 
     public void addTag(String name) {
         UserService userService = new UserService(new FirebaseBundle());
-        Tag tag = new Tag(name);
+        Tag tag = new Tag(name, null);
         userService.addTag(userManager.getUser(), tag);
         tags.getValue().add(tag);
         tags.setValue(new ArrayList<>(tags.getValue()));

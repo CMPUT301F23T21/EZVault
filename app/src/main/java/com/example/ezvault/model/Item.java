@@ -69,6 +69,9 @@ public class Item {
      */
     private double count;
 
+    @Exclude
+    private boolean selected;
+
     /**
      * Create an item with a serial number.
      * @param id The id of the item
@@ -93,6 +96,7 @@ public class Item {
         this.images = images;
         this.count = count;
         this.value = value;
+        this.selected = false;
     }
 
     /**
@@ -233,6 +237,14 @@ public class Item {
         this.tags = tags;
     }
 
+    public void setValue(double value) {
+        this.value = value;
+    }
+
+    public void setCount(double count) {
+        this.count = count;
+    }
+
     /**
      * Set the images
      * @param images List of images to be associated with the item.
@@ -251,6 +263,22 @@ public class Item {
      * @return Whether or not the item has the specified tag
      */
     public boolean hasTag(Tag tag) {
-        return this.tags.contains(tag);
+        for (Tag possibleTag : tags) {
+            if (possibleTag.getUid().equals(tag.getUid())) {
+                return true;
+            }
+        }
+        return false;
     }
+
+    @Exclude
+    public void setSelected(boolean selected){
+        this.selected = selected;
+    }
+
+    @Exclude
+    public boolean isSelected(){
+        return this.selected;
+    }
+
 }

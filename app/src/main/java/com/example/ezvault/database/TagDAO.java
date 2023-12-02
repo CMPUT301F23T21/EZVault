@@ -9,11 +9,25 @@ import android.util.Log;
 import com.example.ezvault.model.Tag;
 import com.google.android.gms.tasks.Task;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Class that deals with operations in the 'tags' collection.
  */
 public class TagDAO extends AbstractDAO<Tag,String> {
     private final String collectionName = "tags";
+
+    private HashMap<String, Object> toMap(Tag tag) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("identifier", tag.getContents());
+        return map;
+    }
+
+    private Tag fromMap(Map<String, Object> map, String id) {
+        return new Tag((String) map.get("identifier"), id);
+    }
 
     /**
      * Constructs a TagDAO
@@ -32,7 +46,7 @@ public class TagDAO extends AbstractDAO<Tag,String> {
     @Override
     public Task<String> create(Tag tag) {
         return firebase.getDb().collection(collectionName)
-                .add(tag)
+                .add(toMap(tag))
                 .continueWith(tagTask -> tagTask.getResult().getId());
     }
 
@@ -47,10 +61,7 @@ public class TagDAO extends AbstractDAO<Tag,String> {
         return firebase.getDb().collection(collectionName)
                 .document(id)
                 .get()
-                .continueWith(task -> {
-                    String identifier = task.getResult().getString("identifier");
-                    return new Tag(identifier);
-                });
+                .continueWith(task -> fromMap(task.getResult().getData(), task.getResult().getId()));
     }
 
     /**
@@ -64,7 +75,7 @@ public class TagDAO extends AbstractDAO<Tag,String> {
         Log.v("EZVault", "Updating tag: " + id);
         return firebase.getDb().collection(collectionName)
                 .document(id)
-                .set(tag);
+                .set(toMap(tag));
     }
 
     /**

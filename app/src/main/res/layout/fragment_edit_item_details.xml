@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".EditItemDetails">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/edit_details_image_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <ImageButton
+                    android:id="@+id/edit_take_pic"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:paddingVertical="14dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    app:srcCompat="@drawable/icon_camera" />
+
+                <ImageButton
+                    android:id="@+id/edit_gallery"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:paddingVertical="14dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                android:hint="Make">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_make"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:hint="Model">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_model"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:id="@+id/edit_details_desc_layout"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/icon_barcode_scan"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:hint="Description">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_description"
+                    android:layout_width="match_parent"
+                    android:inputType="textMultiLine"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:hint="Comment">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_comment"
+                    android:layout_width="match_parent"
+                    android:inputType="textMultiLine"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:hint="Count">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_count"
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:hint="Value">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_value"
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:id="@+id/edit_details_serial_layout"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/icon_camera"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+		app:boxStrokeColor="@color/EZGuardOrange"
+		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:hint="Serial Number">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/edit_details_serial_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/icon_calendar"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:id="@+id/edit_details_date_layout"
+                android:hint="Date">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_date"
+                    android:enabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_details_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:backgroundTint="@color/EZGuardOrange"
+                android:textColor="@color/black"
+                app:cornerRadius="8dp"
+                android:layout_gravity="center_horizontal"
+                android:text="Save" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

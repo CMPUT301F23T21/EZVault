@@ -2,22 +2,26 @@ package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.Tag;
-import com.example.ezvault.model.utils.filter.IItemFilter;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Item filter based on the inclusion of tags
  */
 public class ItemTagFilter implements IItemFilter {
-    private Collection<Tag> tags;
+
+    private final List<Tag> tags;
 
     /**
      * Create a new item tag filter
      * @param tags The tags to test for
      */
-    public ItemTagFilter(Collection<Tag> tags) {
+    public ItemTagFilter(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
     }
 
     /**

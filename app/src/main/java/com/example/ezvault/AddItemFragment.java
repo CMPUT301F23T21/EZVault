@@ -1,23 +1,53 @@
 package com.example.ezvault;
 
 import android.content.ContentResolver;
+import android.app.DatePickerDialog;
+
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
+
+import android.widget.ImageButton;
+
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
+
+import com.example.ezvault.model.SerialPrediction;
+import com.example.ezvault.model.SerialPredictor;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,10 +64,19 @@ import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -45,22 +84,26 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
 /**
  * fragment class that collects the information of a new item
  */
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
-    Button addItem;
+    private Button createButton;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private AutoCompleteTextView itemSerial;
+    private static final String TAG = "AddItem";
+    private Button addItem;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String lastScan;
+
+    private GmsBarcodeScannerOptions options;
 
     private GalleryAction galleryAction;
 
@@ -69,42 +112,35 @@ public class AddItemFragment extends Fragment {
 
     private ArrayList<Image> images;
 
-    private AddItemPhotoAdapter photoAdapter;
+    private PhotoAdapter photoAdapter;
 
     private ContentResolver contentResolver;
+
+    private boolean canInteract;
+
+    private ArrayAdapter<String> serialAdapter;
 
     public AddItemFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TagsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddItemFragment newInstance(String param1, String param2) {
-        AddItemFragment fragment = new AddItemFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        canInteract = true;
+
         contentResolver = requireContext().getContentResolver();
 
         images = new ArrayList<>();
-        photoAdapter = new AddItemPhotoAdapter(requireContext(), images, userManager);
+        photoAdapter = new PhotoAdapter(requireContext(), images);
 
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
+
+        options = new GmsBarcodeScannerOptions.Builder()
+                .enableAutoZoom()
+                .build();
     }
 
     @Override
@@ -119,7 +155,7 @@ public class AddItemFragment extends Fragment {
             }
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                return false;
+                return !canInteract;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
     }
@@ -128,26 +164,80 @@ public class AddItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_item, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_item_details, container, false);
 
-        syncImages(contentResolver);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return !canInteract;
+            }
+        });
 
-        RecyclerView photoRecyclerView = view.findViewById(R.id.add_item_recyclerview);
+        createButton = view.findViewById(R.id.edit_details_save);
+        createButton.setText("Create");
+
+        EditText itemMake = view.findViewById(R.id.edit_details_make);
+        EditText itemModel = view.findViewById(R.id.edit_details_model);
+        EditText itemDescription = view.findViewById(R.id.edit_details_description);
+        EditText itemComments = view.findViewById(R.id.edit_details_comment);
+        EditText itemQuantity = view.findViewById(R.id.edit_details_count);
+        EditText itemValue = view.findViewById(R.id.edit_details_value);
+        itemSerial = view.findViewById(R.id.edit_details_serial_number);
+        EditText itemDate = view.findViewById(R.id.edit_details_date);
+
+        userManager.synchronizeToAdapter(images, photoAdapter);
+
+        RecyclerView photoRecyclerView = view.findViewById(R.id.edit_details_image_recycler);
         photoRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false));
         photoRecyclerView.setAdapter(photoAdapter);
 
-        // Get all of our text fields
-        EditText itemValue = view.findViewById(R.id.edittext_item_value);
-        EditText itemQuantity = view.findViewById(R.id.edittext_item_quantity);
-        EditText itemMake = view.findViewById(R.id.edittext_item_make);
-        EditText itemModel = view.findViewById(R.id.edittext_item_model);
-        EditText itemSerial = view.findViewById(R.id.edittext_item_serial);
-        EditText itemDescription = view.findViewById(R.id.edittext_item_description);
-        EditText itemComments = view.findViewById(R.id.edittext_item_comment);
-        EditText itemDate = view.findViewById(R.id.edittext_item_date);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String dateString = format.format(new Date());
 
-        addItem = view.findViewById(R.id.button_confirm_add_item);
-        addItem.setOnClickListener(v -> {
+        itemDate.setText(dateString);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        TextInputLayout dateLayout = view.findViewById(R.id.edit_details_date_layout);
+        dateLayout.setEndIconOnClickListener(v -> {
+            Log.d("EZVault", "Setting new date.");
+
+            DatePickerDialog dialog = new DatePickerDialog(requireContext());
+            int y = calendar.get(Calendar.YEAR);
+            int m = calendar.get(Calendar.MONTH);
+            int d = calendar.get(Calendar.DAY_OF_MONTH);
+            dialog.updateDate(y, m, d);
+            dialog.setOnDateSetListener((datePicker, year, month, day) -> {
+                calendar.set(year, month, day);
+
+                itemDate.setText(format.format(calendar.getTime()));
+            });
+            dialog.show();
+        });
+
+        serialAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.select_dialog_singlechoice);
+
+        itemSerial.setOnClickListener(v -> itemSerial.showDropDown());
+        itemSerial.setOnFocusChangeListener((v,f) -> itemSerial.showDropDown());
+
+        itemSerial.setAdapter(serialAdapter);
+
+        TextInputLayout serialLayout = view.findViewById(R.id.edit_details_serial_layout);
+        TextInputLayout descriptionLayout = view.findViewById(R.id.edit_details_desc_layout);
+
+
+        serialLayout.setEndIconOnClickListener(serialListener);
+        descriptionLayout.setEndIconOnClickListener(listener);
+
+        createButton.setOnClickListener(v -> {
+            toggleInteractable();
+
             FirebaseBundle fb = new FirebaseBundle();
             ItemDAO itemDAO = new ItemDAO(fb);
             ImageDAO imageDAO = new ImageDAO(fb);
@@ -166,23 +256,13 @@ public class AddItemFragment extends Fragment {
                 return TaskUtils.drop(Tasks.forResult(null));
 
             }).continueWith(itemCreateTask -> {
-
-                String dateText = itemDate.getText().toString();
-                Date realItemDate;
-
-                if (dateText.isEmpty()){
-                    realItemDate = new Date();
-                } else {
-                    realItemDate = new SimpleDateFormat("dd-MM-yyyy").parse(dateText);
-                }
-
                 // Construct our item
                 ItemBuilder itemBuilder = new ItemBuilder()
                         .setMake(itemMake.getText().toString())
                         .setModel(itemModel.getText().toString())
                         .setCount(Double.valueOf(itemQuantity.getText().toString()))
                         .setValue(Double.valueOf(itemValue.getText().toString()))
-                        .setAcquisitionDate(new Timestamp(realItemDate))
+                        .setAcquisitionDate(new Timestamp(calendar.getTime()))
                         .setDescription(itemDescription.getText().toString())
                         .setSerialNumber(itemSerial.getText().toString())
                         .setComment(itemComments.getText().toString())
@@ -203,22 +283,30 @@ public class AddItemFragment extends Fragment {
 
                     RawUserDAO rawUserDAO = new RawUserDAO(fb);
 
-                    // Fetch our raw local user
-                    // TODO: Expose raw user so we dont have to fetch every tag/item creation or update
-                    rawUserDAO.read(uid).continueWith(rawUserTask -> {
-                        RawUserDAO.RawUser rawUser = rawUserTask.getResult();
-                        rawUser.getItemids().add(itemId); // Add the item to our user database reference
+                    List<String> itemIds = localUser.getItemList()
+                            .stream()
+                            .map(item -> item.getId())
+                            .collect(Collectors.toList());
 
-                        rawUserDAO.update(uid, rawUser)
-                                .continueWith(updateUserTask -> {
-                                    images.clear();
-                                    userManager.clearUriCache();
-                                    Navigation.findNavController(view).popBackStack();
-                                    return null;
-                                });
+                    List<String> tagIds = localUser
+                            .getItemList()
+                            .getTags()
+                            .stream()
+                            .map(tag -> tag.getUid())
+                            .collect(Collectors.toList());
 
-                        return null;
-                    });
+                    // Update raw user
+                    RawUserDAO.RawUser rawUser = new RawUserDAO.RawUser(localUser.getUserName(),
+                            (ArrayList<String>) tagIds,
+                            (ArrayList<String>) itemIds);
+
+                    rawUserDAO.update(uid, rawUser)
+                            .continueWith(updateUserTask -> {
+                                images.clear();
+                                userManager.clearLocalImages();
+                                Navigation.findNavController(view).popBackStack();
+                                return null;
+                            });
 
                     return null;
                 });
@@ -227,17 +315,25 @@ public class AddItemFragment extends Fragment {
         });
 
         // Handle opening the camera
-        ImageButton cameraButton = view.findViewById(R.id.imageButton);
+        ImageButton cameraButton = view.findViewById(R.id.edit_take_pic);
         cameraButton.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.action_addItemFragment_to_cameraFragment);
         });
 
         // Handle opening the gallery
-        ImageButton galleryButton = view.findViewById(R.id.imageButton2);
+        ImageButton galleryButton = view.findViewById(R.id.edit_gallery);
         galleryButton.setOnClickListener(v -> {
             galleryAction.resolveAll().continueWith(imTask -> {
-                userManager.getUriCache().addAll(imTask.getResult());
-                syncImages(contentResolver);
+                List<Uri> uris = imTask.getResult();
+
+                if (uris != null && uris.size() > 0){
+                    uris.forEach(uri -> {
+                        userManager.addLocalImage(FileUtils.imageFromUri(uri, contentResolver));
+                    });
+
+                    userManager.synchronizeToAdapter(images, photoAdapter);
+                }
+
                 return null;
             });
         });
@@ -245,26 +341,136 @@ public class AddItemFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Synchronizes the recycler view of Images with the stae of the user's uri cache
-     * @param contentResolver Content resolver used for reading media
-     */
-    private void syncImages(ContentResolver contentResolver){
-        int imLen = images.size();
-        int cacheLen = userManager.getUriCache().size();
 
-        if (imLen == cacheLen) return;
-        else if (imLen < cacheLen) {
-            int numPhotosAdded = cacheLen - imLen;
-            int addedStart = cacheLen - numPhotosAdded;
+    private View.OnClickListener serialListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            galleryAction.resolve().continueWithTask(uriTask-> {
+                Uri uri = uriTask.getResult();
 
-            for (int i = addedStart; i < cacheLen; i++){
-                Image image = FileUtils
-                        .imageFromUri(userManager.getUriCache().get(i), contentResolver);
-                images.add(image);
-                photoAdapter.notifyItemInserted(i);
-            }
-            photoAdapter.notifyItemRangeInserted(addedStart, cacheLen - 1);
+                if (uri == null) { return null; } // Null if the user didn't select an image
+
+                Image image = FileUtils.imageFromUri(uri, contentResolver);
+                Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
+
+                return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
+                    predictions -> {
+                        serialAdapter.addAll(predictions
+                                .stream()
+                                .sorted(Comparator.comparing(SerialPrediction::getConfidence)
+                                        .reversed())
+                                .map(SerialPrediction::getContents)
+                                .collect(Collectors.toList()));
+
+                        serialAdapter.notifyDataSetChanged();
+                    });
+            });
         }
+    };
+
+    private View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(AddItemFragment.this.getActivity(), options);
+            if (v.getId() == itemSerial.getId()) lastScan = "serial";
+            else lastScan = "desc";
+            scanner.startScan().addOnSuccessListener(
+                    barcode -> {
+                        if (lastScan.equals("serial")) {
+                            EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
+                            SerialText.setText(barcode.getRawValue());
+                        } else {
+                            updateDescription(barcode.getRawValue());
+                        }
+                    }
+            );
+        }
+    };
+
+
+
+
+private void toggleInteractable(){
+        canInteract = !canInteract;
+
+        createButton.setEnabled(canInteract);
+        createButton.setClickable(canInteract);
+        createButton.getBackground().setAlpha(canInteract ? 255 : 112);
+    }
+
+    public void updateDescription(String UPC) {
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    String UPCurl = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + URLEncoder.encode(UPC);
+                    URL url = null;
+
+                    // Store exit status for processing - 0 is normal, 2 is network error, 1 is item not found
+                    int code = 0;
+
+                    // Create the URL object
+                    try {
+                        url = new URL(UPCurl);
+                    } catch (MalformedURLException e) {
+                        code = 2;
+                        Log.e(TAG, "Malformed URL");
+                    }
+
+                    URLConnection connection;
+                    String itemname = "";
+                    try {
+                        connection = url.openConnection();
+                        connection.connect();
+                        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) connection.getContent()));
+                        Log.i(TAG, root.toString());
+                        JsonObject rootobj = root.getAsJsonObject();
+                        if (rootobj.isEmpty() || rootobj.get("items").getAsJsonArray().isEmpty()) {
+                            code = 1;
+                            Log.i(TAG, "No items found");
+                        } else {
+                            itemname = rootobj.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
+                        }
+                    } catch (IOException e) {
+                        code = 2;
+                        Log.e("TAG", e.toString());
+                    }
+
+                    String finalItemname = itemname;
+                    Log.i(TAG, itemname);
+                    int finalCode = code;
+                    getActivity().runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            // Stuff that updates the UI
+                            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
+
+                            switch (finalCode) {
+                                case 0:
+                                    DescriptionText.setText(finalItemname);
+                                    break;
+                                case 1:
+                                    DescriptionText.setText("No items found");
+                                    break;
+                                case 2:
+                                    DescriptionText.setText("Network error");
+                                    break;
+                            }
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+
+
     }
 }

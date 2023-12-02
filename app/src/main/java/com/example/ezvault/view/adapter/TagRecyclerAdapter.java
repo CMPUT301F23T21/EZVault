@@ -115,7 +115,7 @@ public class TagRecyclerAdapter extends RecyclerView.Adapter<TagRecyclerAdapter.
         }
 
         public void bind(Tag tag) {
-            tagIdentifierView.setText(tag.getIdentifier());
+            tagIdentifierView.setText(tag.getContents());
         }
     }
 
@@ -128,7 +128,7 @@ public class TagRecyclerAdapter extends RecyclerView.Adapter<TagRecyclerAdapter.
 
         tagList.remove(position);
         notifyItemRemoved(position);
-        tagDAO.delete(TagPosition.getIdentifier());
+        tagDAO.delete(TagPosition.getUid());
 
 
 

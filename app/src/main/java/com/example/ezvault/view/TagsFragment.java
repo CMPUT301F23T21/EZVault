@@ -104,12 +104,12 @@ public class TagsFragment extends Fragment{
 
             if(isSorted){
                 sortedTags = tags.stream()
-                        .sorted(Comparator.comparing(Tag -> Tag.getIdentifier().toLowerCase()))
+                        .sorted(Comparator.comparing(Tag -> Tag.getUid().toLowerCase()))
                         .collect(Collectors.toList());
             }
             else{
                 sortedTags = tags.stream()
-                        .sorted((tag1, tag2) -> tag2.getIdentifier().toLowerCase().compareTo(tag1.getIdentifier().toLowerCase()))
+                        .sorted((tag1, tag2) -> tag2.getUid().toLowerCase().compareTo(tag1.getUid().toLowerCase()))
                         .collect(Collectors.toList());
             }
             //Sorts the list of tags
