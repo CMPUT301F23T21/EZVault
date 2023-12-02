@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity{
         // set top level destinations to hide back button
         Set<Integer> topLevelDestinations = new HashSet<>();
         topLevelDestinations.add(R.id.itemsFragment);
-        topLevelDestinations.add(R.id.searchFragment);
         topLevelDestinations.add(R.id.tagsFragment);
         topLevelDestinations.add(R.id.profileFragment);
 
@@ -80,17 +79,29 @@ public class MainActivity extends AppCompatActivity{
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
                 if (navDestination.getId() == R.id.itemsFragment) {
                     userManager.clearLocalImages();
-                    bottomNavView.setVisibility(View.VISIBLE);
-                    toolbar.setVisibility(View.VISIBLE);
-                } else if (navDestination.getId() == R.id.addItemFragment
+                }
+
+                // Hide bottom nav bar in following fragments
+                if (navDestination.getId() == R.id.addItemFragment
                         || navDestination.getId() == R.id.filterFragment
                         || navDestination.getId() == R.id.cameraFragment
                         || navDestination.getId() == R.id.editItemDetails) {
 
+                    toolbar.setVisibility(View.VISIBLE);
                     bottomNavView.setVisibility(View.GONE);
-                } else if (navDestination.getId() == R.id.welcomeFragment){
+
+                // Hide both nav bars in following fragments
+                } else if (navDestination.getId() == R.id.welcomeFragment
+                        || navDestination.getId() == R.id.loginFragment
+                        || navDestination.getId() == R.id.newUserFragment){
+
                     bottomNavView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
+
+                // Show both nav bars as default behaviour
+                } else {
+                    bottomNavView.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
                 }
 
 
