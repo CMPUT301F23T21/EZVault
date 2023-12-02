@@ -110,7 +110,7 @@ public class ItemsFragment extends Fragment {
                         .getItemList()
                         .get(position));
 
-                Navigation.findNavController(view).navigate(R.id.action_itemsFragment_to_editItemDetails);
+                Navigation.findNavController(view).navigate(R.id.itemsFragment_to_viewItemFragment);
             }
         });
 

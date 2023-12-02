@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:fontFamily="@font/paytone_one"
-        android:text="EZGuard"
+        android:text="EZVault"
         android:textColor="@color/white"
         android:textSize="64sp"
         app:layout_constraintEnd_toEndOf="parent"

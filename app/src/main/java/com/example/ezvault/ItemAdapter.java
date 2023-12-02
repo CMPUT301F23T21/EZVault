@@ -27,6 +27,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Recyclerview adapter for itemsFragment
+ */
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private ItemListView itemListView;
     private LayoutInflater inflater;
@@ -92,21 +95,23 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             checkBox.setChecked(false);
         }
 
-        // Set the click listener for the item
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        // Set the click listener for the item if not in delete mode
+        if (!deleteMode) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                // Get the current clicked position
-                int adapterPosition = holder.getAdapterPosition();
+                @Override
+                public void onClick(View v) {
+                    // Get the current clicked position
+                    int adapterPosition = holder.getAdapterPosition();
 
-                // Check if a click listener is set and the position is valid
-                if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
-                    itemClickListener.onItemClick(v, adapterPosition);
+                    // Check if a click listener is set and the position is valid
+                    if (itemClickListener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                        itemClickListener.onItemClick(v, adapterPosition);
 
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // item is checked if checkbox is checked
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -145,6 +150,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
     }
 
+    /**
+     * Clears the isSelected field of each item
+     */
     public void clearSelected(){
         itemListView.forEach(item -> {
             if (item.isSelected()){
@@ -154,6 +162,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         notifyDataSetChanged();
     }
 
+    /**
+     * Gets a list of the selected items
+     * @return
+     *      list of selected items
+     */
     public List<Item> getSelectedItems(){
         List<Item> selected = new ArrayList<>();
 
@@ -166,6 +179,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         return selected;
     }
 
+    /**
+     * Gets a list of the unselected items
+     * @return
+     *      list of unselected items
+     */
     public List<Item> getUnselectedItems(){
         List<Item> unselected = new ArrayList<>();
 
@@ -179,11 +197,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     }
 
+    /**
+     * Gets the number of selected items
+     * @return
+     *      integer count
+     */
     public int getSelectedCount(){
         return getSelectedItems().size();
     }
 
-    // Allows external callers to set a new dataset
+    /**
+     * Allows external callers to set a new dataset
+     * @param items
+     *      an iterable object
+     */
     public void setItems(ItemListView items) {
         this.itemListView = items;
         notifyDataSetChanged();

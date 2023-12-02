@@ -53,7 +53,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Allows user to edit an item's details
  */
 @AndroidEntryPoint
 public class EditItemDetails extends Fragment {
@@ -121,7 +121,7 @@ public class EditItemDetails extends Fragment {
         ImageButton galleryButton = view.findViewById(R.id.edit_gallery);
 
         takePhotoButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_editItemDetails_to_cameraFragment);
+            Navigation.findNavController(view).navigate(R.id.editItemDetails_to_cameraFragment);
         });
 
         galleryButton.setOnClickListener(v -> {

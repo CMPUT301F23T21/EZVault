@@ -17,14 +17,12 @@ import com.example.ezvault.utils.UserManager;
 
 import java.util.List;
 
+/**
+ * Recyclerview adapter for displaying photos
+ */
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder> {
 
-    // class for each type of different view layout
-    public static class PlaceHolder extends RecyclerView.ViewHolder {
-        public PlaceHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-    }
+
     public static class ImageHolder extends RecyclerView.ViewHolder {
         ImageView image;
         ImageButton deletePhotoButton;
@@ -79,7 +77,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
     }
 
     // returns what type of image layout to be displayed
-
     @Override
     public int getItemCount() {
         return imageList.size();
