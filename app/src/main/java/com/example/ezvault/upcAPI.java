@@ -19,6 +19,7 @@ import java.net.URLEncoder;
 public class upcAPI {
 
     private static final String TAG = "upcAPI";
+    private Thread bgThread;
 
     public upcAPI() {
     }
@@ -32,7 +33,7 @@ public class upcAPI {
     public void upcLookup(String UPC, EditText destination, Activity activity) {
 
         // Create a new thread to handle the network request
-        Thread thread = new Thread(new Runnable() {
+        this.bgThread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -110,8 +111,17 @@ public class upcAPI {
         });
 
         // Start the network thread
-        thread.start();
+        bgThread.start();
 
 
     }
+
+    /**
+     * Returns the background thread created by upcLookup
+     * @return
+     */
+    public Thread getBgThread() {
+        return this.bgThread;
+    }
+
 }
