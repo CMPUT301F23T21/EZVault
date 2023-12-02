@@ -380,7 +380,7 @@ public class AddItemFragment extends Fragment {
                             EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
                             SerialText.setText(barcode.getRawValue());
                         } else {
-                            updateDescription(barcode.getRawValue());
+                            upcLookup(barcode.getRawValue(), getView().findViewById(R.id.edittext_item_description));
                         }
                     }
             );
@@ -398,7 +398,7 @@ private void toggleInteractable(){
         createButton.getBackground().setAlpha(canInteract ? 255 : 112);
     }
 
-    public void updateDescription(String UPC) {
+    public void upcLookup(String UPC, EditText destination) {
 
         Thread thread = new Thread(new Runnable() {
 
@@ -446,18 +446,17 @@ private void toggleInteractable(){
                         @Override
                         public void run() {
 
-                            // Stuff that updates the UI
-                            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
+                            // Stuff that updates the UI;
 
                             switch (finalCode) {
                                 case 0:
-                                    DescriptionText.setText(finalItemname);
+                                    destination.setText(finalItemname);
                                     break;
                                 case 1:
-                                    DescriptionText.setText("No items found");
+                                    destination.setText("No items found");
                                     break;
                                 case 2:
-                                    DescriptionText.setText("Network error");
+                                    destination.setText("Network error");
                                     break;
                             }
                         }
