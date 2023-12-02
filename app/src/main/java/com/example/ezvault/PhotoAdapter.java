@@ -31,6 +31,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
     public static class ImageHolder extends RecyclerView.ViewHolder {
         ImageView image;
         ImageButton deletePhotoButton;
+
+        /**
+         * Constructor for ImageHolder
+         * @param itemView the view to be used
+         */
         public ImageHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.imageview_photo);
@@ -56,6 +61,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
         return new ImageHolder(view);
     }
 
+    /**
+     * Binds the data to the view
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *        item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull PhotoAdapter.ImageHolder holder, int position) {
         Image image = imageList.get(position);
@@ -82,6 +93,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
 
     // returns what type of image layout to be displayed
 
+    /**
+     * Returns the number of images in the ImageHolder
+     * @return
+     */
     @Override
     public int getItemCount() {
         return imageList.size();
