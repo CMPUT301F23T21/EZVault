@@ -174,4 +174,12 @@ public class FilterViewModel extends ViewModel {
     public interface DateConsumer {
         void accept(int year, int month, int day);
     }
+
+    public void setSortField(SortedItemListView.SortField sortField) {
+        filterRepository.setSortField(sortField);
+    }
+
+    public void setSortOrder(SortedItemListView.SortOrder sortOrder) {
+        filterRepository.setSortOrder(sortOrder);
+    }
 }
