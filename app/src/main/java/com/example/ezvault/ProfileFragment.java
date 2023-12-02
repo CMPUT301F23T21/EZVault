@@ -3,6 +3,7 @@ package com.example.ezvault;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.RawUserDAO;
 import com.example.ezvault.model.ItemList;
+import com.example.ezvault.textwatchers.PasswordWatcher;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -39,6 +41,8 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseBundle firebaseBundle;
 
+    private EditText newPasswordText;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -47,6 +51,12 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseBundle = new FirebaseBundle();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupTextWatchers();
     }
 
     @Override
@@ -68,7 +78,7 @@ public class ProfileFragment extends Fragment {
         EditText emailText = view.findViewById(R.id.edittext_profile_email);
         emailText.setText(currentEmail);
 
-        EditText newPasswordText = view.findViewById(R.id.edittext_profile_password);
+        newPasswordText = view.findViewById(R.id.edittext_profile_password);
 
         Button logOutButton = view.findViewById(R.id.log_out_button);
         logOutButton.setOnClickListener(v -> {
@@ -105,16 +115,16 @@ public class ProfileFragment extends Fragment {
             }
 
             String updatedPassword = newPasswordText.getText().toString();
-            if (!updatedPassword.isEmpty()){
+            if (!updatedPassword.isEmpty() && updatedPassword.length() >= 6){
                 profileTasks.add(firebaseBundle.getAuth().getCurrentUser().updatePassword(updatedPassword));
             }
 
-            if (profileTasks.isEmpty()) return; // We didn't do anything
+            if (profileTasks.isEmpty() ) return; // We didn't do anything
 
             Tasks.whenAllComplete(profileTasks)
                     .addOnSuccessListener(t -> {
                         Toast.makeText(requireContext(),
-                                "Profile sucessfully updated",
+                                "Profile successfully updated",
                                     Toast.LENGTH_SHORT)
                                     .show();
 
@@ -129,5 +139,9 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setupTextWatchers(){
+        newPasswordText.addTextChangedListener(new PasswordWatcher(6, newPasswordText));
     }
 }

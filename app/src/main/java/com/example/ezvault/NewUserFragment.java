@@ -10,13 +10,22 @@ import android.widget.ImageButton;
 import android.widget.EditText;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.ezvault.authentication.registration.EmailPasswordRegistrationStrategy;
 import com.example.ezvault.authentication.registration.RegistrationHandler;
 import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.textwatchers.MirroredTextWatcher;
+import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
+import com.example.ezvault.textwatchers.PasswordWatcher;
+import com.example.ezvault.utils.FragmentUtils;
 import com.example.ezvault.utils.UserManager;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -27,11 +36,19 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class NewUserFragment extends Fragment {
+
+    private final int MIN_PASSWORD_LENGTH = 6;
     Button createUser;
     ImageButton backButton;
 
     @Inject
     UserManager userManager;
+
+    private EditText passwordText;
+    private EditText confirmPasswordText;
+
+    private EditText emailText;
+    private EditText userNameText;
 
     public NewUserFragment() {
         // Required empty public constructor
@@ -40,6 +57,12 @@ public class NewUserFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupTextWatchers();
     }
 
     @Override
@@ -53,10 +76,10 @@ public class NewUserFragment extends Fragment {
             Navigation.findNavController(view).popBackStack();
         });
 
-        EditText emailText = view.findViewById(R.id.create_email_text);
-        EditText userNameText = view.findViewById(R.id.create_username_text);
-        EditText passwordText = view.findViewById(R.id.create_password_text);
-        EditText confirmPasswordText = view.findViewById(R.id.confirm_password_text);
+        emailText = view.findViewById(R.id.create_email_text);
+        userNameText = view.findViewById(R.id.create_username_text);
+        passwordText = view.findViewById(R.id.create_password_text);
+        confirmPasswordText = view.findViewById(R.id.confirm_password_text);
 
         createUser = view.findViewById(R.id.create_user_button);
 
@@ -66,7 +89,7 @@ public class NewUserFragment extends Fragment {
             String password = passwordText.getText().toString();
             String confirmPassword = confirmPasswordText.getText().toString();
 
-            if (password.equals(confirmPassword)) {
+            if (canRegister() && password.equals(confirmPassword) && password.length() >= MIN_PASSWORD_LENGTH) {
                 EmailPasswordRegistrationStrategy rs = new EmailPasswordRegistrationStrategy(new FirebaseBundle(), email, password);
                 RegistrationHandler rh = new RegistrationHandler(rs);
 
@@ -81,5 +104,21 @@ public class NewUserFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setupTextWatchers(){
+        emailText.addTextChangedListener(new NonEmptyTextWatcher(emailText));
+        userNameText.addTextChangedListener(new NonEmptyTextWatcher(userNameText));
+
+        passwordText.addTextChangedListener(new NonEmptyTextWatcher(passwordText));
+        passwordText.addTextChangedListener(new PasswordWatcher(MIN_PASSWORD_LENGTH, passwordText));
+
+        confirmPasswordText.addTextChangedListener(new MirroredTextWatcher(confirmPasswordText,
+                passwordText,
+                "Passwords do not match"));
+    }
+
+    private boolean canRegister(){
+        return FragmentUtils.textHasNoErrors(emailText, userNameText, passwordText, confirmPasswordText);
     }
 }

@@ -1,5 +1,8 @@
 package com.example.ezvault;
 
+import static com.example.ezvault.utils.FragmentUtils.getTextParentLayout;
+import static com.example.ezvault.utils.FragmentUtils.textLayoutHasNoErrors;
+
 import android.app.DatePickerDialog;
 import android.content.ContentResolver;
 
@@ -43,6 +46,7 @@ import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.SerialPrediction;
 import com.example.ezvault.model.SerialPredictor;
+import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
@@ -99,6 +103,13 @@ public class EditItemDetails extends Fragment {
 
     private boolean canInteract;
 
+    private EditText makeText;
+    private EditText modelText;
+    private EditText descText;
+    private EditText commentText;
+    private EditText countText;
+    private EditText valueText;
+
     public EditItemDetails() {
         // Required empty public constructor
     }
@@ -125,6 +136,8 @@ public class EditItemDetails extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setupTextWatchers();
 
         MenuHost menuHost = (MenuHost) requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
@@ -182,12 +195,12 @@ public class EditItemDetails extends Fragment {
         });
 
         saveButton = view.findViewById(R.id.edit_details_save);
-        EditText makeText = view.findViewById(R.id.edit_details_make);
-        EditText modelText = view.findViewById(R.id.edit_details_model);
-        EditText descText = view.findViewById(R.id.edit_details_description);
-        EditText commentText = view.findViewById(R.id.edit_details_comment);
-        EditText countText = view.findViewById(R.id.edit_details_count);
-        EditText valueText = view.findViewById(R.id.edit_details_value);
+        makeText = view.findViewById(R.id.edit_details_make);
+        modelText = view.findViewById(R.id.edit_details_model);
+        descText = view.findViewById(R.id.edit_details_description);
+        commentText = view.findViewById(R.id.edit_details_comment);
+        countText = view.findViewById(R.id.edit_details_count);
+        valueText = view.findViewById(R.id.edit_details_value);
         AutoCompleteTextView serialText = view.findViewById(R.id.edit_details_serial_number);
         EditText dateText = view.findViewById(R.id.edit_details_date);
 
@@ -266,6 +279,13 @@ public class EditItemDetails extends Fragment {
 
         //update to new values on save
         saveButton.setOnClickListener(v -> {
+            if(!hasValidEdits()){
+                Toast.makeText(requireContext(),
+                        "Please make sure all fields are valid",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             toggleInteractable();
 
             String make = makeText.getText().toString();
@@ -336,6 +356,24 @@ public class EditItemDetails extends Fragment {
         });
 
         return view;
+    }
+
+    private void setupTextWatchers(){
+        makeText.addTextChangedListener(new NonEmptyTextWatcher(makeText, getTextParentLayout(makeText)));
+        modelText.addTextChangedListener(new NonEmptyTextWatcher(modelText, getTextParentLayout(modelText)));
+        descText.addTextChangedListener(new NonEmptyTextWatcher(descText, getTextParentLayout(descText)));
+        commentText.addTextChangedListener(new NonEmptyTextWatcher(commentText, getTextParentLayout(commentText)));
+        countText.addTextChangedListener(new NonEmptyTextWatcher(countText, getTextParentLayout(countText)));
+        valueText.addTextChangedListener(new NonEmptyTextWatcher(valueText, getTextParentLayout(valueText)));
+    }
+
+    private boolean hasValidEdits(){
+        return textLayoutHasNoErrors(getTextParentLayout(makeText),
+                getTextParentLayout(modelText),
+                getTextParentLayout(descText),
+                getTextParentLayout(commentText),
+                getTextParentLayout(countText),
+                getTextParentLayout(valueText));
     }
 
     private void toggleInteractable(){
