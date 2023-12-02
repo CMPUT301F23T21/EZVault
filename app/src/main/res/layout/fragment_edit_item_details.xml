@@ -49,25 +49,28 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="14dp"
+                android:layout_marginBottom="14dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
                 app:hintTextColor="@color/EZGuardOrange"
                 app:boxStrokeColor="@color/EZGuardOrange"
                 app:cursorColor="@color/EZGuardOrange"
                 android:hint="Make">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_details_make"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"/>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
                 app:cursorColor="@color/EZGuardOrange"
                 app:hintTextColor="@color/EZGuardOrange"
                 app:boxStrokeColor="@color/EZGuardOrange"
@@ -75,13 +78,77 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edit_details_model"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"/>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/icon_calendar"
+                app:endIconContentDescription="pick date"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:id="@+id/edit_details_date_layout"
+                android:hint="Date">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_date"
+                    android:enabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp"
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:hint="Count">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_count"
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                android:hint="Value">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edit_details_value"
+                    android:inputType="numberDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
                 android:id="@+id/edit_details_desc_layout"
@@ -96,13 +163,36 @@
                     android:layout_width="match_parent"
                     android:inputType="textMultiLine"
                     android:layout_height="wrap_content"
-                    android:minHeight="50dp"/>
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
+                android:layout_marginBottom="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:id="@+id/edit_details_serial_layout"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/icon_camera"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:hint="Serial Number">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/edit_details_serial_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
                 app:cursorColor="@color/EZGuardOrange"
@@ -114,96 +204,25 @@
                     android:layout_width="match_parent"
                     android:inputType="textMultiLine"
                     android:layout_height="wrap_content"
-                    android:minHeight="50dp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
-                app:cursorColor="@color/EZGuardOrange"
-                app:hintTextColor="@color/EZGuardOrange"
-                app:boxStrokeColor="@color/EZGuardOrange"
-                android:hint="Count">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_details_count"
-                    android:inputType="numberDecimal"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
-                app:cursorColor="@color/EZGuardOrange"
-                app:hintTextColor="@color/EZGuardOrange"
-                app:boxStrokeColor="@color/EZGuardOrange"
-                android:hint="Value">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_details_value"
-                    android:inputType="numberDecimal"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
-                android:id="@+id/edit_details_serial_layout"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/icon_camera"
-                app:cursorColor="@color/EZGuardOrange"
-                app:hintTextColor="@color/EZGuardOrange"
-		app:boxStrokeColor="@color/EZGuardOrange"
-		style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:hint="Serial Number">
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/edit_details_serial_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginEnd="14dp"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/icon_calendar"
-                app:endIconContentDescription="pick date"
-                app:cursorColor="@color/EZGuardOrange"
-                app:hintTextColor="@color/EZGuardOrange"
-                app:boxStrokeColor="@color/EZGuardOrange"
-                android:id="@+id/edit_details_date_layout"
-                android:hint="Date">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edit_details_date"
-                    android:enabled="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"/>
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit_details_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingVertical="14dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
-                android:backgroundTint="@color/EZGuardOrange"
+                android:backgroundTint="#BCD7F8"
                 android:textColor="@color/black"
                 app:cornerRadius="8dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Save" />
+                android:text="Save"
+                android:fontFamily="@font/fredoka_one"
+                android:textSize="20sp"
+                android:paddingVertical="13dp"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

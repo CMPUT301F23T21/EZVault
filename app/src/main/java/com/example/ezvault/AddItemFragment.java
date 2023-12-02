@@ -192,7 +192,7 @@ public class AddItemFragment extends Fragment {
         photoRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false));
         photoRecyclerView.setAdapter(photoAdapter);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
         String dateString = format.format(new Date());
 
         itemDate.setText(dateString);

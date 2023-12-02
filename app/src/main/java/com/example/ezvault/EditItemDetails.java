@@ -203,7 +203,7 @@ public class EditItemDetails extends Fragment {
         valueText.setText(String.valueOf(raw.getValue()));
         serialText.setText(raw.getSerialNumber());
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
         String dateString = format.format(raw.getAcquisitionDate().toDate());
 
         dateText.setText(dateString);
