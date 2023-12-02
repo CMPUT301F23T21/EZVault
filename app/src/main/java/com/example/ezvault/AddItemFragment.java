@@ -48,6 +48,7 @@ import com.google.gson.JsonParser;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -153,6 +154,7 @@ public class AddItemFragment extends Fragment {
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menu.clear();
             }
+
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 return !canInteract;
@@ -224,7 +226,7 @@ public class AddItemFragment extends Fragment {
                 android.R.layout.select_dialog_singlechoice);
 
         itemSerial.setOnClickListener(v -> itemSerial.showDropDown());
-        itemSerial.setOnFocusChangeListener((v,f) -> itemSerial.showDropDown());
+        itemSerial.setOnFocusChangeListener((v, f) -> itemSerial.showDropDown());
 
         itemSerial.setAdapter(serialAdapter);
 
@@ -267,7 +269,7 @@ public class AddItemFragment extends Fragment {
                         .setSerialNumber(itemSerial.getText().toString())
                         .setComment(itemComments.getText().toString())
                         .setTags(new ArrayList<>())
-                        .setImages((ArrayList<Image>)images.clone());
+                        .setImages((ArrayList<Image>) images.clone());
 
                 // Add the new item to our database
                 itemDAO.create(itemBuilder.build()).continueWith(idTask -> {
@@ -310,7 +312,7 @@ public class AddItemFragment extends Fragment {
 
                     return null;
                 });
-            return null;
+                return null;
             });
         });
 
@@ -326,7 +328,7 @@ public class AddItemFragment extends Fragment {
             galleryAction.resolveAll().continueWith(imTask -> {
                 List<Uri> uris = imTask.getResult();
 
-                if (uris != null && uris.size() > 0){
+                if (uris != null && uris.size() > 0) {
                     uris.forEach(uri -> {
                         userManager.addLocalImage(FileUtils.imageFromUri(uri, contentResolver));
                     });
@@ -345,25 +347,27 @@ public class AddItemFragment extends Fragment {
     private View.OnClickListener serialListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            galleryAction.resolve().continueWithTask(uriTask-> {
+            galleryAction.resolve().continueWithTask(uriTask -> {
                 Uri uri = uriTask.getResult();
 
-                if (uri == null) { return null; } // Null if the user didn't select an image
+                if (uri == null) {
+                    return null;
+                } // Null if the user didn't select an image
 
                 Image image = FileUtils.imageFromUri(uri, contentResolver);
                 Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
 
                 return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
-                    predictions -> {
-                        serialAdapter.addAll(predictions
-                                .stream()
-                                .sorted(Comparator.comparing(SerialPrediction::getConfidence)
-                                        .reversed())
-                                .map(SerialPrediction::getContents)
-                                .collect(Collectors.toList()));
+                        predictions -> {
+                            serialAdapter.addAll(predictions
+                                    .stream()
+                                    .sorted(Comparator.comparing(SerialPrediction::getConfidence)
+                                            .reversed())
+                                    .map(SerialPrediction::getContents)
+                                    .collect(Collectors.toList()));
 
-                        serialAdapter.notifyDataSetChanged();
-                    });
+                            serialAdapter.notifyDataSetChanged();
+                        });
             });
         }
     };
@@ -388,9 +392,7 @@ public class AddItemFragment extends Fragment {
     };
 
 
-
-
-private void toggleInteractable(){
+    private void toggleInteractable() {
         canInteract = !canInteract;
 
         createButton.setEnabled(canInteract);
@@ -398,13 +400,21 @@ private void toggleInteractable(){
         createButton.getBackground().setAlpha(canInteract ? 255 : 112);
     }
 
+    /**
+     * Looks up the item name from the UPC database
+     *
+     * @param UPC         the UPC to look up
+     * @param destination the EditText to put the item name in
+     */
     public void upcLookup(String UPC, EditText destination) {
 
+        // Create a new thread to handle the network request
         Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 try {
+                    // Create the URL string for the API endpoint
                     String UPCurl = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + URLEncoder.encode(UPC);
                     URL url = null;
 
@@ -419,6 +429,7 @@ private void toggleInteractable(){
                         Log.e(TAG, "Malformed URL");
                     }
 
+                    // Open the connection and parse the JSON response
                     URLConnection connection;
                     String itemname = "";
                     try {
@@ -427,10 +438,12 @@ private void toggleInteractable(){
                         JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) connection.getContent()));
                         Log.i(TAG, root.toString());
                         JsonObject rootobj = root.getAsJsonObject();
+                        // Check if the response is empty or no items are returned
                         if (rootobj.isEmpty() || rootobj.get("items").getAsJsonArray().isEmpty()) {
                             code = 1;
                             Log.i(TAG, "No items found");
                         } else {
+                            // Get the item name from the JSON response
                             itemname = rootobj.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
                         }
                     } catch (IOException e) {
@@ -438,24 +451,29 @@ private void toggleInteractable(){
                         Log.e("TAG", e.toString());
                     }
 
+                    // Make the item name and exit code effectively final so it can be passed to the UI thread
                     String finalItemname = itemname;
                     Log.i(TAG, itemname);
                     int finalCode = code;
+
+                    // Run the UI update on the UI thread
                     getActivity().runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
 
-                            // Stuff that updates the UI;
-
+                            // Set the text of the destination EditText based on the exit code
                             switch (finalCode) {
                                 case 0:
+                                    // If a valid item name was found, set the text to that
                                     destination.setText(finalItemname);
                                     break;
                                 case 1:
+                                    // If no items were found, set the text to "No items found"
                                     destination.setText("No items found");
                                     break;
                                 case 2:
+                                    // If there was a network error, set the text to "Network error"
                                     destination.setText("Network error");
                                     break;
                             }
@@ -468,6 +486,7 @@ private void toggleInteractable(){
             }
         });
 
+        // Start the network thread
         thread.start();
 
 
