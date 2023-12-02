@@ -40,6 +40,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
+import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.SerialPrediction;
 import com.example.ezvault.model.SerialPredictor;
 import com.google.gson.JsonElement;
@@ -276,29 +277,18 @@ public class AddItemFragment extends Fragment {
                     // User info
                     User localUser = userManager.getUser();
                     String uid = localUser.getUid();
+                    ItemList itemsList = localUser.getItemList();
 
                     // Add the item to our local store
                     itemBuilder.setId(itemId);
-                    localUser.getItemList().add(itemBuilder.build());
+                    itemsList.add(itemBuilder.build());
 
                     RawUserDAO rawUserDAO = new RawUserDAO(fb);
 
-                    List<String> itemIds = localUser.getItemList()
-                            .stream()
-                            .map(item -> item.getId())
-                            .collect(Collectors.toList());
-
-                    List<String> tagIds = localUser
-                            .getItemList()
-                            .getTags()
-                            .stream()
-                            .map(tag -> tag.getUid())
-                            .collect(Collectors.toList());
-
                     // Update raw user
                     RawUserDAO.RawUser rawUser = new RawUserDAO.RawUser(localUser.getUserName(),
-                            (ArrayList<String>) tagIds,
-                            (ArrayList<String>) itemIds);
+                            (ArrayList<String>) itemsList.getTagIds(),
+                            (ArrayList<String>) itemsList.getItemIds());
 
                     rawUserDAO.update(uid, rawUser)
                             .continueWith(updateUserTask -> {

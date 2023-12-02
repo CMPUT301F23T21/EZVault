@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 /**
  * Represents a list of items
@@ -59,6 +60,16 @@ public class ItemList implements List<Item>, ItemListView {
     public ArrayList<Tag> getTags() {
         return tags;
     }
+
+    public List<String> getItemIds() {return
+            items.stream()
+            .map(item -> item.getId())
+            .collect(Collectors.toList());}
+
+    public List<String> getTagIds() {return
+            tags.stream()
+                    .map(tag -> tag.getUid())
+                    .collect(Collectors.toList());}
 
     /**
      * {@inheritDoc}
