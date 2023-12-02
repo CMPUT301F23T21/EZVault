@@ -3,16 +3,12 @@ package com.example.ezvault;
 import android.content.ContentResolver;
 import android.app.DatePickerDialog;
 
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,28 +19,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
-
-import android.widget.ImageButton;
 
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
 import com.example.ezvault.model.SerialPrediction;
 import com.example.ezvault.model.SerialPredictor;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
@@ -68,13 +55,6 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -85,7 +65,6 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -96,6 +75,7 @@ import java.util.stream.Collectors;
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
+    private final upcAPI upcLookup = new upcAPI();
     private Button createButton;
 
     private AutoCompleteTextView itemSerial;
@@ -103,8 +83,6 @@ public class AddItemFragment extends Fragment {
     private Button addItem;
 
     private String lastScan;
-
-    private GmsBarcodeScannerOptions options;
 
     private GalleryAction galleryAction;
 
@@ -139,9 +117,6 @@ public class AddItemFragment extends Fragment {
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
 
-        options = new GmsBarcodeScannerOptions.Builder()
-                .enableAutoZoom()
-                .build();
     }
 
     @Override
@@ -235,7 +210,7 @@ public class AddItemFragment extends Fragment {
 
 
         serialLayout.setEndIconOnClickListener(serialListener);
-        descriptionLayout.setEndIconOnClickListener(listener);
+        descriptionLayout.setEndIconOnClickListener(barcodeListener);
 
         createButton.setOnClickListener(v -> {
             toggleInteractable();
@@ -372,9 +347,12 @@ public class AddItemFragment extends Fragment {
         }
     };
 
-    private View.OnClickListener listener = new View.OnClickListener() {
+    protected View.OnClickListener barcodeListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
+                    .enableAutoZoom()
+                    .build();
             GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(AddItemFragment.this.getActivity(), options);
             if (v.getId() == itemSerial.getId()) lastScan = "serial";
             else lastScan = "desc";
@@ -384,7 +362,8 @@ public class AddItemFragment extends Fragment {
                             EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
                             SerialText.setText(barcode.getRawValue());
                         } else {
-                            upcLookup(barcode.getRawValue(), getView().findViewById(R.id.edittext_item_description));
+                            upcAPI api = new upcAPI();
+                            api.upcLookup(barcode.getRawValue(), getView().findViewById(R.id.edittext_item_description), getActivity());
                         }
                     }
             );
@@ -400,95 +379,4 @@ public class AddItemFragment extends Fragment {
         createButton.getBackground().setAlpha(canInteract ? 255 : 112);
     }
 
-    /**
-     * Looks up the item name from the UPC database
-     *
-     * @param UPC         the UPC to look up
-     * @param destination the EditText to put the item name in
-     */
-    public void upcLookup(String UPC, EditText destination) {
-
-        // Create a new thread to handle the network request
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    // Create the URL string for the API endpoint
-                    String UPCurl = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + URLEncoder.encode(UPC);
-                    URL url = null;
-
-                    // Store exit status for processing - 0 is normal, 2 is network error, 1 is item not found
-                    int code = 0;
-
-                    // Create the URL object
-                    try {
-                        url = new URL(UPCurl);
-                    } catch (MalformedURLException e) {
-                        code = 2;
-                        Log.e(TAG, "Malformed URL");
-                    }
-
-                    // Open the connection and parse the JSON response
-                    URLConnection connection;
-                    String itemname = "";
-                    try {
-                        connection = url.openConnection();
-                        connection.connect();
-                        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) connection.getContent()));
-                        Log.i(TAG, root.toString());
-                        JsonObject rootobj = root.getAsJsonObject();
-                        // Check if the response is empty or no items are returned
-                        if (rootobj.isEmpty() || rootobj.get("items").getAsJsonArray().isEmpty()) {
-                            code = 1;
-                            Log.i(TAG, "No items found");
-                        } else {
-                            // Get the item name from the JSON response
-                            itemname = rootobj.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
-                        }
-                    } catch (IOException e) {
-                        code = 2;
-                        Log.e("TAG", e.toString());
-                    }
-
-                    // Make the item name and exit code effectively final so it can be passed to the UI thread
-                    String finalItemname = itemname;
-                    Log.i(TAG, itemname);
-                    int finalCode = code;
-
-                    // Run the UI update on the UI thread
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-
-                            // Set the text of the destination EditText based on the exit code
-                            switch (finalCode) {
-                                case 0:
-                                    // If a valid item name was found, set the text to that
-                                    destination.setText(finalItemname);
-                                    break;
-                                case 1:
-                                    // If no items were found, set the text to "No items found"
-                                    destination.setText("No items found");
-                                    break;
-                                case 2:
-                                    // If there was a network error, set the text to "Network error"
-                                    destination.setText("Network error");
-                                    break;
-                            }
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        // Start the network thread
-        thread.start();
-
-
-    }
 }
