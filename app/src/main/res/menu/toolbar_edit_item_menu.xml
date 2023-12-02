@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="Confirm"
-        android:icon="@drawable/icon_checkmark"
+        android:icon="@drawable/icon_delete"
         app:showAsAction="ifRoom"/>
 
 
