@@ -1,7 +1,6 @@
 package com.example.ezvault.textwatchers;
 
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
