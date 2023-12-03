@@ -161,9 +161,4 @@ public class DeleteItemTest {
         onView(withText("Confirm"))
                 .perform(click());
     }
-
-    @Test
-    public void deleteItems() {
-        // TODO
-    }
 }
