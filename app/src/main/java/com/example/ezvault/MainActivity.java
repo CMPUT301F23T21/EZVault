@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity{
         // show toolbar and bottom nav bar once on items page
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
-            public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {\
+            public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
                 int destination = navDestination.getId();
 
                 // show bottom nav bar and toolbar
