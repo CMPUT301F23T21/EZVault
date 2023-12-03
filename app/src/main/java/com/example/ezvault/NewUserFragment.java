@@ -104,8 +104,9 @@ public class NewUserFragment extends Fragment {
                         userNameText.setError("Username already exists");
                     }
 
+                    String toastText = "Could not register: " + e.getMessage();
                     Toast.makeText(requireContext(),
-                            e.getMessage(),
+                            toastText,
                             Toast.LENGTH_SHORT).show();
                 });
             }
