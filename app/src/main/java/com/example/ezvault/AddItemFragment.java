@@ -3,12 +3,10 @@ package com.example.ezvault;
 import static com.example.ezvault.utils.FragmentUtils.getTextParentLayout;
 import static com.example.ezvault.utils.FragmentUtils.textLayoutHasNoErrors;
 
-import android.content.ContentResolver;
 import android.app.DatePickerDialog;
-
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,34 +22,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageButton;
-
-import android.widget.ImageButton;
-import android.widget.Toast;
-
-import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
-
-import com.example.ezvault.model.ItemList;
-import com.example.ezvault.model.SerialPrediction;
-import com.example.ezvault.model.SerialPredictor;
-import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
-import com.example.ezvault.textwatchers.NumberOnlyTextWatcher;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,8 +39,14 @@ import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
 import com.example.ezvault.model.Image;
+import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemBuilder;
+import com.example.ezvault.model.ItemList;
+import com.example.ezvault.model.SerialPrediction;
+import com.example.ezvault.model.SerialPredictor;
+import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
+import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
@@ -70,20 +54,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 /**
  * fragment class that collects the information of a new item
@@ -95,7 +81,6 @@ public class AddItemFragment extends Fragment {
     private Button createButton;
 
     private AutoCompleteTextView itemSerial;
-    private static final String TAG = "AddItem";
     private String lastScan;
 
     private GalleryAction galleryAction;
@@ -261,8 +246,8 @@ public class AddItemFragment extends Fragment {
                 ItemBuilder itemBuilder = new ItemBuilder()
                         .setMake(itemMake.getText().toString())
                         .setModel(itemModel.getText().toString())
-                        .setCount(Double.valueOf(itemQuantity.getText().toString()))
-                        .setValue(Double.valueOf(itemValue.getText().toString()))
+                        .setCount(Double.parseDouble(itemQuantity.getText().toString()))
+                        .setValue(Double.parseDouble(itemValue.getText().toString()))
                         .setAcquisitionDate(new Timestamp(calendar.getTime()))
                         .setDescription(itemDescription.getText().toString())
                         .setSerialNumber(itemSerial.getText().toString())
@@ -286,14 +271,14 @@ public class AddItemFragment extends Fragment {
 
                     List<String> itemIds = localUser.getItemList()
                             .stream()
-                            .map(item -> item.getId())
+                            .map(Item::getId)
                             .collect(Collectors.toList());
 
                     List<String> tagIds = localUser
                             .getItemList()
                             .getTags()
                             .stream()
-                            .map(tag -> tag.getUid())
+                            .map(Tag::getUid)
                             .collect(Collectors.toList());
 
                     // Update raw user
@@ -464,8 +449,8 @@ public class AddItemFragment extends Fragment {
                 ItemBuilder itemBuilder = new ItemBuilder()
                         .setMake(itemMake.getText().toString())
                         .setModel(itemModel.getText().toString())
-                        .setCount(Double.valueOf(itemQuantity.getText().toString()))
-                        .setValue(Double.valueOf(itemValue.getText().toString()))
+                        .setCount(Double.parseDouble(itemQuantity.getText().toString()))
+                        .setValue(Double.parseDouble(itemValue.getText().toString()))
                         .setAcquisitionDate(new Timestamp(calendar.getTime()))
                         .setDescription(itemDescription.getText().toString())
                         .setSerialNumber(itemSerial.getText().toString())
