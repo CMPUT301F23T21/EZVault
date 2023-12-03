@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.ezvault.authentication.registration.EmailPasswordRegistrationStrategy;
+import com.example.ezvault.authentication.registration.RegistrationException;
 import com.example.ezvault.authentication.registration.RegistrationHandler;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.textwatchers.MirroredTextWatcher;
@@ -98,7 +100,13 @@ public class NewUserFragment extends Fragment {
                     userManager.setUser(user);
                     Navigation.findNavController(view).navigate(R.id.newUserFragment_to_itemsFragment);
                 }).addOnFailureListener(e -> {
-                    Log.e("EZVault", "Failed Registration.", e);
+                    if (e instanceof RegistrationException.UserAlreadyExists){
+                        userNameText.setError("Username already exists");
+                    }
+
+                    Toast.makeText(requireContext(),
+                            e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                 });
             }
         });
@@ -113,12 +121,16 @@ public class NewUserFragment extends Fragment {
         passwordText.addTextChangedListener(new NonEmptyTextWatcher(passwordText));
         passwordText.addTextChangedListener(new PasswordWatcher(MIN_PASSWORD_LENGTH, passwordText));
 
+        confirmPasswordText.addTextChangedListener(new NonEmptyTextWatcher(confirmPasswordText));
         confirmPasswordText.addTextChangedListener(new MirroredTextWatcher(confirmPasswordText,
                 passwordText,
                 "Passwords do not match"));
     }
 
     private boolean canRegister(){
-        return FragmentUtils.textHasNoErrors(emailText, userNameText, passwordText, confirmPasswordText);
+        return FragmentUtils.textHasNoErrors(emailText,
+                userNameText,
+                passwordText,
+                confirmPasswordText);
     }
 }

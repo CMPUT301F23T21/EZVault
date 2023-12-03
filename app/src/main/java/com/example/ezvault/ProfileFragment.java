@@ -14,10 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ezvault.authentication.registration.RegistrationException;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.RawUserDAO;
+import com.example.ezvault.database.UserService;
 import com.example.ezvault.model.ItemList;
+import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.textwatchers.PasswordWatcher;
+import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -41,6 +45,9 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseBundle firebaseBundle;
 
+
+    EditText usernameText;
+    EditText emailText;
     private EditText newPasswordText;
 
     public ProfileFragment() {
@@ -72,10 +79,10 @@ public class ProfileFragment extends Fragment {
                 .getCurrentUser()
                 .getEmail();
 
-        EditText usernameText = view.findViewById(R.id.edittext_profile_username);
+        usernameText = view.findViewById(R.id.edittext_profile_username);
         usernameText.setText(currentUsername);
 
-        EditText emailText = view.findViewById(R.id.edittext_profile_email);
+        emailText = view.findViewById(R.id.edittext_profile_email);
         emailText.setText(currentEmail);
 
         newPasswordText = view.findViewById(R.id.edittext_profile_password);
@@ -91,26 +98,41 @@ public class ProfileFragment extends Fragment {
             List<Task<Void>> profileTasks = new ArrayList<>();
 
             String updatedUsername = usernameText.getText().toString();
-            if (!updatedUsername.equals(currentUsername)){
+            if (!updatedUsername.equals(userManager.getUser().getUserName()) && usernameText.getError() == null){
                 ItemList itemsList = userManager.getUser().getItemList();
 
                 RawUserDAO.RawUser newRawUser = new RawUserDAO.RawUser(updatedUsername,
                         (ArrayList<String>)itemsList.getTagIds(),
                         (ArrayList<String>)itemsList.getItemIds());
 
-                Task<Void> updateUsernameTask = new RawUserDAO(firebaseBundle)
-                        .update(userManager.getUser().getUid(), newRawUser);
+                UserService us = new UserService(firebaseBundle);
+                Task<Void> updateIfValidTask = us.userExists(updatedUsername).continueWithTask(result -> {
+                   if (result.getException() == null && result.getResult()){
+                       Task<Void> updateUsernameTask = new RawUserDAO(firebaseBundle)
+                               .update(userManager.getUser().getUid(), newRawUser);
 
-                updateUsernameTask.addOnSuccessListener(t -> {
-                    userManager.getUser()
-                            .applyUserNameUpdate(updatedUsername);
+                       updateUsernameTask.addOnSuccessListener(t -> {
+                           userManager.getUser()
+                                   .applyUserNameUpdate(updatedUsername);
+                       });
+
+                       return updateUsernameTask;
+                   } else if (result.getException() == null && !result.getResult()){
+                       usernameText.setError("Username already exists");
+
+                       return Tasks.forException(new RegistrationException.UserAlreadyExists(updatedUsername));
+                   } else{
+                       return Tasks.forException(result.getException());
+                   }
                 });
 
-                profileTasks.add(updateUsernameTask);
+                profileTasks.add(updateIfValidTask);
             }
 
             String updatedEmail = emailText.getText().toString();
-            if (!updatedEmail.equals(currentEmail)){
+            if (!updatedEmail.equals(firebaseBundle.getAuth()
+                    .getCurrentUser()
+                    .getEmail()) && emailText.getError() == null){
                 profileTasks.add(firebaseBundle.getAuth().getCurrentUser().updateEmail(updatedEmail));
             }
 
@@ -121,7 +143,7 @@ public class ProfileFragment extends Fragment {
 
             if (profileTasks.isEmpty() ) return; // We didn't do anything
 
-            Tasks.whenAllComplete(profileTasks)
+            Tasks.whenAllSuccess(profileTasks)
                     .addOnSuccessListener(t -> {
                         Toast.makeText(requireContext(),
                                 "Profile successfully updated",
@@ -131,7 +153,7 @@ public class ProfileFragment extends Fragment {
                         newPasswordText.setText("");
                      }).addOnFailureListener(e -> {
                         Toast.makeText(requireContext(),
-                                "Error updating profile, please try again",
+                                e.getMessage(),
                                     Toast.LENGTH_SHORT)
                                     .show();
                      });
@@ -142,6 +164,9 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setupTextWatchers(){
+        usernameText.addTextChangedListener(new NonEmptyTextWatcher(usernameText));
+        emailText.addTextChangedListener(new NonEmptyTextWatcher(emailText));
         newPasswordText.addTextChangedListener(new PasswordWatcher(6, newPasswordText));
+
     }
 }
