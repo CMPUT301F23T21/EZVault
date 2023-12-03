@@ -3,7 +3,6 @@
 package com.example.ezvault.model;
 
 import com.google.firebase.firestore.Exclude;
-import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import javax.annotation.Nullable;
 
@@ -53,7 +52,6 @@ public class Image {
     /**
      * Sets the byte data of the Image
      * @param contents The raw byte data of the desired image
-     * @return
      */
     @Exclude
     public void setContents(byte[] contents) {
