@@ -3,16 +3,12 @@ package com.example.ezvault;
 import android.content.ContentResolver;
 import android.app.DatePickerDialog;
 
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,19 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
-
-import android.widget.ImageButton;
 
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
@@ -84,7 +74,6 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -318,7 +307,7 @@ public class AddItemFragment extends Fragment {
         // Handle opening the camera
         ImageButton cameraButton = view.findViewById(R.id.edit_take_pic);
         cameraButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_addItemFragment_to_cameraFragment);
+            Navigation.findNavController(view).navigate(R.id.addItemFragment_to_cameraFragment);
         });
 
         // Handle opening the gallery

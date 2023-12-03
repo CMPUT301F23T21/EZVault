@@ -77,17 +77,25 @@ public class MainActivity extends AppCompatActivity{
         // show toolbar and bottom nav bar once on items page
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
-            public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
-                if (navDestination.getId() == R.id.itemsFragment) {
+            public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {\
+                int destination = navDestination.getId();
+
+                // show bottom nav bar and toolbar
+                if (destination == R.id.itemsFragment) {
                     userManager.clearLocalImages();
                     bottomNavView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
-                } else if (navDestination.getId() == R.id.addItemFragment
-                        || navDestination.getId() == R.id.filterFragment
-                        || navDestination.getId() == R.id.cameraFragment
-                        || navDestination.getId() == R.id.editItemDetails) {
+
+                    // hide bottom nav bar
+                } else if (destination == R.id.addItemFragment
+                        || destination == R.id.filterFragment
+                        || destination == R.id.cameraFragment
+                        || destination == R.id.editItemDetails
+                        || destination == R.id.viewItemFragment) {
 
                     bottomNavView.setVisibility(View.GONE);
+
+                    // hide tool bar and bottom nav bar
                 } else if (navDestination.getId() == R.id.welcomeFragment){
                     bottomNavView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);

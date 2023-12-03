@@ -58,9 +58,6 @@
             android:name="item_name"
             app:argType="string" />
         <action
-            android:id="@+id/itemsFragment_to_editItemDetails"
-            app:destination="@id/editItemDetails" />
-        <action
             android:id="@+id/itemsFragment_to_viewItemFragment"
             app:destination="@id/viewItemFragment" />
         <action
@@ -87,10 +84,10 @@
         android:label="New Item"
         tools:layout="@layout/fragment_add_item" >
         <action
-            android:id="@+id/action_addItemFragment_to_itemsFragment"
+            android:id="@+id/addItemFragment_to_itemsFragment"
             app:destination="@id/itemsFragment" />
         <action
-            android:id="@+id/action_addItemFragment_to_cameraFragment"
+            android:id="@+id/addItemFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
     </fragment>
     <fragment
@@ -111,17 +108,25 @@
     <fragment
         android:id="@+id/viewItemFragment"
         android:name="com.example.ezvault.ViewItemFragment"
-        android:label="fragment_view_item"
-        tools:layout="@layout/fragment_view_item" />
+        android:label="Item Details"
+        tools:layout="@layout/fragment_view_item">
+        <action
+            android:id="@+id/viewItemFragment_to_editItemDetails"
+            app:destination="@id/editItemDetails" />
+        <action
+            android:id="@+id/viewItemFragment_to_itemsFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/itemsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.example.ezvault.CameraFragment"
         android:label="CameraFragment" >
         <action
-            android:id="@+id/action_cameraFragment_to_addItemFragment"
+            android:id="@+id/cameraFragment_to_addItemFragment"
             app:destination="@id/addItemFragment" />
         <action
-            android:id="@+id/action_cameraFragment_to_editItemDetails"
+            android:id="@+id/cameraFragment_to_editItemDetails"
             app:destination="@id/editItemDetails" />
     </fragment>
     <fragment
@@ -131,6 +136,7 @@
         tools:layout="@layout/fragment_filter" >
         <action
             android:id="@+id/filterFragment_to_itemsFragment"
+            app:popUpToInclusive="true"
             app:destination="@id/itemsFragment" />
     </fragment>
     <fragment
@@ -141,5 +147,9 @@
         <action
             android:id="@+id/editItemDetails_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/editItemDetails_to_viewItemFragment"
+            app:popUpToInclusive="true"
+            app:destination="@id/viewItemFragment" />
     </fragment>
 </navigation>

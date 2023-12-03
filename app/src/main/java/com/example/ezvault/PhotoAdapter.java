@@ -15,8 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ezvault.model.Image;
-import com.example.ezvault.utils.FileUtils;
-import com.example.ezvault.utils.UserManager;
+
 
 import java.util.List;
 

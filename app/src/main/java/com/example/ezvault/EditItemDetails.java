@@ -333,6 +333,7 @@ public class EditItemDetails extends Fragment {
 
                                 return TaskUtils.drop(Tasks.forResult(null));
                             }));
+            Navigation.findNavController(view).navigate(R.id.editItemDetails_to_viewItemFragment);
         });
 
         return view;

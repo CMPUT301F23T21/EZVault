@@ -299,7 +299,6 @@ public class ItemsFragment extends Fragment {
                             .create()
                             .show();
                 }
-
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);

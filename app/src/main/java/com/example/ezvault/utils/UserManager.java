@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.ViewpagerAdapter;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.User;
 
@@ -50,4 +51,17 @@ public class UserManager {
         clearLocalImages();
     }
 
+    public void synchronizeToPager(List<Image> unsyncedImages,
+                                     ViewpagerAdapter viewpagerAdapter){
+
+        int unsyncedLen = unsyncedImages.size();
+        int newPhotosLen = localImages.size();
+
+        for(int i = 0; i < newPhotosLen; i++){
+            unsyncedImages.add(localImages.get(i));
+            viewpagerAdapter.notifyItemInserted(unsyncedLen + i);
+        }
+        viewpagerAdapter.notifyItemRangeInserted(unsyncedLen, newPhotosLen - 1);
+        clearLocalImages();
+    }
 }

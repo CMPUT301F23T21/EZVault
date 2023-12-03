@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".EditItemDetails">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_item_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"/>
+
+            <me.relex.circleindicator.CircleIndicator3
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginTop="-25dp"
+                android:background="#66000000"
+                android:id="@+id/circle_indicator"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Make"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_make"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Model"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_model"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/view_details_date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Date"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:enabled="false"
+                    android:fontFamily="@font/paytone_one"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Count"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:inputType="numberDecimal"
+                    android:textSize="20sp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Value"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:inputType="numberDecimal"
+                    android:textSize="20sp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/view_details_desc_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Description"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:inputType="textMultiLine"
+                    android:textSize="20sp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/view_details_serial_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Serial Number"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_serial_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:textSize="20sp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="14dp"
+                android:hint="Comment"
+                app:boxStrokeColor="@color/EZGuardOrange"
+                app:cursorColor="@color/EZGuardOrange"
+                app:hintTextColor="@color/EZGuardOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/view_details_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/paytone_one"
+                    android:inputType="textMultiLine"
+                    android:textSize="20sp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
