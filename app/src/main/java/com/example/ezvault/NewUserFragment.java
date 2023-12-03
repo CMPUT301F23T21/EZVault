@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -98,6 +99,8 @@ public class NewUserFragment extends Fragment {
                     userManager.setUser(user);
                     Navigation.findNavController(view).navigate(R.id.newUserFragment_to_itemsFragment);
                 }).addOnFailureListener(e -> {
+                    String toastText = "Could not register: " + e.getMessage();
+                    Toast.makeText(requireContext(), toastText, Toast.LENGTH_SHORT).show();
                     Log.e("EZVault", "Failed Registration.", e);
                 });
             }
