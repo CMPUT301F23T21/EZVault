@@ -27,8 +27,6 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class NewUserFragment extends Fragment {
-    Button createUser;
-    ImageButton backButton;
 
     @Inject
     UserManager userManager;
@@ -48,18 +46,20 @@ public class NewUserFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_user, container, false);
 
-        backButton = view.findViewById(R.id.create_user_back_button);
+        // setup back button
+        ImageButton backButton = view.findViewById(R.id.create_user_back_button);
         backButton.setOnClickListener(v -> {
             Navigation.findNavController(view).popBackStack();
         });
 
+        // find text fields
         EditText emailText = view.findViewById(R.id.create_email_text);
         EditText userNameText = view.findViewById(R.id.create_username_text);
         EditText passwordText = view.findViewById(R.id.create_password_text);
         EditText confirmPasswordText = view.findViewById(R.id.confirm_password_text);
 
-        createUser = view.findViewById(R.id.create_user_button);
-
+        // create user functionality
+        Button createUser = view.findViewById(R.id.create_user_button);
         createUser.setOnClickListener(v -> {
             String email = emailText.getText().toString();
             String userName = userNameText.getText().toString();

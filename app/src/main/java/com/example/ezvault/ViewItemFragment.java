@@ -60,7 +60,6 @@ public class ViewItemFragment extends Fragment {
 
     // images to be shown in view pager
     private ArrayList<Image> images;
-    private ContentResolver contentResolver;
 
 
     public ViewItemFragment() {
@@ -71,12 +70,10 @@ public class ViewItemFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // setup variables
         itemModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class).get();
-
         images = new ArrayList<>();
         images.addAll(itemModel.getValue().getImages());
-
-        contentResolver = requireContext().getContentResolver();
         viewpagerAdapter = new ViewpagerAdapter(requireContext(), images);
     }
 
@@ -106,7 +103,6 @@ public class ViewItemFragment extends Fragment {
         EditText dateText = view.findViewById(R.id.view_details_date);
 
         Item raw = itemModel.getValue();
-
         Log.v("EZVault", "Viewing item: " + raw.getId());
 
         // set item details
@@ -130,7 +126,7 @@ public class ViewItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // update the menu
+        // update the toolbar menu
         MenuHost menuHost = (MenuHost) requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
             @Override

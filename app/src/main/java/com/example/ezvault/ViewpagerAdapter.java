@@ -35,8 +35,8 @@ public class ViewpagerAdapter extends RecyclerView.Adapter<ViewpagerAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewpagerAdapter.ViewHolder holder, int position) {
+        // bind the image to the layout
         Image image = imageList.get(position);
-
         byte[] imageContent = image.getContents();
         Bitmap imageBmp = BitmapFactory.decodeByteArray(imageContent, 0, imageContent.length);
         holder.imageView.setImageBitmap(imageBmp);

@@ -27,8 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class LoginFragment extends Fragment {
-    Button loginButton;
-    ImageButton backButton;
+    private Button loginButton;
 
     @Inject
     UserManager userManager;
@@ -49,7 +48,7 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         // find the views
-        backButton = view.findViewById(R.id.login_back_button);
+        ImageButton backButton = view.findViewById(R.id.login_back_button);
         loginButton = view.findViewById(R.id.login_button);
         EditText emailText = view.findViewById(R.id.username_text);
         EditText passwordText = view.findViewById(R.id.password_text);
