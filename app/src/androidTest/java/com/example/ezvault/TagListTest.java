@@ -50,10 +50,13 @@ public class TagListTest {
             .outerRule(hiltRule)
             .around(scenarioRule);
 
+    private static boolean hasEmulatorSet = false;
+
     @Before
     public void setup() {
         hiltRule.inject();
-
+        if (hasEmulatorSet) return;
+        hasEmulatorSet = true;
         FirebaseFirestore.getInstance().useEmulator("10.0.2.2", 8080);
         FirebaseAuth.getInstance().useEmulator("10.0.2.2", 9099);
         FirebaseStorage.getInstance().useEmulator("10.0.2.2", 9199);
@@ -87,7 +90,7 @@ public class TagListTest {
 
     @Test
     public void nonEmptyTagList() {
-        prelude(u -> u.getItemList().getTags().add(new Tag("test")));
+        prelude(u -> u.getItemList().getTags().add(new Tag("test", null)));
         onView(withId(R.id.empty_tags))
                 .check(matches(not(isDisplayed())));
     }
