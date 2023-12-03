@@ -31,6 +31,7 @@ import com.example.ezvault.database.RawUserDAO;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.User;
+import com.example.ezvault.viewmodel.ItemViewModel;
 import com.example.ezvault.utils.UserManager;
 
 import java.text.SimpleDateFormat;
@@ -61,7 +62,7 @@ public class ViewItemFragment extends Fragment {
     // images to be shown in view pager
     private ArrayList<Image> images;
 
-
+    private ItemViewModel viewModel;
     public ViewItemFragment() {
         // Required empty public constructor
     }
@@ -71,10 +72,11 @@ public class ViewItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // setup variables
-        itemModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class).get();
+        itemModel = new ViewModelProvider(requireActivity()).get(com.example.ezvault.ItemViewModel.class).get();
         images = new ArrayList<>();
         images.addAll(itemModel.getValue().getImages());
         viewpagerAdapter = new ViewpagerAdapter(requireContext(), images);
+        viewModel = new ViewModelProvider(this).get(com.example.ezvault.viewmodel.ItemViewModel.class);
     }
 
     @Override
@@ -155,7 +157,7 @@ public class ViewItemFragment extends Fragment {
                     new AlertDialog.Builder(requireContext())
                             .setMessage("Are you sure you want to delete this item?")
                             .setPositiveButton("Yes", (dialog, which) -> {
-                                // deleteItem();
+                                deleteItem();
                                 Navigation.findNavController(view).navigate(R.id.viewItemFragment_to_itemsFragment);
                             })
                             .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
@@ -168,6 +170,39 @@ public class ViewItemFragment extends Fragment {
     }
 
     private void deleteItem() {
+        FirebaseBundle fb = new FirebaseBundle();
+        ItemDAO itemDAO = new ItemDAO(fb);
+        ImageDAO imageDAO = new ImageDAO(fb);
+        RawUserDAO rawUserDAO = new RawUserDAO(fb);
 
+        User currUser = userManager.getUser();
+
+        List<Item> itemList = userManager.getUser().getItemList();
+        itemList.remove(itemModel.getValue());
+        List<String> itemStr = itemList.stream().map(item -> item.getId()).collect(Collectors.toList());
+
+        List<String> tagIds = currUser.getItemList()
+                .getTags()
+                .stream()
+                .map(tag -> tag.getUid())
+                .collect(Collectors.toList());
+
+        rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(), (ArrayList<String>) tagIds, (ArrayList<String>) itemStr))
+                .continueWith(t -> {
+                    Item item = itemModel.getValue();
+                    itemDAO.delete(item.getId());
+
+                    item.getImages().forEach(image -> {
+                        imageDAO.delete(image.getId());
+                    });
+
+                    userManager.getUser()
+                            .getItemList()
+                            .remove(item);
+
+                    viewModel.synchronizeItems(userManager.getUser().getItemList());
+                    viewpagerAdapter.notifyDataSetChanged();
+                    return null;
+                });
     }
 }

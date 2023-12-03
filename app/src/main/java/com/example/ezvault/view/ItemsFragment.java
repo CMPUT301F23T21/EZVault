@@ -267,6 +267,9 @@ public class ItemsFragment extends Fragment {
         itemAdapter.clearSelected();
     }
 
+    /**
+     * Set up toolbar with new menu and button functionality
+     */
     private void setupToolbar(){
         MenuHost menuHost = (MenuHost) requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
