@@ -54,6 +54,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -245,6 +248,7 @@ public class EditItemDetails extends Fragment {
             dialog.show();
         });
 
+
         serialText.setOnClickListener(v -> serialText.showDropDown());
         serialText.setOnFocusChangeListener((v,f) -> serialText.showDropDown());
         serialAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.select_dialog_singlechoice);
@@ -275,6 +279,9 @@ public class EditItemDetails extends Fragment {
                 });
             }
         });
+
+        TextInputLayout descriptionLayout = view.findViewById(R.id.edit_details_desc_layout);
+        descriptionLayout.setEndIconOnClickListener(barcodeListener);
 
 
         //update to new values on save
@@ -383,5 +390,21 @@ public class EditItemDetails extends Fragment {
         saveButton.setClickable(canInteract);
         saveButton.getBackground().setAlpha(canInteract ? 255 : 112);
     }
+
+    protected View.OnClickListener barcodeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
+                    .enableAutoZoom()
+                    .build();
+            GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(EditItemDetails.this.getActivity(), options);
+            scanner.startScan().addOnSuccessListener(
+                    barcode -> {
+                        upcAPI api = new upcAPI();
+                        api.upcLookup(barcode.getRawValue(), getView().findViewById(R.id.edit_details_description), getActivity());
+                    }
+            );
+        }
+    };
 
 }

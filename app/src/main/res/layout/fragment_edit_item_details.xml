@@ -179,6 +179,7 @@
                 android:layout_marginEnd="14dp"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/icon_calendar"
+                app:endIconContentDescription="pick date"
                 app:cursorColor="@color/EZGuardOrange"
                 app:hintTextColor="@color/EZGuardOrange"
                 app:boxStrokeColor="@color/EZGuardOrange"
