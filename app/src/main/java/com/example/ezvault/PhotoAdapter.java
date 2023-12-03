@@ -1,10 +1,8 @@
 package com.example.ezvault;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ezvault.model.Image;
-import com.example.ezvault.utils.FileUtils;
-import com.example.ezvault.utils.UserManager;
 
 import java.util.List;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder> {
 
-    // class for each type of different view layout
-    public static class PlaceHolder extends RecyclerView.ViewHolder {
-        public PlaceHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-    }
     public static class ImageHolder extends RecyclerView.ViewHolder {
         ImageView image;
         ImageButton deletePhotoButton;
@@ -39,7 +29,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
     }
 
     private final Context context;
-    private List<Image> imageList;
+    private final List<Image> imageList;
 
     public PhotoAdapter(Context context, List<Image> imageList) {
         this.context = context;
