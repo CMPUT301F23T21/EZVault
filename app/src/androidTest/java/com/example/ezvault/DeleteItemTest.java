@@ -2,10 +2,21 @@ package com.example.ezvault;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import android.view.View;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -20,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -110,9 +122,44 @@ public class DeleteItemTest {
         });
     }
 
+    private static ViewAction checkBox() {
+        return new ViewAction() {
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return isDisplayed();
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                View v = view.findViewById(R.id.item_checkbox);
+                v.performClick();
+            }
+        };
+    }
+
     @Test
     public void deleteAllItems() {
-        // TODO
+        // enter edit mode
+        onView(withId(R.id.toolbar_trash))
+                .perform(click());
+
+        // check all boxes
+        for (int i = 0; i < 3; i++) {
+            onView(withId(R.id.recyclerView))
+                    .perform(scrollToPosition(i))
+                    .perform(actionOnItemAtPosition(i, checkBox()));
+        }
+
+        // confirm deletion
+        onView(withId(R.id.edit_item_confirm))
+                .perform(click());
+        onView(withText("Confirm"))
+                .perform(click());
     }
 
     @Test
