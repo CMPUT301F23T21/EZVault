@@ -69,6 +69,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * Displays items in a list as well as total value and total quantity
  */
 @AndroidEntryPoint
+@SuppressLint("NotifyDataSetChanged")
 public class ItemsFragment extends Fragment {
     @Inject
     UserManager userManager;
@@ -92,6 +93,12 @@ public class ItemsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupToolbar();
     }
 
     private void setupRecycler(View view, ItemListView itemListView) {
@@ -141,7 +148,6 @@ public class ItemsFragment extends Fragment {
 
         tagItemsButton = view.findViewById(R.id.tag_items_button);
         tagItemsButton.setOnClickListener(v -> tagSelected());
-        tagItemsButton.setVisibility(View.GONE);
 
         TextView totalItemValueView = view.findViewById(R.id.text_total_value);
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
@@ -167,8 +173,6 @@ public class ItemsFragment extends Fragment {
 
         setupRecycler(view, viewModel.getItemListView().getValue());
         viewModel.getItemListView().observe(getViewLifecycleOwner(), this::displayList);
-
-        setupToolbar();
 
         return view;
     }
@@ -227,17 +231,13 @@ public class ItemsFragment extends Fragment {
         List<Item> unselectedItems = itemAdapter.getUnselectedItems();
         List<Item> selectedItems = itemAdapter.getSelectedItems();
 
-        List<String> itemStr = unselectedItems.stream()
+        List<String> selectedItemIds = unselectedItems.stream()
                 .map(item -> item.getId())
                 .collect(Collectors.toList());
 
-        List<String> tagIds = currUser.getItemList()
-                .getTags()
-                .stream()
-                .map(tag -> tag.getUid())
-                .collect(Collectors.toList());
-
-        rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(), (ArrayList<String>) tagIds, (ArrayList<String>) itemStr))
+        rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(),
+                        (ArrayList<String>) currUser.getItemList().getTagIds(),
+                        (ArrayList<String>) selectedItemIds))
                         .continueWith(t -> {
                             for (int i = 0; i < selectedItems.size(); i++){
                                 Item item = selectedItems.get(i);
@@ -268,7 +268,7 @@ public class ItemsFragment extends Fragment {
     }
 
     private void setupToolbar(){
-        MenuHost menuHost = (MenuHost) requireActivity();
+        MenuHost menuHost = requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {

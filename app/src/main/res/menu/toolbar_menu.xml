@@ -11,5 +11,5 @@
         android:id="@+id/toolbar_trash"
         app:showAsAction="ifRoom"
         android:title="Trash"
-        android:icon="@drawable/icon_delete"/>
+        android:icon="@drawable/icon_edit"/>
 </menu>
