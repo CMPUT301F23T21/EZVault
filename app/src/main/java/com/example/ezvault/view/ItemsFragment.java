@@ -1,13 +1,22 @@
 package com.example.ezvault.view;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
@@ -17,46 +26,23 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.InputType;
-import android.util.Log;
-import android.view.LayoutInflater;
-
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.EditText;
-
-import android.widget.ImageButton;
-import android.widget.Switch;
-import android.widget.TextView;
-
 import com.example.ezvault.ItemAdapter;
-import com.example.ezvault.MainActivity;
 import com.example.ezvault.R;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
-import com.example.ezvault.database.TagDAO;
 import com.example.ezvault.model.Item;
-
 import com.example.ezvault.model.Tag;
-
 import com.example.ezvault.model.User;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.utils.UserManager;
 import com.example.ezvault.viewmodel.ItemViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.HashSet;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -250,7 +236,7 @@ public class ItemsFragment extends Fragment {
                                         .remove(item);
 
                                 itemAdapter.notifyItemRemoved(i);
-                            };
+                            }
 
                             viewModel.synchronizeItems(userManager.getUser().getItemList());
 
