@@ -14,6 +14,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 
+import static org.hamcrest.CoreMatchers.not;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -115,6 +117,7 @@ public class EditItemTest {
                 .perform(replaceText("1.0"))
                 .perform(closeSoftKeyboard());
 
+        // save the edits
         onView(withId(R.id.edit_details_save))
                 .perform(scrollTo())
                 .perform(click());
@@ -128,5 +131,35 @@ public class EditItemTest {
         // ensure that the new total value has changed
         onView(withId(R.id.text_total_value))
                 .check(matches(withSubstring("2.99")));
+    }
+
+    @Test
+    public void cancelEdit() {
+        prelude();
+
+        // ensure that the initial displayed total value is correct
+        onView(withId(R.id.text_total_value))
+                .check(matches(withSubstring(String.format("%.2f", 2.99*1.5))));
+
+        // enter into editing the items
+        onView(withSubstring("Pringles"))
+                .perform(click());
+
+        onView(withId(R.id.edit_details_count))
+                .perform(click())
+                .perform(replaceText("1.0"))
+                .perform(closeSoftKeyboard());
+
+        pressBack();
+
+        // ensure item view does NOT display updated quantity
+        onView(withId(R.id.quantity_text))
+                .check(matches(not(withSubstring("1.0"))));
+
+        // ensure that the new total value has NOT changed
+        onView(withId(R.id.text_total_value))
+                .check(matches(not(withSubstring("2.99"))));
+        onView(withId(R.id.text_total_value))
+                .check(matches(withSubstring(String.format("%.2f", 2.99*1.5))));
     }
 }
