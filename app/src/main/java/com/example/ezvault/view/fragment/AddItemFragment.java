@@ -82,7 +82,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
-    private final UpcApi upcLookup = new UpcApi();
     private Button createButton;
 
     private AutoCompleteTextView itemSerial;

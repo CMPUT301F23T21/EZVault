@@ -229,14 +229,6 @@ public class Item {
         this.serialNumber = serialNumber;
     }
 
-    /**
-     * Set the tags.
-     * @param tags The list of tags to be associated with the item.
-     */
-    public void setTags(ArrayList<Tag> tags) {
-        this.tags = tags;
-    }
-
     public void setValue(double value) {
         this.value = value;
     }

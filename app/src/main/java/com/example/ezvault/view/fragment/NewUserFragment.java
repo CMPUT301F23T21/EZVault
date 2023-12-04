@@ -38,7 +38,6 @@ public class NewUserFragment extends Fragment {
 
 
     private final int MIN_PASSWORD_LENGTH = 6;
-    Button createUser;
     ImageButton backButton;
 
     @Inject

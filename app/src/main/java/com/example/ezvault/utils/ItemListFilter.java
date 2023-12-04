@@ -66,13 +66,6 @@ public class ItemListFilter implements ItemListView {
     }
 
     /**
-     * Mark the indices as invalid.
-     */
-    public final void invalidate() {
-        valid = false;
-    }
-
-    /**
      * Make an iterator of the valid filtered items.
      * @return An iterator of the filtered items.
      */
