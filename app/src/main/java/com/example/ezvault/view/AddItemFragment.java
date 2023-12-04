@@ -1,4 +1,4 @@
-package com.example.ezvault.viewmodel;
+package com.example.ezvault.view;
 
 import static com.example.ezvault.utils.FragmentUtils.getTextParentLayout;
 import static com.example.ezvault.utils.FragmentUtils.textLayoutHasNoErrors;

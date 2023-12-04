@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.ezvault.viewmodel.WelcomeFragment"
+        android:name="com.example.ezvault.view.WelcomeFragment"
         android:label="WelcomeFragment"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.ezvault.viewmodel.LoginFragment"
+        android:name="com.example.ezvault.view.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/newUserFragment"
-        android:name="com.example.ezvault.viewmodel.NewUserFragment"
+        android:name="com.example.ezvault.view.NewUserFragment"
         android:label="NewUserFragment"
         tools:layout="@layout/fragment_new_user">
         <action
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.ezvault.viewmodel.SearchFragment"
+        android:name="com.example.ezvault.view.SearchFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search" />
     <fragment
@@ -83,7 +83,7 @@
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
-        android:name="com.example.ezvault.viewmodel.AddItemFragment"
+        android:name="com.example.ezvault.view.AddItemFragment"
         android:label="New Item"
         tools:layout="@layout/fragment_add_item" >
         <action
@@ -95,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.ezvault.viewmodel.ProfileFragment"
+        android:name="com.example.ezvault.view.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -110,12 +110,12 @@
         />
     <fragment
         android:id="@+id/viewItemFragment"
-        android:name="com.example.ezvault.viewmodel.ViewItemFragment"
+        android:name="com.example.ezvault.view.ViewItemFragment"
         android:label="fragment_view_item"
         tools:layout="@layout/fragment_view_item" />
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.example.ezvault.viewmodel.CameraFragment"
+        android:name="com.example.ezvault.view.CameraFragment"
         android:label="CameraFragment" >
         <action
             android:id="@+id/action_cameraFragment_to_addItemFragment"

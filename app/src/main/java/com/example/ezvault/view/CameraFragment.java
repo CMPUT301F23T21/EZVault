@@ -1,4 +1,4 @@
-package com.example.ezvault.viewmodel;
+package com.example.ezvault.view;
 
 import android.app.Activity;
 import android.graphics.Color;
