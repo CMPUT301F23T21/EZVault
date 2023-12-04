@@ -21,7 +21,7 @@ public class SortedItemListView implements ItemListView {
 
     // Enum for sort field
     public enum SortField {
-        DATE, DESCRIPTION, MAKE, VALUE
+        DATE, DESCRIPTION, MAKE, VALUE,TAGS
     }
     public SortOrder getCurrentSortOrder() {
         return currentSortOrder;
@@ -72,6 +72,9 @@ public class SortedItemListView implements ItemListView {
                 break;
             case VALUE:
                 comparator = Comparator.comparingDouble(Item::getValue);
+                break;
+            case TAGS:
+                comparator = Comparator.comparingInt(item -> item.getTags().size());
                 break;
         }
 

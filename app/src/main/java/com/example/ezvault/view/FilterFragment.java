@@ -167,9 +167,13 @@ public class FilterFragment extends Fragment {
                 sortField = SortedItemListView.SortField.MAKE;
             } else if (checkedId == R.id.sort_by_value) {
                 sortField = SortedItemListView.SortField.VALUE;
-            } else {
+            }
+            else if (checkedId == R.id.sort_by_tags) {
+                sortField = SortedItemListView.SortField.TAGS;
+            }else {
                 sortField = SortedItemListView.SortField.DATE; // Default case
             }
+
             viewModel.setSortField(sortField);
         });
 
