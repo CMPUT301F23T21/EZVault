@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.ezvault.R;
-import com.example.ezvault.authentication.registration.RegistrationException;
+import com.example.ezvault.data.authentication.registration.RegistrationException;
 import com.example.ezvault.data.database.FirebaseBundle;
 import com.example.ezvault.data.database.RawUserDAO;
 import com.example.ezvault.data.database.UserService;

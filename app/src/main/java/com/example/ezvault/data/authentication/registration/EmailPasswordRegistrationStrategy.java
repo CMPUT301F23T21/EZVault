@@ -1,4 +1,4 @@
-package com.example.ezvault.authentication.registration;
+package com.example.ezvault.data.authentication.registration;
 
 import com.example.ezvault.data.database.FirebaseBundle;
 import com.google.android.gms.tasks.Task;

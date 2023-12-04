@@ -1,8 +1,7 @@
-package com.example.ezvault.authentication.registration;
+package com.example.ezvault.data.authentication.registration;
 
 import android.util.Log;
 
-import com.example.ezvault.authentication.registration.RegistrationException.UserAlreadyExists;
 import com.example.ezvault.data.database.FirebaseBundle;
 import com.example.ezvault.model.User;
 import com.example.ezvault.data.database.UserService;
@@ -47,7 +46,7 @@ public abstract class FirebaseRegistrationStrategy implements IRegistrationStrat
                 return this.register(firebase, userName);
             } else {
                 Log.d("EZVault", "User " + userName + " does exist!");
-                return Tasks.forException(new UserAlreadyExists(userName));
+                return Tasks.forException(new RegistrationException.UserAlreadyExists(userName));
             }
         }).onSuccessTask(authResult -> userService.createUser(authResult.getUser().getUid(), userName));
     }

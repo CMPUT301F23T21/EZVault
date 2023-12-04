@@ -16,9 +16,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.ezvault.R;
-import com.example.ezvault.authentication.registration.EmailPasswordRegistrationStrategy;
-import com.example.ezvault.authentication.registration.RegistrationException;
-import com.example.ezvault.authentication.registration.RegistrationHandler;
+import com.example.ezvault.data.authentication.registration.EmailPasswordRegistrationStrategy;
+import com.example.ezvault.data.authentication.registration.RegistrationException;
+import com.example.ezvault.data.authentication.registration.RegistrationHandler;
 import com.example.ezvault.data.database.FirebaseBundle;
 import com.example.ezvault.utils.textwatchers.MirroredTextWatcher;
 import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;

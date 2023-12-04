@@ -16,8 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.ezvault.R;
-import com.example.ezvault.authentication.authentication.AuthenticationHandler;
-import com.example.ezvault.authentication.authentication.EmailPasswordAuthenticationStrategy;
+import com.example.ezvault.data.authentication.authentication.AuthenticationHandler;
+import com.example.ezvault.data.authentication.authentication.EmailPasswordAuthenticationStrategy;
 import com.example.ezvault.data.database.FirebaseBundle;
 import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.utils.FragmentUtils;

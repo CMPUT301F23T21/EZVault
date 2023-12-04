@@ -1,4 +1,4 @@
-package com.example.ezvault.authentication.registration;
+package com.example.ezvault.data.authentication.registration;
 
 /**
  * An exception in the registration process.

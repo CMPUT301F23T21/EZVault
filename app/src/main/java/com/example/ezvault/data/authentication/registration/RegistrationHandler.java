@@ -1,4 +1,4 @@
-package com.example.ezvault.authentication.registration;
+package com.example.ezvault.data.authentication.registration;
 
 import com.example.ezvault.model.User;
 import com.google.android.gms.tasks.Task;
