@@ -17,14 +17,12 @@ public class RegistrationException extends Exception {
      * An exception representing the error that a user already exists.
      */
     public static class UserAlreadyExists extends RegistrationException {
-        private final String userName;
         /**
          * The user already exists.
          * @param userName The name of the user that already exists.
          */
         public UserAlreadyExists(String userName) {
             super("User " + "\"" + userName +"\" already exists.");
-            this.userName = userName;
         }
     }
 }

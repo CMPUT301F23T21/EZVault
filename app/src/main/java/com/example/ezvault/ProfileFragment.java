@@ -1,18 +1,17 @@
 package com.example.ezvault;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.ezvault.authentication.registration.RegistrationException;
 import com.example.ezvault.database.FirebaseBundle;
@@ -21,11 +20,9 @@ import com.example.ezvault.database.UserService;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.textwatchers.PasswordWatcher;
-import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;

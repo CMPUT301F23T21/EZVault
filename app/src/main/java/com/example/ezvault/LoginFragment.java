@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -61,9 +60,7 @@ public class LoginFragment extends Fragment {
         passwordText = view.findViewById(R.id.password_text);
 
         // setup back button
-        backButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).popBackStack();
-        });
+        backButton.setOnClickListener(v -> Navigation.findNavController(view).popBackStack());
 
         // setup login button
         loginButton.setOnClickListener(v -> {

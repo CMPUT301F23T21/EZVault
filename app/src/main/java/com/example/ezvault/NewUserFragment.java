@@ -6,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,9 +24,6 @@ import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.textwatchers.PasswordWatcher;
 import com.example.ezvault.utils.FragmentUtils;
 import com.example.ezvault.utils.UserManager;
-
-import java.util.Objects;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -74,9 +70,7 @@ public class NewUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_user, container, false);
 
         backButton = view.findViewById(R.id.create_user_back_button);
-        backButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).popBackStack();
-        });
+        backButton.setOnClickListener(v -> Navigation.findNavController(view).popBackStack());
 
         emailText = view.findViewById(R.id.create_email_text);
         userNameText = view.findViewById(R.id.create_username_text);

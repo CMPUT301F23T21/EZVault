@@ -1,13 +1,8 @@
 package com.example.ezvault.authentication.registration;
 
 import com.example.ezvault.database.FirebaseBundle;
-import com.example.ezvault.database.UserService;
-import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
-
-import java.util.function.Supplier;
 
 /**
  * Represents the registration strategy using firebase and it's email and password provider.
