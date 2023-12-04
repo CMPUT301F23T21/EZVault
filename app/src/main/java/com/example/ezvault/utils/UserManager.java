@@ -47,18 +47,4 @@ public class UserManager {
         photoAdapter.notifyItemRangeInserted(unsyncedLen, newPhotosLen - 1);
         clearLocalImages();
     }
-
-    public void synchronizeToPager(List<Image> unsyncedImages,
-                                     ViewpagerAdapter viewpagerAdapter){
-
-        int unsyncedLen = unsyncedImages.size();
-        int newPhotosLen = localImages.size();
-
-        for(int i = 0; i < newPhotosLen; i++){
-            unsyncedImages.add(localImages.get(i));
-            viewpagerAdapter.notifyItemInserted(unsyncedLen + i);
-        }
-        viewpagerAdapter.notifyItemRangeInserted(unsyncedLen, newPhotosLen - 1);
-        clearLocalImages();
-    }
 }
