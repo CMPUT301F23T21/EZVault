@@ -23,6 +23,13 @@ public class SortedItemListView implements ItemListView {
     public enum SortField {
         DATE, DESCRIPTION, MAKE, VALUE
     }
+    public SortOrder getCurrentSortOrder() {
+        return currentSortOrder;
+    }
+
+    public SortField getCurrentSortField() {
+        return currentSortField;
+    }
 
     // Constructor
     public SortedItemListView(List<Item> items) {
