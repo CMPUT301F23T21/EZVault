@@ -13,7 +13,9 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.ezvault.EmulatorState.setEmulator;
 import static org.hamcrest.CoreMatchers.not;
 
 import androidx.navigation.NavController;
@@ -57,8 +59,6 @@ public class EditItemTest {
     public RuleChain chain = RuleChain
             .outerRule(hiltRule)
             .around(scenarioRule);
-
-    private static boolean setEmulator = false;
 
     @Before
     public void setup() {
@@ -113,6 +113,12 @@ public class EditItemTest {
         onView(withSubstring("Pringles"))
                 .perform(click());
 
+        onView(withId(R.id.view_item_edit))
+                .perform(click());
+
+        onView(withText("Yes"))
+                .perform(click());
+
         onView(withId(R.id.edit_details_count))
                 .perform(click())
                 .perform(replaceText("1.0"))
@@ -123,6 +129,7 @@ public class EditItemTest {
                 .perform(scrollTo())
                 .perform(click());
 
+        pressBack();
         pressBack();
 
         // ensure item view displays updated quantity
@@ -146,11 +153,19 @@ public class EditItemTest {
         onView(withSubstring("Pringles"))
                 .perform(click());
 
+        onView(withId(R.id.view_item_edit))
+                .perform(click());
+        onView(withText("Yes"))
+                .perform(click());
+
+
+
         onView(withId(R.id.edit_details_count))
                 .perform(click())
                 .perform(replaceText("1.0"))
                 .perform(closeSoftKeyboard());
 
+        pressBack();
         pressBack();
 
         // ensure item view does NOT display updated quantity
