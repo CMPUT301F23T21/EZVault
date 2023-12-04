@@ -137,12 +137,13 @@
             android:id="@+id/text_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sort"
+            android:text="Order"
             android:fontFamily="@font/fredoka_one"
             android:textSize="28sp"
             android:layout_marginStart="5dp"
             android:layout_below="@id/edittext_filter_tags"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="95dp"
+            />
 
         <View
             android:layout_below="@+id/text_sort_options"
@@ -156,11 +157,11 @@
             android:id="@+id/text_sort_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sort Options"
+            android:text="Sort"
             android:fontFamily="@font/fredoka_one"
             android:textSize="28sp"
             android:layout_below="@id/edittext_filter_make"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="90dp"
             android:layout_marginLeft="5dp"/>
 
         <RadioGroup
