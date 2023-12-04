@@ -9,6 +9,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.data.FilterRepository;
+import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.model.utils.filter.IItemFilter;
@@ -22,9 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import com.example.ezvault.model.Item;
-
-import org.checkerframework.common.returnsreceiver.qual.This;
 
 @HiltViewModel
 public class ItemViewModel extends ViewModel {
