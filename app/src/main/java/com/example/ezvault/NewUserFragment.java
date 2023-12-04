@@ -82,6 +82,7 @@ public class NewUserFragment extends Fragment {
 
         // create user functionality
         Button createUser = view.findViewById(R.id.create_user_button);
+        EditText finalUserNameText = userNameText;
         createUser.setOnClickListener(v -> {
             String email = emailText.getText().toString();
             String userName = userNameText.getText().toString();
@@ -98,7 +99,7 @@ public class NewUserFragment extends Fragment {
                     Navigation.findNavController(view).navigate(R.id.newUserFragment_to_itemsFragment);
                 }).addOnFailureListener(e -> {
                     if (e instanceof RegistrationException.UserAlreadyExists){
-                        userNameText.setError("Username already exists");
+                        finalUserNameText.setError("Username already exists");
                     }
 
                     String toastText = "Could not register: " + e.getMessage();
