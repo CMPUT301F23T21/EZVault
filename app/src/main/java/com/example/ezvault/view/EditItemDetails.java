@@ -50,7 +50,7 @@ import com.example.ezvault.model.Item;
 import com.example.ezvault.model.utils.SerialPrediction;
 import com.example.ezvault.utils.SerialPredictor;
 import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;
-import com.example.ezvault.upcAPI;
+import com.example.ezvault.data.UpcApi;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
@@ -404,7 +404,7 @@ public class EditItemDetails extends Fragment {
             GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(EditItemDetails.this.getActivity(), options);
             scanner.startScan().addOnSuccessListener(
                     barcode -> {
-                        upcAPI api = new upcAPI();
+                        UpcApi api = new UpcApi();
                         api.upcLookup(barcode.getRawValue(), getView().findViewById(R.id.edit_details_description), getActivity());
                     }
             );

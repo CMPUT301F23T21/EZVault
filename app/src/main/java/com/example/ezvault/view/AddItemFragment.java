@@ -49,7 +49,7 @@ import com.example.ezvault.utils.SerialPredictor;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
 import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;
-import com.example.ezvault.upcAPI;
+import com.example.ezvault.data.UpcApi;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
@@ -80,7 +80,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
-    private final com.example.ezvault.upcAPI upcLookup = new upcAPI();
+    private final UpcApi upcLookup = new UpcApi();
     private Button createButton;
 
     private AutoCompleteTextView itemSerial;
@@ -111,7 +111,7 @@ public class AddItemFragment extends Fragment {
 
     private Calendar calendar;
 
-    private upcAPI upcAPI;
+    private UpcApi upcAPI;
 
 
     public AddItemFragment() {
@@ -134,7 +134,7 @@ public class AddItemFragment extends Fragment {
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
 
-        upcAPI = new upcAPI();
+        upcAPI = new UpcApi();
 
     }
 
