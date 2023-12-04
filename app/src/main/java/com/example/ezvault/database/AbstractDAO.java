@@ -5,11 +5,8 @@ The subclasses should specialize in accessing the database for a specific type o
 
 package com.example.ezvault.database;
 
-import android.util.Log;
-
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.Transaction;
 
 import java.util.ArrayList;
 
@@ -63,59 +60,17 @@ public abstract class AbstractDAO<T, ID> {
     public abstract Task<Void> delete(ID id);
 
     /**
-     * Represents a creation of an object in a transaction.
-     *
-     * @param transaction The current transaction state
-     * @param t           The object to create
-     * @return The ID of the object created
-     */
-    public ID createTransactional(Transaction transaction, T t) {
-        throw new UnsupportedOperationException("Unsupported Operation!");
-    }
-
-    /**
-     * Represents reading an object in a transaction
-     * @param transaction The current transaction state
-     * @param id The id of the object to read
-     * @return The object read
-     */
-    public T readTransactional(Transaction transaction, ID id) {
-        throw new UnsupportedOperationException("Unsupported Operation!");
-    }
-
-    /**
-     * Update an object in a transaction
-     * @param transaction The current transaction state
-     * @param t The new value of the object
-     * @param id The id of the object to be updated
-     */
-    public void updateTransactional(Transaction transaction, T t, ID id) {
-        throw new UnsupportedOperationException("Unsupported Operation!");
-    }
-
-    /**
-     * Delete an object in a transaction
-     * @param transaction The current transaction state
-     * @param id The id of the object to delete
-     */
-    public void deleteTransactional(Transaction transaction, ID id) {
-        throw new UnsupportedOperationException("Unsupported Operation!");
-    }
-
-    /**
      * Performs a batch read operation for multiple objects from the database based on their unique identifiers.
      * @param ids The list of unique identifiers for the objects to be read.
      * @return A {@code Task} containing an {@code ArrayList} of objects of type {@code T} corresponding to the provided identifiers.
      */
     public Task<ArrayList<T>> pluralRead(ArrayList<ID> ids) {
         Task<ArrayList<T>> task = Tasks.forResult(new ArrayList<>());
-        if (ids.size() <= 0) {
+        if (ids.size() == 0) {
             return task;
         }
         for (ID id : ids) {
             task = task.onSuccessTask(ts -> {
-                Log.d("EZVault", "Got to id/task: " + ts.size());
-                Log.d("EZVault", "With: " + id.getClass().toString());
                 Task<T> tTask = read(id);
                 return tTask.continueWith(t -> {
                     ts.add(tTask.getResult());

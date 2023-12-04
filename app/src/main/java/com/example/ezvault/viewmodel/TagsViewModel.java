@@ -5,11 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.database.FirebaseBundle;
-import com.example.ezvault.database.TagDAO;
 import com.example.ezvault.database.UserService;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.utils.UserManager;
-import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,7 +11,6 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Class that deals with operations in the 'tags' collection.

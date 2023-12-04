@@ -1,8 +1,5 @@
 package com.example.ezvault.utils;
 
-import android.content.ContentResolver;
-import android.net.Uri;
-
 import com.example.ezvault.PhotoAdapter;
 import com.example.ezvault.ViewpagerAdapter;
 import com.example.ezvault.model.Image;

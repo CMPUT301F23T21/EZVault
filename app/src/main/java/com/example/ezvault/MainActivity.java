@@ -1,31 +1,22 @@
 package com.example.ezvault;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.ezvault.database.FirebaseBundle;
-
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-
-
 import com.example.ezvault.utils.UserManager;
-import com.example.ezvault.view.ItemsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashSet;
@@ -60,7 +51,6 @@ public class MainActivity extends AppCompatActivity{
         // set top level destinations to hide back button
         Set<Integer> topLevelDestinations = new HashSet<>();
         topLevelDestinations.add(R.id.itemsFragment);
-        topLevelDestinations.add(R.id.searchFragment);
         topLevelDestinations.add(R.id.tagsFragment);
         topLevelDestinations.add(R.id.profileFragment);
 
@@ -83,6 +73,7 @@ public class MainActivity extends AppCompatActivity{
                 // show bottom nav bar and toolbar
                 if (destination == R.id.itemsFragment) {
                     userManager.clearLocalImages();
+
                     bottomNavView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
 
@@ -93,12 +84,23 @@ public class MainActivity extends AppCompatActivity{
                         || destination == R.id.editItemDetails
                         || destination == R.id.viewItemFragment) {
 
+
+                    toolbar.setVisibility(View.VISIBLE);
                     bottomNavView.setVisibility(View.GONE);
 
-                    // hide tool bar and bottom nav bar
-                } else if (navDestination.getId() == R.id.welcomeFragment){
+
+                // Hide both nav bars in following fragments
+                } else if (navDestination.getId() == R.id.welcomeFragment
+                        || navDestination.getId() == R.id.loginFragment
+                        || navDestination.getId() == R.id.newUserFragment){
+
                     bottomNavView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
+
+                // Show both nav bars as default behaviour
+                } else {
+                    bottomNavView.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
                 }
 
 

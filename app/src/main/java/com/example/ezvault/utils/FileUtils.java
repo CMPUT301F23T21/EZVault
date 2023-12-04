@@ -6,13 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
-import android.renderscript.ScriptGroup;
 
 import androidx.camera.core.impl.utils.Exif;
 
 import com.example.ezvault.model.Image;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;

@@ -1,7 +1,6 @@
 package com.example.ezvault.model;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
 
 import com.google.android.gms.tasks.TaskCompletionSource;
 

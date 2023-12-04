@@ -1,7 +1,6 @@
 package com.example.ezvault.camera;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.activity.ComponentActivity;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -9,18 +8,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.example.ezvault.model.Image;
-import com.example.ezvault.utils.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.android.gms.tasks.Tasks;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * An action that allows the user to select photos from their gallery

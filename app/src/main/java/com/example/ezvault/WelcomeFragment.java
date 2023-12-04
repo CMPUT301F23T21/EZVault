@@ -31,14 +31,13 @@ public class WelcomeFragment extends Fragment {
         Button newUser = view.findViewById(R.id.new_user_button);
 
         // click listener for existingUser button
-        existingUser.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_loginFragment);
-        });
+        existingUser.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_loginFragment));
 
         // click listener for newUser button
-        newUser.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_newUserFragment);
-        });
+        newUser.setOnClickListener(v ->
+            Navigation.findNavController(view).navigate(R.id.welcomeFragment_to_newUserFragment)
+        );
 
         return view;
     }
