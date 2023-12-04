@@ -63,6 +63,7 @@ public class ViewItemFragment extends Fragment {
     private ArrayList<Image> images;
 
     private ItemViewModel viewModel;
+
     public ViewItemFragment() {
         // Required empty public constructor
     }
@@ -78,6 +79,7 @@ public class ViewItemFragment extends Fragment {
         viewpagerAdapter = new ViewpagerAdapter(requireContext(), images);
         viewModel = new ViewModelProvider(this).get(com.example.ezvault.viewmodel.ItemViewModel.class);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,8 +130,9 @@ public class ViewItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // update the toolbar menu
+
         MenuHost menuHost = (MenuHost) requireActivity();
+
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {

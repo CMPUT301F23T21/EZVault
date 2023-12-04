@@ -8,9 +8,9 @@ import com.google.firebase.storage.FirebaseStorage;
  * Utility class for grouping Firebase components together.
  */
 public class FirebaseBundle {
-    private FirebaseFirestore db;
-    private FirebaseAuth auth;
-    private FirebaseStorage storage;
+    private final FirebaseFirestore db;
+    private final FirebaseAuth auth;
+    private final FirebaseStorage storage;
 
     /**
      * Construct a FirebaseBundle based on the default
@@ -41,7 +41,7 @@ public class FirebaseBundle {
 
     /**
      * Get the auth
-     * @return The Firebase auth instnace
+     * @return The Firebase auth instance
      */
     public FirebaseAuth getAuth() {
         return auth;
@@ -49,7 +49,7 @@ public class FirebaseBundle {
 
     /**
      * Get the storage
-     * @return The Firebase storage instnace
+     * @return The Firebase storage instance
      */
     public FirebaseStorage getStorage() { return storage; }
 }

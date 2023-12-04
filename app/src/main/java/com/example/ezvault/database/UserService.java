@@ -4,23 +4,17 @@ Provides utilities for interacting with Users on the database.
 
 package com.example.ezvault.database;
 
-import android.util.Log;
-
+import com.example.ezvault.database.RawUserDAO.RawUser;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
-
-import com.example.ezvault.database.RawUserDAO.RawUser;
 import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * Provides operations involving users and the database.
@@ -29,7 +23,7 @@ public class UserService {
     private final RawUserDAO rawUserDAO;
     private final ItemDAO itemDAO;
     private final TagDAO tagDAO;
-    private final FirebaseAuth auth;
+
     /**
      * Initializes services for user-related operations.
      * @param firebase FirebaseBundle containing Firebase services
@@ -38,7 +32,6 @@ public class UserService {
         this.rawUserDAO = new RawUserDAO(firebase);
         this.tagDAO = new TagDAO(firebase);
         this.itemDAO = new ItemDAO(firebase);
-        this.auth = firebase.getAuth();
     }
 
     /**

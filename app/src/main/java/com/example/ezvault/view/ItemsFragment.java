@@ -1,13 +1,22 @@
 package com.example.ezvault.view;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
@@ -17,46 +26,23 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.InputType;
-import android.util.Log;
-import android.view.LayoutInflater;
-
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.EditText;
-
-import android.widget.ImageButton;
-import android.widget.Switch;
-import android.widget.TextView;
-
 import com.example.ezvault.ItemAdapter;
-import com.example.ezvault.MainActivity;
 import com.example.ezvault.R;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
-import com.example.ezvault.database.TagDAO;
 import com.example.ezvault.model.Item;
-
 import com.example.ezvault.model.Tag;
-
 import com.example.ezvault.model.User;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.utils.UserManager;
 import com.example.ezvault.viewmodel.ItemViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-
 import java.util.Arrays;
 import java.util.HashSet;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -69,6 +55,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * Displays items in a list as well as total value and total quantity
  */
 @AndroidEntryPoint
+@SuppressLint("NotifyDataSetChanged")
 public class ItemsFragment extends Fragment {
     @Inject
     UserManager userManager;
@@ -92,6 +79,12 @@ public class ItemsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupToolbar();
     }
 
     private void setupRecycler(View view, ItemListView itemListView) {
@@ -141,7 +134,6 @@ public class ItemsFragment extends Fragment {
 
         tagItemsButton = view.findViewById(R.id.tag_items_button);
         tagItemsButton.setOnClickListener(v -> tagSelected());
-        tagItemsButton.setVisibility(View.GONE);
 
         TextView totalItemValueView = view.findViewById(R.id.text_total_value);
         TextView numItemsView = view.findViewById(R.id.text_number_of_items);
@@ -167,8 +159,6 @@ public class ItemsFragment extends Fragment {
 
         setupRecycler(view, viewModel.getItemListView().getValue());
         viewModel.getItemListView().observe(getViewLifecycleOwner(), this::displayList);
-
-        setupToolbar();
 
         return view;
     }
@@ -227,17 +217,13 @@ public class ItemsFragment extends Fragment {
         List<Item> unselectedItems = itemAdapter.getUnselectedItems();
         List<Item> selectedItems = itemAdapter.getSelectedItems();
 
-        List<String> itemStr = unselectedItems.stream()
+        List<String> selectedItemIds = unselectedItems.stream()
                 .map(item -> item.getId())
                 .collect(Collectors.toList());
 
-        List<String> tagIds = currUser.getItemList()
-                .getTags()
-                .stream()
-                .map(tag -> tag.getUid())
-                .collect(Collectors.toList());
-
-        rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(), (ArrayList<String>) tagIds, (ArrayList<String>) itemStr))
+        rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(),
+                        (ArrayList<String>) currUser.getItemList().getTagIds(),
+                        (ArrayList<String>) selectedItemIds))
                         .continueWith(t -> {
                             for (int i = 0; i < selectedItems.size(); i++){
                                 Item item = selectedItems.get(i);
@@ -250,7 +236,7 @@ public class ItemsFragment extends Fragment {
                                         .remove(item);
 
                                 itemAdapter.notifyItemRemoved(i);
-                            };
+                            }
 
                             viewModel.synchronizeItems(userManager.getUser().getItemList());
 
@@ -271,7 +257,7 @@ public class ItemsFragment extends Fragment {
      * Set up toolbar with new menu and button functionality
      */
     private void setupToolbar(){
-        MenuHost menuHost = (MenuHost) requireActivity();
+        MenuHost menuHost = requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {

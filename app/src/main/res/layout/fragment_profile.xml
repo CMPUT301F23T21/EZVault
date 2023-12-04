@@ -49,7 +49,7 @@
         android:id="@+id/text_profile_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email"
+        android:text="New Password"
         android:layout_below="@id/edittext_profile_email"
         android:textSize="20sp"
         android:fontFamily="@font/paytone_one"
@@ -67,14 +67,31 @@
         android:paddingEnd="13dp"
         android:background="@drawable/background_blue_text"/>
 
-    <Button
-        android:id="@+id/log_out_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Log Out"
+        android:orientation="horizontal"
         android:layout_below="@id/edittext_profile_password"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/EZGuardOrange"/>
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/update_info_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="2dp"
+            android:backgroundTint="@color/EZGuardOrange"/>
+
+        <Button
+            android:id="@+id/log_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="2dp"
+            android:backgroundTint="@color/EZGuardOrange"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

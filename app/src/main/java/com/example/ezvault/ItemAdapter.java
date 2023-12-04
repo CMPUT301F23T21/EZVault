@@ -1,39 +1,34 @@
 package com.example.ezvault;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.content.Context;
-import com.example.ezvault.model.Image;
-
-import com.example.ezvault.model.Item;
-import com.example.ezvault.model.utils.ItemListView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ezvault.model.Image;
+import com.example.ezvault.model.Item;
+import com.example.ezvault.model.utils.ItemListView;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Recyclerview adapter for itemsFragment
  */
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
     private ItemListView itemListView;
-    private LayoutInflater inflater;
-    private ItemClickListener itemClickListener;
+    private final LayoutInflater inflater;
+    private final ItemClickListener itemClickListener;
     public boolean deleteMode;
 
     // Interface for click events
@@ -67,7 +62,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         holder.itemName.setText(itemName);
 
         // Set the items count
-        holder.itemCount.setText(String.valueOf(currentItem.getCount()) + " Units");
+        holder.itemCount.setText(currentItem.getCount() + " Units");
 
         // Set the items cost
         holder.itemAmount.setText(String.format("$%.2f", currentItem.getValue()));
@@ -131,7 +126,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
     // ViewHolder class
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
         TextView itemName;
         ImageView itemImage;
         TextView itemCount;

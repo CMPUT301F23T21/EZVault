@@ -9,7 +9,7 @@ import com.example.ezvault.model.Item;
  *
  */
 public class ItemViewModel extends ViewModel {
-    private final MutableLiveData<Item> itemData = new MutableLiveData<Item>();
+    private final MutableLiveData<Item> itemData = new MutableLiveData<>();
 
     public void set(Item item) {
         this.itemData.setValue(item);

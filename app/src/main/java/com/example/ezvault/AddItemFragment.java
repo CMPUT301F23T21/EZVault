@@ -1,11 +1,15 @@
 package com.example.ezvault;
 
-import android.content.ContentResolver;
-import android.app.DatePickerDialog;
 
+
+
+import static com.example.ezvault.utils.FragmentUtils.getTextParentLayout;
+import static com.example.ezvault.utils.FragmentUtils.textLayoutHasNoErrors;
+
+import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,23 +25,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import androidx.annotation.NonNull;
-
 import androidx.core.view.MenuHost;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
-
-import com.example.ezvault.model.SerialPrediction;
-import com.example.ezvault.model.SerialPredictor;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,8 +42,14 @@ import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
 import com.example.ezvault.model.Image;
+import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemBuilder;
+import com.example.ezvault.model.ItemList;
+import com.example.ezvault.model.SerialPrediction;
+import com.example.ezvault.model.SerialPredictor;
+import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
+import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
@@ -56,19 +57,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -77,22 +77,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
-
 /**
  * fragment class that collects the information of a new item
  */
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
+    private final upcAPI upcLookup = new upcAPI();
     private Button createButton;
 
     private AutoCompleteTextView itemSerial;
-    private static final String TAG = "AddItem";
-    private Button addItem;
-
     private String lastScan;
-
-    private GmsBarcodeScannerOptions options;
 
     private GalleryAction galleryAction;
 
@@ -109,6 +104,19 @@ public class AddItemFragment extends Fragment {
 
     private ArrayAdapter<String> serialAdapter;
 
+    private EditText itemMake;
+    private EditText itemModel;
+    private EditText itemDescription;
+    private EditText itemComments;
+    private EditText itemQuantity;
+    private EditText itemValue;
+    private EditText itemDate;
+
+    private Calendar calendar;
+
+    private upcAPI upcAPI;
+
+
     public AddItemFragment() {
         // Required empty public constructor
     }
@@ -116,6 +124,8 @@ public class AddItemFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        calendar = Calendar.getInstance();
 
         canInteract = true;
 
@@ -127,27 +137,18 @@ public class AddItemFragment extends Fragment {
         galleryAction = new GalleryAction(requireActivity());
         getLifecycle().addObserver(galleryAction);
 
-        options = new GmsBarcodeScannerOptions.Builder()
-                .enableAutoZoom()
-                .build();
+        upcAPI = new upcAPI();
+
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Updates the toolbar menu
-        MenuHost menuHost = (MenuHost) requireActivity();
-        menuHost.addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.clear();
-            }
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                return !canInteract;
-            }
-        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+
+        setupTextWatchers();
+        setupCreateButton(view);
+        setupToolbar();
     }
 
     @Override
@@ -166,14 +167,14 @@ public class AddItemFragment extends Fragment {
         createButton = view.findViewById(R.id.edit_details_save);
         createButton.setText("Create");
 
-        EditText itemMake = view.findViewById(R.id.edit_details_make);
-        EditText itemModel = view.findViewById(R.id.edit_details_model);
-        EditText itemDescription = view.findViewById(R.id.edit_details_description);
-        EditText itemComments = view.findViewById(R.id.edit_details_comment);
-        EditText itemQuantity = view.findViewById(R.id.edit_details_count);
-        EditText itemValue = view.findViewById(R.id.edit_details_value);
+        itemMake = view.findViewById(R.id.edit_details_make);
+        itemModel = view.findViewById(R.id.edit_details_model);
+        itemDescription = view.findViewById(R.id.edit_details_description);
+        itemComments = view.findViewById(R.id.edit_details_comment);
+        itemQuantity = view.findViewById(R.id.edit_details_count);
+        itemValue = view.findViewById(R.id.edit_details_value);
         itemSerial = view.findViewById(R.id.edit_details_serial_number);
-        EditText itemDate = view.findViewById(R.id.edit_details_date);
+        itemDate = view.findViewById(R.id.edit_details_date);
 
         userManager.synchronizeToAdapter(images, photoAdapter);
 
@@ -186,7 +187,6 @@ public class AddItemFragment extends Fragment {
 
         itemDate.setText(dateString);
 
-        Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -214,7 +214,7 @@ public class AddItemFragment extends Fragment {
                 android.R.layout.select_dialog_singlechoice);
 
         itemSerial.setOnClickListener(v -> itemSerial.showDropDown());
-        itemSerial.setOnFocusChangeListener((v,f) -> itemSerial.showDropDown());
+        itemSerial.setOnFocusChangeListener((v, f) -> itemSerial.showDropDown());
 
         itemSerial.setAdapter(serialAdapter);
 
@@ -223,7 +223,10 @@ public class AddItemFragment extends Fragment {
 
 
         serialLayout.setEndIconOnClickListener(serialListener);
-        descriptionLayout.setEndIconOnClickListener(listener);
+
+        descriptionLayout.setErrorIconDrawable(R.drawable.icon_barcode_scan);
+        descriptionLayout.setErrorIconOnClickListener(barcodeListener);
+        descriptionLayout.setEndIconOnClickListener(barcodeListener);
 
         createButton.setOnClickListener(v -> {
             toggleInteractable();
@@ -250,14 +253,14 @@ public class AddItemFragment extends Fragment {
                 ItemBuilder itemBuilder = new ItemBuilder()
                         .setMake(itemMake.getText().toString())
                         .setModel(itemModel.getText().toString())
-                        .setCount(Double.valueOf(itemQuantity.getText().toString()))
-                        .setValue(Double.valueOf(itemValue.getText().toString()))
+                        .setCount(Double.parseDouble(itemQuantity.getText().toString()))
+                        .setValue(Double.parseDouble(itemValue.getText().toString()))
                         .setAcquisitionDate(new Timestamp(calendar.getTime()))
                         .setDescription(itemDescription.getText().toString())
                         .setSerialNumber(itemSerial.getText().toString())
                         .setComment(itemComments.getText().toString())
                         .setTags(new ArrayList<>())
-                        .setImages((ArrayList<Image>)images.clone());
+                        .setImages((ArrayList<Image>) images.clone());
 
                 // Add the new item to our database
                 itemDAO.create(itemBuilder.build()).continueWith(idTask -> {
@@ -275,14 +278,14 @@ public class AddItemFragment extends Fragment {
 
                     List<String> itemIds = localUser.getItemList()
                             .stream()
-                            .map(item -> item.getId())
+                            .map(Item::getId)
                             .collect(Collectors.toList());
 
                     List<String> tagIds = localUser
                             .getItemList()
                             .getTags()
                             .stream()
-                            .map(tag -> tag.getUid())
+                            .map(Tag::getUid)
                             .collect(Collectors.toList());
 
                     // Update raw user
@@ -300,7 +303,7 @@ public class AddItemFragment extends Fragment {
 
                     return null;
                 });
-            return null;
+                return null;
             });
         });
 
@@ -316,7 +319,7 @@ public class AddItemFragment extends Fragment {
             galleryAction.resolveAll().continueWith(imTask -> {
                 List<Uri> uris = imTask.getResult();
 
-                if (uris != null && uris.size() > 0){
+                if (uris != null && uris.size() > 0) {
                     uris.forEach(uri -> {
                         userManager.addLocalImage(FileUtils.imageFromUri(uri, contentResolver));
                     });
@@ -331,56 +334,88 @@ public class AddItemFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Thread upcThread = upcAPI.getBgThread();
+        if (upcThread != null){
+            try {
+                upcThread.join();
+            } catch (InterruptedException e) {
+                Log.e("EZVAULT", "Could not join upc thread");
+            }
+        }
+    }
 
     private View.OnClickListener serialListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            galleryAction.resolve().continueWithTask(uriTask-> {
+            galleryAction.resolve().continueWithTask(uriTask -> {
                 Uri uri = uriTask.getResult();
 
-                if (uri == null) { return null; } // Null if the user didn't select an image
+                if (uri == null) {
+                    return null;
+                } // Null if the user didn't select an image
 
                 Image image = FileUtils.imageFromUri(uri, contentResolver);
                 Bitmap bmp = BitmapFactory.decodeByteArray(image.getContents(), 0, image.getContents().length);
 
                 return TaskUtils.onSuccessProc(new SerialPredictor().predict(bmp, 0),
-                    predictions -> {
-                        serialAdapter.addAll(predictions
-                                .stream()
-                                .sorted(Comparator.comparing(SerialPrediction::getConfidence)
-                                        .reversed())
-                                .map(SerialPrediction::getContents)
-                                .collect(Collectors.toList()));
+                        predictions -> {
+                            serialAdapter.addAll(predictions
+                                    .stream()
+                                    .sorted(Comparator.comparing(SerialPrediction::getConfidence)
+                                            .reversed())
+                                    .map(SerialPrediction::getContents)
+                                    .collect(Collectors.toList()));
 
-                        serialAdapter.notifyDataSetChanged();
-                    });
+                            serialAdapter.notifyDataSetChanged();
+                        });
             });
         }
     };
 
-    private View.OnClickListener listener = new View.OnClickListener() {
+    protected View.OnClickListener barcodeListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(AddItemFragment.this.getActivity(), options);
+            GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
+                    .enableAutoZoom()
+                    .build();
+            GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(requireActivity(), options);
             if (v.getId() == itemSerial.getId()) lastScan = "serial";
             else lastScan = "desc";
             scanner.startScan().addOnSuccessListener(
                     barcode -> {
                         if (lastScan.equals("serial")) {
-                            EditText SerialText = getView().findViewById(R.id.edittext_item_serial);
-                            SerialText.setText(barcode.getRawValue());
+                            itemSerial.setText(barcode.getRawValue());
                         } else {
-                            updateDescription(barcode.getRawValue());
+                            upcAPI.upcLookup(barcode.getRawValue(), itemDescription, requireActivity());
                         }
                     }
             );
         }
     };
 
+    private void setupTextWatchers(){
+        itemMake.addTextChangedListener(new NonEmptyTextWatcher(itemMake, getTextParentLayout(itemMake)));
+        itemModel.addTextChangedListener(new NonEmptyTextWatcher(itemModel, getTextParentLayout(itemModel)));
+        itemDescription.addTextChangedListener(new NonEmptyTextWatcher(itemDescription, getTextParentLayout(itemDescription)));
+        itemComments.addTextChangedListener(new NonEmptyTextWatcher(itemComments, getTextParentLayout(itemComments)));
+        itemQuantity.addTextChangedListener(new NonEmptyTextWatcher(itemQuantity, getTextParentLayout(itemQuantity)));
+        itemValue.addTextChangedListener(new NonEmptyTextWatcher(itemValue, getTextParentLayout(itemValue)));
+    }
 
+    private boolean isValidItem(){
+        return textLayoutHasNoErrors(getTextParentLayout(itemMake),
+                getTextParentLayout(itemModel),
+                getTextParentLayout(itemDescription),
+                getTextParentLayout(itemComments),
+                getTextParentLayout(itemQuantity),
+                getTextParentLayout(itemValue));
+    }
 
-
-private void toggleInteractable(){
+    private void toggleInteractable(){
         canInteract = !canInteract;
 
         createButton.setEnabled(canInteract);
@@ -388,79 +423,94 @@ private void toggleInteractable(){
         createButton.getBackground().setAlpha(canInteract ? 255 : 112);
     }
 
-    public void updateDescription(String UPC) {
-
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    String UPCurl = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + URLEncoder.encode(UPC);
-                    URL url = null;
-
-                    // Store exit status for processing - 0 is normal, 2 is network error, 1 is item not found
-                    int code = 0;
-
-                    // Create the URL object
-                    try {
-                        url = new URL(UPCurl);
-                    } catch (MalformedURLException e) {
-                        code = 2;
-                        Log.e(TAG, "Malformed URL");
-                    }
-
-                    URLConnection connection;
-                    String itemname = "";
-                    try {
-                        connection = url.openConnection();
-                        connection.connect();
-                        JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) connection.getContent()));
-                        Log.i(TAG, root.toString());
-                        JsonObject rootobj = root.getAsJsonObject();
-                        if (rootobj.isEmpty() || rootobj.get("items").getAsJsonArray().isEmpty()) {
-                            code = 1;
-                            Log.i(TAG, "No items found");
-                        } else {
-                            itemname = rootobj.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
-                        }
-                    } catch (IOException e) {
-                        code = 2;
-                        Log.e("TAG", e.toString());
-                    }
-
-                    String finalItemname = itemname;
-                    Log.i(TAG, itemname);
-                    int finalCode = code;
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-
-                            // Stuff that updates the UI
-                            EditText DescriptionText = getView().findViewById(R.id.edittext_item_description);
-
-                            switch (finalCode) {
-                                case 0:
-                                    DescriptionText.setText(finalItemname);
-                                    break;
-                                case 1:
-                                    DescriptionText.setText("No items found");
-                                    break;
-                                case 2:
-                                    DescriptionText.setText("Network error");
-                                    break;
-                            }
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+    private void setupCreateButton(View view){
+        createButton.setOnClickListener(v -> {
+            if(!isValidItem()){
+                Toast.makeText(requireContext(),
+                        "Please make sure all fields are valid",
+                        Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            toggleInteractable();
+
+            FirebaseBundle fb = new FirebaseBundle();
+            ItemDAO itemDAO = new ItemDAO(fb);
+            ImageDAO imageDAO = new ImageDAO(fb);
+
+            List<Task<String>> imageTasks = new ArrayList<>();
+
+            images.forEach(image -> {
+                imageTasks.add(imageDAO.create(image));
+            });
+
+            Tasks.whenAllSuccess(imageTasks).onSuccessTask(t -> {
+                for (int i = 0; i < images.size(); i++) {
+                    images.get(i).setId((String) t.get(i));
+                }
+
+                return TaskUtils.drop(Tasks.forResult(null));
+
+            }).continueWith(itemCreateTask -> {
+                // Construct our item
+                ItemBuilder itemBuilder = new ItemBuilder()
+                        .setMake(itemMake.getText().toString())
+                        .setModel(itemModel.getText().toString())
+                        .setCount(Double.parseDouble(itemQuantity.getText().toString()))
+                        .setValue(Double.parseDouble(itemValue.getText().toString()))
+                        .setAcquisitionDate(new Timestamp(calendar.getTime()))
+                        .setDescription(itemDescription.getText().toString())
+                        .setSerialNumber(itemSerial.getText().toString())
+                        .setComment(itemComments.getText().toString())
+                        .setTags(new ArrayList<>())
+                        .setImages((ArrayList<Image>)images.clone());
+
+                // Add the new item to our database
+                itemDAO.create(itemBuilder.build()).continueWith(idTask -> {
+                    String itemId = idTask.getResult();
+
+                    // User info
+                    User localUser = userManager.getUser();
+                    String uid = localUser.getUid();
+                    ItemList itemsList = localUser.getItemList();
+
+                    // Add the item to our local store
+                    itemBuilder.setId(itemId);
+                    itemsList.add(itemBuilder.build());
+
+                    RawUserDAO rawUserDAO = new RawUserDAO(fb);
+
+                    // Update raw user
+                    RawUserDAO.RawUser rawUser = new RawUserDAO.RawUser(localUser.getUserName(),
+                            (ArrayList<String>) itemsList.getTagIds(),
+                            (ArrayList<String>) itemsList.getItemIds());
+
+                    rawUserDAO.update(uid, rawUser)
+                            .continueWith(updateUserTask -> {
+                                images.clear();
+                                userManager.clearLocalImages();
+                                Navigation.findNavController(view).popBackStack();
+                                return null;
+                            });
+
+                    return null;
+                });
+                return null;
+            });
         });
-
-        thread.start();
-
-
     }
+
+    private void setupToolbar(){
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.clear();
+            }
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return !canInteract;
+            }
+        }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
+
 }
