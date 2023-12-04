@@ -1,23 +1,13 @@
 package com.example.ezvault;
 
-import static androidx.test.espresso.Espresso.*;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
-import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
-import static androidx.test.espresso.matcher.RootMatchers.isTouchable;
-import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.espresso.action.ViewActions.*;
-
 import static org.hamcrest.CoreMatchers.not;
 
 import android.Manifest;
@@ -26,21 +16,18 @@ import androidx.lifecycle.Lifecycle;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.ViewAction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.ezvault.model.Item;
-import com.example.ezvault.model.ItemBuilder;
+import com.example.ezvault.utils.ItemBuilder;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.User;
-import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.data.UserManager;
+import com.example.ezvault.view.MainActivity;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -54,7 +41,6 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.testing.HiltAndroidRule;
 import dagger.hilt.android.testing.HiltAndroidTest;
-import kotlin.jvm.JvmField;
 
 @RunWith(AndroidJUnit4.class)
 @HiltAndroidTest
