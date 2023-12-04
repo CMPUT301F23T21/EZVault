@@ -15,7 +15,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import static com.example.ezvault.EmulatorState.setEmulator;
 
 import androidx.navigation.NavController;
@@ -24,11 +23,11 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
+import com.example.ezvault.data.UserManager;
 import com.example.ezvault.model.Item;
-import com.example.ezvault.utils.ItemBuilder;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.User;
-import com.example.ezvault.data.UserManager;
+import com.example.ezvault.utils.ItemBuilder;
 import com.example.ezvault.view.MainActivity;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,9 +40,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -193,31 +190,27 @@ public class ItemsTest {
                 .perform(click());
 
         // ensure make is properly set
-        onView(withId(R.id.edit_details_make))
+        onView(withId(R.id.view_details_make))
                 .check(matches(withText("Pringles")));
 
         // ensure model is properly set
-        onView(withId(R.id.edit_details_model))
+        onView(withId(R.id.view_details_model))
                 .check(matches(withText("Original")));
 
         // ensure description is properly set
-        onView(withId(R.id.edit_details_description))
+        onView(withId(R.id.view_details_description))
                 .check(matches(withText("Chips")));
 
         // ensure value is properly set
-        onView(withId(R.id.edit_details_value))
+        onView(withId(R.id.view_details_value))
                 .check(matches(withText("2.99")));
 
         // ensure count is properly set
-        onView(withId(R.id.edit_details_count))
+        onView(withId(R.id.view_details_count))
                 .check(matches(withText("1.5")));
 
         // ensure serial number is properly set
-        onView(withId(R.id.edit_details_serial_number))
+        onView(withId(R.id.view_details_serial_number))
                 .check(matches(withText("88899608")));
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        onView(withId(R.id.edit_details_date))
-                .check(matches(withText(format.format(new Date()))));
     }
 }
