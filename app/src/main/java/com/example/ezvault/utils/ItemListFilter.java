@@ -1,4 +1,4 @@
-package com.example.ezvault.model.utils.filter;
+package com.example.ezvault.utils;
 
 import androidx.annotation.NonNull;
 

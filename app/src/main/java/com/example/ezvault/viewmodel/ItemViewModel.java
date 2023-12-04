@@ -13,7 +13,7 @@ import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.utils.ItemListView;
 import com.example.ezvault.utils.IItemFilter;
-import com.example.ezvault.model.utils.filter.ItemListFilter;
+import com.example.ezvault.utils.ItemListFilter;
 import com.example.ezvault.utils.MainItemFilter;
 import com.example.ezvault.utils.UserManager;
 
@@ -63,11 +63,15 @@ public class ItemViewModel extends ViewModel {
             // Apply the filtering logic using ItemListFilter
             ItemListFilter filteredListView = new ItemListFilter(items, filter);
             // Extracts List<Item> from ItemListFilter
-            List<Item> filteredItems = extractItemsFromFilter(filteredListView);
-            // Create a SortedItemListView and apply the sorting logic
-            SortedItemListView sortedListView = new SortedItemListView(filteredItems);
-            sortedListView.sortItems(sortField, sortOrder);
-            itemListView.setValue(sortedListView);
+            if (sortField != null && sortOrder != null) {
+                List<Item> filteredItems = extractItemsFromFilter(filteredListView);
+                // Create a SortedItemListView and apply the sorting logic
+                SortedItemListView sortedListView = new SortedItemListView(filteredItems);
+                sortedListView.sortItems(sortField, sortOrder);
+                itemListView.setValue(sortedListView);
+            } else {
+                itemListView.setValue(filteredListView);
+            }
         }
     }
 

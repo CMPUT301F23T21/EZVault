@@ -8,13 +8,15 @@ import java.util.Date;
 import java.util.List;
 
 public class MainItemFilter implements IItemFilter {
-    private Instant start, end;
-    private List<Tag> tags;
-    private List<String> keywords;
-    private String make;
-    private boolean enabled = true;
+    private final Instant start;
+    private final Instant end;
+    private final List<Tag> tags;
+    private final List<String> keywords;
+    private final String make;
+    private boolean enabled;
 
-    public MainItemFilter(Instant start, Instant end, List<Tag> tags, List<String> keywords, String make, boolean enabled) {
+    public MainItemFilter(Instant start, Instant end, List<Tag> tags,
+                          List<String> keywords, String make, boolean enabled) {
         this.start = start;
         this.end = end;
         this.tags = tags;
@@ -26,8 +28,8 @@ public class MainItemFilter implements IItemFilter {
     public boolean keep(Item item) {
         if (!enabled) return true;
 
-        boolean datePasses = start != null
-                && !item.getAcquisitionDate().toDate().before(getStartDate());
+        boolean datePasses = start == null
+            || !item.getAcquisitionDate().toDate().before(getStartDate());
         if (end != null && !item.getAcquisitionDate().toDate().after(getEndDate())) {
             datePasses = false;
         }
@@ -73,5 +75,9 @@ public class MainItemFilter implements IItemFilter {
 
     public String getMake() {
         return make;
+    }
+
+    public void disable() {
+        this.enabled = false;
     }
 }

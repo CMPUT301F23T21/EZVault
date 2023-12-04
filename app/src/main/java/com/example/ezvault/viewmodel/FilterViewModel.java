@@ -147,7 +147,9 @@ public class FilterViewModel extends ViewModel {
         make = null;
         keywords = null;
 
-        apply();
+        MainItemFilter filter = createFilter();
+        filter.disable();
+        filterRepository.setFilter(filter);
     }
 
     public String getMake() {
