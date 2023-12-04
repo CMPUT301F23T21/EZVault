@@ -46,14 +46,6 @@ public class ItemList implements List<Item>, ItemListView {
     }
 
     /**
-     * Get the list of items
-     * @return The raw list of items.
-     */
-    public ArrayList<Item> getItems() {
-        return items;
-    }
-
-    /**
      * Get the list of available tags
      * @return The list of available tags.
      */

@@ -23,13 +23,6 @@ public class SortedItemListView implements ItemListView {
     public enum SortField {
         DATE, DESCRIPTION, MAKE, VALUE,TAGS
     }
-    public SortOrder getCurrentSortOrder() {
-        return currentSortOrder;
-    }
-
-    public SortField getCurrentSortField() {
-        return currentSortField;
-    }
 
     // Constructor
     public SortedItemListView(List<Item> items) {
@@ -89,8 +82,4 @@ public class SortedItemListView implements ItemListView {
         currentSortOrder = order;
     }
 
-    // Method to reverse the current sort order
-    public void reverseSortOrder() {
-        sortItems(currentSortField, currentSortOrder == SortOrder.ASCENDING ? SortOrder.DESCENDING : SortOrder.ASCENDING);
-    }
 }

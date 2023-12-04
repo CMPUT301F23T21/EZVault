@@ -19,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class TagsViewModel extends ViewModel {
     private final MutableLiveData<List<Tag>> tags = new MutableLiveData<>();
-    private final FirebaseBundle firebase = new FirebaseBundle();
     private final UserManager userManager;
 
     @Inject

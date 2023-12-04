@@ -38,11 +38,4 @@ public class Tag {
         return contents;
     }
 
-    /**
-     * Set the contents.
-     * @param contents The contents of the tag.
-     */
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
 }
