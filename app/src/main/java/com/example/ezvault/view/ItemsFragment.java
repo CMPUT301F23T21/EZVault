@@ -36,7 +36,7 @@ import com.example.ezvault.data.database.RawUserDAO;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
-import com.example.ezvault.model.utils.ItemListView;
+import com.example.ezvault.view.utils.ItemListView;
 import com.example.ezvault.utils.UserManager;
 import com.example.ezvault.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

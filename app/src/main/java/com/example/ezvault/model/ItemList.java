@@ -5,7 +5,7 @@ package com.example.ezvault.model;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.ezvault.model.utils.ItemListView;
+import com.example.ezvault.view.utils.ItemListView;
 
 import java.util.ArrayList;
 import java.util.Collection;
