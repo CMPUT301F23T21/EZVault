@@ -2,6 +2,7 @@ package com.example.ezvault.model;
 
 import android.graphics.Bitmap;
 
+import com.example.ezvault.model.utils.SerialPrediction;
 import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;

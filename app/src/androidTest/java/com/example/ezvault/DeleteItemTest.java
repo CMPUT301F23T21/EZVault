@@ -19,7 +19,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.example.ezvault.model.Item;
-import com.example.ezvault.model.ItemBuilder;
+import com.example.ezvault.model.utils.ItemBuilder;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.User;
 import com.example.ezvault.utils.UserManager;
