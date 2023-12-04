@@ -3,7 +3,7 @@ Provides an AbstractDAO class that is intended to be extended by subclasses.
 The subclasses should specialize in accessing the database for a specific type of object.
  */
 
-package com.example.ezvault.database;
+package com.example.ezvault.data.database;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;

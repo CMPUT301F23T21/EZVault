@@ -3,9 +3,9 @@ package com.example.ezvault.authentication.registration;
 import android.util.Log;
 
 import com.example.ezvault.authentication.registration.RegistrationException.UserAlreadyExists;
-import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.data.database.FirebaseBundle;
 import com.example.ezvault.model.User;
-import com.example.ezvault.database.UserService;
+import com.example.ezvault.data.database.UserService;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;

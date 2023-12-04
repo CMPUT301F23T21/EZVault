@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.ezvault.database.FirebaseBundle;
-import com.example.ezvault.database.UserService;
+import com.example.ezvault.data.database.FirebaseBundle;
+import com.example.ezvault.data.database.UserService;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.utils.UserManager;
 

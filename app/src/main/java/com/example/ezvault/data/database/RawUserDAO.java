@@ -3,7 +3,7 @@ Handles direct database access to users within the 'users' collection.
 */
 
 
-package com.example.ezvault.database;
+package com.example.ezvault.data.database;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;

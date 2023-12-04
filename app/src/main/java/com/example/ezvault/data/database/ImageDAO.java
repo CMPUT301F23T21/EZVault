@@ -1,4 +1,4 @@
-package com.example.ezvault.database;
+package com.example.ezvault.data.database;
 
 import com.example.ezvault.model.Image;
 import com.google.android.gms.tasks.Task;

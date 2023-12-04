@@ -2,7 +2,7 @@
  * Handles direct database operations relating to Item objects.
  */
 
-package com.example.ezvault.database;
+package com.example.ezvault.data.database;
 
 import android.util.Log;
 

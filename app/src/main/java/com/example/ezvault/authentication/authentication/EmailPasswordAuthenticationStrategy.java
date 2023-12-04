@@ -1,6 +1,6 @@
 package com.example.ezvault.authentication.authentication;
 
-import com.example.ezvault.database.FirebaseBundle;
+import com.example.ezvault.data.database.FirebaseBundle;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
