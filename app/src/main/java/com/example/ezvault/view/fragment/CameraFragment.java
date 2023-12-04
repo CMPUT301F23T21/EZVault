@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view.fragment;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -29,6 +29,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 
+import com.example.ezvault.R;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.UserManager;

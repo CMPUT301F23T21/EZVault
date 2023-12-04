@@ -1,4 +1,4 @@
-package com.example.ezvault.view;
+package com.example.ezvault.view.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

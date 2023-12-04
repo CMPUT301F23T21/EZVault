@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view.fragment;
 
 import android.content.ContentResolver;
 import android.os.Bundle;
@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.ezvault.R;
+import com.example.ezvault.ViewpagerAdapter;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;

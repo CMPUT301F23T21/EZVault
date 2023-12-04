@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.ezvault.R;
 import com.example.ezvault.authentication.registration.RegistrationException;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.RawUserDAO;

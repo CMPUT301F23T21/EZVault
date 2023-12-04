@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import com.example.ezvault.R;
 
 /**
  * A welcome page fragment that presents the user with 2 options
