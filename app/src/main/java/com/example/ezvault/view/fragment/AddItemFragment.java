@@ -25,7 +25,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import androidx.core.view.MenuHost;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +35,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.view.adapter.PhotoAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;
@@ -77,9 +76,6 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.stream.Collectors;
 /**
  * fragment class that collects the information of a new item
  */

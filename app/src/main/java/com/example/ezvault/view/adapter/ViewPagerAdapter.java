@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,34 +9,34 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ezvault.R;
 import com.example.ezvault.model.Image;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.widget.ImageView;
 
-public class ViewpagerAdapter extends RecyclerView.Adapter<ViewpagerAdapter.ViewHolder> {
+public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolder> {
     private final Context context;
     private ArrayList<Image> imageList;
 
 
-    public ViewpagerAdapter(Context context, ArrayList<Image> imageList) {
+    public ViewPagerAdapter(Context context, ArrayList<Image> imageList) {
         this.imageList = imageList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public ViewpagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewPagerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.viewpager_photo_layout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewpagerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewPagerAdapter.ViewHolder holder, int position) {
         // bind the image to the layout
         Image image = imageList.get(position);
         byte[] imageContent = image.getContents();

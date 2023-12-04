@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ezvault.R;
 import com.example.ezvault.model.Image;
 
 import java.util.List;

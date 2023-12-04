@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ezvault.R;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.utils.ItemListView;

@@ -1,9 +1,7 @@
 package com.example.ezvault.view.fragment;
 
-import android.content.ContentResolver;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -16,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +23,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.ezvault.R;
-import com.example.ezvault.ViewpagerAdapter;
+import com.example.ezvault.view.adapter.ViewPagerAdapter;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
 import com.example.ezvault.database.ItemDAO;
@@ -40,9 +37,7 @@ import com.example.ezvault.utils.UserManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -61,7 +56,7 @@ public class ViewItemFragment extends Fragment {
     private MutableLiveData<Item> itemModel;
 
     // adapter for view pager
-    private ViewpagerAdapter viewpagerAdapter;
+    private ViewPagerAdapter viewpagerAdapter;
 
     // images to be shown in view pager
     private ArrayList<Image> images;
@@ -80,7 +75,7 @@ public class ViewItemFragment extends Fragment {
         itemModel = new ViewModelProvider(requireActivity()).get(com.example.ezvault.ItemViewModel.class).get();
         images = new ArrayList<>();
         images.addAll(itemModel.getValue().getImages());
-        viewpagerAdapter = new ViewpagerAdapter(requireContext(), itemModel.getValue().getImages());
+        viewpagerAdapter = new ViewPagerAdapter(requireContext(), itemModel.getValue().getImages());
         viewModel = new ViewModelProvider(this).get(com.example.ezvault.viewmodel.ItemViewModel.class);
     }
     @Override
