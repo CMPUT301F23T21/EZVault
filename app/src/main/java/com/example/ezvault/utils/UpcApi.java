@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.utils;
 
 import android.app.Activity;
 import android.util.Log;
@@ -16,12 +16,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-public class upcAPI {
+public class UpcApi {
 
-    private static final String TAG = "upcAPI";
+    private static final String TAG = "UpcApi";
     private Thread bgThread;
 
-    public upcAPI() {
+    public UpcApi() {
     }
 
     /**
