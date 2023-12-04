@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.data.FilterRepository;
 import com.example.ezvault.model.Tag;
-import com.example.ezvault.utils.MainItemFilter;
+import com.example.ezvault.utils.filter.MainItemFilter;
 import com.example.ezvault.utils.UserManager;
 
 import java.text.SimpleDateFormat;
