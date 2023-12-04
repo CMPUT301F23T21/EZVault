@@ -16,11 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.ezvault.R;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.viewmodel.FilterViewModel;
+import com.example.ezvault.viewmodel.SortedItemListView;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -108,6 +110,8 @@ public class FilterFragment extends Fragment {
         setupResetButton(view);
 
         restorePreviousInput();
+
+        setupSortingOptions(view);
     }
 
     private void setupDatePickers(View view) {
@@ -148,4 +152,36 @@ public class FilterFragment extends Fragment {
         tags = view.findViewById(R.id.edittext_filter_tags);
         setupTextWatcher(tags, viewModel::setTags);
     }
+
+    private void setupSortingOptions(View view) {
+        RadioGroup sortFieldGroup = view.findViewById(R.id.sort_field_group);
+        RadioGroup sortOrderGroup = view.findViewById(R.id.sort_order_group);
+
+        sortFieldGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            SortedItemListView.SortField sortField;
+            if (checkedId == R.id.sort_by_date) {
+                sortField = SortedItemListView.SortField.DATE;
+            } else if (checkedId == R.id.sort_by_description) {
+                sortField = SortedItemListView.SortField.DESCRIPTION;
+            } else if (checkedId == R.id.sort_by_make) {
+                sortField = SortedItemListView.SortField.MAKE;
+            } else if (checkedId == R.id.sort_by_value) {
+                sortField = SortedItemListView.SortField.VALUE;
+            }
+            else if (checkedId == R.id.sort_by_tags) {
+                sortField = SortedItemListView.SortField.TAGS;
+            }else {
+                sortField = SortedItemListView.SortField.DATE; // Default case
+            }
+
+            viewModel.setSortField(sortField);
+        });
+
+        sortOrderGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            SortedItemListView.SortOrder sortOrder = (checkedId == R.id.sort_ascending) ?
+                    SortedItemListView.SortOrder.ASCENDING : SortedItemListView.SortOrder.DESCENDING;
+            viewModel.setSortOrder(sortOrder);
+        });
+    }
+
 }

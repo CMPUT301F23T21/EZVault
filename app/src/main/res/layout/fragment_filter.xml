@@ -145,20 +145,91 @@
             android:layout_marginTop="10dp"/>
 
         <View
-            android:layout_below="@+id/text_sort"
+            android:layout_below="@+id/text_sort_options"
             android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="@color/black"
             />
 
+        <TextView
+            android:id="@+id/text_sort_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sort Options"
+            android:fontFamily="@font/fredoka_one"
+            android:textSize="28sp"
+            android:layout_below="@id/edittext_filter_make"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"/>
+
+        <RadioGroup
+            android:id="@+id/sort_field_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/text_sort_options"
+            android:layout_marginTop="10dp">
+
+            <RadioButton
+                android:id="@+id/sort_by_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"/>
+
+            <RadioButton
+                android:id="@+id/sort_by_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"/>
+
+            <RadioButton
+                android:id="@+id/sort_by_make"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Make"/>
+
+            <RadioButton
+                android:id="@+id/sort_by_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Value"/>
+
+            <RadioButton
+                android:id="@+id/sort_by_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tags"/>
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/sort_order_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/sort_field_group"
+            android:layout_marginTop="10dp">
+
+            <RadioButton
+                android:id="@+id/sort_ascending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ascending"/>
+
+            <RadioButton
+                android:id="@+id/sort_descending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descending"/>
+        </RadioGroup>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/divider2"
+            android:layout_below="@+id/sort_order_group"
             android:layout_marginTop="20dp"
-            >
+            tools:ignore="NotSibling">
 
             <Button
                 android:id="@+id/button_filter_reset"
