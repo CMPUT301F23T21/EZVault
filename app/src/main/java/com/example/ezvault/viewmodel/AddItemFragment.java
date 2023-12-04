@@ -45,7 +45,7 @@ import com.example.ezvault.model.Item;
 import com.example.ezvault.model.utils.ItemBuilder;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.utils.SerialPrediction;
-import com.example.ezvault.model.SerialPredictor;
+import com.example.ezvault.utils.SerialPredictor;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
 import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;

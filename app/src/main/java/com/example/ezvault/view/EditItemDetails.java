@@ -48,7 +48,7 @@ import com.example.ezvault.data.database.ItemDAO;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.utils.SerialPrediction;
-import com.example.ezvault.model.SerialPredictor;
+import com.example.ezvault.utils.SerialPredictor;
 import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.upcAPI;
 import com.example.ezvault.utils.FileUtils;

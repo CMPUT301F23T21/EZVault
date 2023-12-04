@@ -1,4 +1,4 @@
-package com.example.ezvault.model;
+package com.example.ezvault.utils;
 
 import android.graphics.Bitmap;
 
