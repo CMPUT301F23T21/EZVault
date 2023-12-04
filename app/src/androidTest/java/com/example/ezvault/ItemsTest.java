@@ -23,10 +23,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.example.ezvault.model.Item;
-import com.example.ezvault.model.ItemBuilder;
+import com.example.ezvault.utils.ItemBuilder;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.User;
-import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.data.UserManager;
+import com.example.ezvault.view.MainActivity;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;

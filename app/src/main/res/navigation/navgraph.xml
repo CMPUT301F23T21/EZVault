@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="com.example.ezvault.WelcomeFragment"
+        android:name="com.example.ezvault.view.fragment.WelcomeFragment"
         android:label="WelcomeFragment"
         tools:layout="@layout/fragment_welcome">
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.ezvault.LoginFragment"
+        android:name="com.example.ezvault.view.fragment.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/newUserFragment"
-        android:name="com.example.ezvault.NewUserFragment"
+        android:name="com.example.ezvault.view.fragment.NewUserFragment"
         android:label="NewUserFragment"
         tools:layout="@layout/fragment_new_user">
         <action
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemsFragment"
-        android:name="com.example.ezvault.view.ItemsFragment"
+        android:name="com.example.ezvault.view.fragment.ItemsFragment"
         android:label="Items"
         tools:layout="@layout/fragment_items" >
         <action
@@ -66,12 +66,12 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.ezvault.SearchFragment"
+        android:name="com.example.ezvault.view.fragment.SearchFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/tagsFragment"
-        android:name="com.example.ezvault.view.TagsFragment"
+        android:name="com.example.ezvault.view.fragment.TagsFragment"
         android:label="Tags"
         tools:layout="@layout/fragment_tags" >
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
-        android:name="com.example.ezvault.AddItemFragment"
+        android:name="com.example.ezvault.view.fragment.AddItemFragment"
         android:label="New Item"
         tools:layout="@layout/fragment_edit_item_details" >
         <action
@@ -92,7 +92,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.ezvault.ProfileFragment"
+        android:name="com.example.ezvault.view.fragment.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -101,13 +101,13 @@
     </fragment>
     <dialog
         android:id="@+id/tagDialogue"
-        android:name="com.example.ezvault.view.TagDialogue"
+        android:name="com.example.ezvault.view.fragment.TagDialogue"
         android:label="TagDialogue"
         tools:layout="@layout/add_tag_dialogue"
         />
     <fragment
         android:id="@+id/viewItemFragment"
-        android:name="com.example.ezvault.ViewItemFragment"
+        android:name="com.example.ezvault.view.fragment.ViewItemFragment"
         android:label="Item Details"
         tools:layout="@layout/fragment_view_item_details">
         <action
@@ -120,7 +120,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.example.ezvault.CameraFragment"
+        android:name="com.example.ezvault.view.fragment.CameraFragment"
         android:label="CameraFragment" >
         <action
             android:id="@+id/cameraFragment_to_addItemFragment"
@@ -131,7 +131,7 @@
     </fragment>
     <fragment
         android:id="@+id/filterFragment"
-        android:name="com.example.ezvault.view.FilterFragment"
+        android:name="com.example.ezvault.view.fragment.FilterFragment"
         android:label="Filter / Sort"
         tools:layout="@layout/fragment_filter" >
         <action
@@ -141,7 +141,7 @@
     </fragment>
     <fragment
         android:id="@+id/editItemDetails"
-        android:name="com.example.ezvault.EditItemDetails"
+        android:name="com.example.ezvault.view.fragment.EditItemDetails"
         android:label="Edit Item"
         tools:layout="@layout/fragment_edit_item_details" >
         <action

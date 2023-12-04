@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModel;
 import com.example.ezvault.data.FilterRepository;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
-import com.example.ezvault.model.utils.ItemListView;
+import com.example.ezvault.utils.ItemListView;
 import com.example.ezvault.utils.IItemFilter;
 import com.example.ezvault.utils.ItemListFilter;
 import com.example.ezvault.utils.MainItemFilter;
-import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.data.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
