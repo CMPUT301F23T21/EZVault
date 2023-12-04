@@ -1,18 +1,18 @@
 package com.example.ezvault;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.Tag;
+import com.example.ezvault.model.User;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-public class ItemListTest {
+public class UserTest {
     public ItemList mockList() {
         ItemList itemList = new ItemList();
         Tag tag1 = new Tag("tag1", null);
@@ -26,28 +26,22 @@ public class ItemListTest {
 
         return itemList;
     }
-
-    @Test
-    public void iteratesCorrectly() {
-        ItemList itemList = mockList();
-        for (Item item : itemList) {
-            assertEquals("tag", item.getMake());
-            assertTrue(item.getModel().equals("1") || item.getModel().equals("2"));
-        }
+    private User mockUser() {
+        return new User("test", "uid", mockList());
     }
 
     @Test
-    public void correctTags() {
-        ItemList itemList = mockList();
-        for (Tag tag : itemList.getTags()) {
-            assertTrue(tag.getContents().equals("tag1") || tag.getContents().equals("tag2"));
-        }
+    public void checkUserName() {
+        assertEquals(mockUser().getUserName(), "test");
     }
 
     @Test
-    public void correctSize() {
-        ItemList itemList = mockList();
-        assertEquals(2, itemList.size());
-        assertFalse(itemList.isEmpty());
+    public void checkUid() {
+        assertEquals(mockUser().getUid(), "uid");
+    }
+
+    @Test
+    public void checkItemList() {
+        assertNotNull(mockUser().getItemList());
     }
 }
