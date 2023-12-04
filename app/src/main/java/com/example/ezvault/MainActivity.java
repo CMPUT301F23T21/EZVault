@@ -28,9 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity{
-    BottomNavigationView bottomNavView;
-    Toolbar toolbar;
-    NavController navController;
+    private BottomNavigationView bottomNavView;
+    private Toolbar toolbar;
+    private NavController navController;
     NavHostFragment navHostFragment;
     @Inject
     UserManager userManager;
@@ -73,12 +73,9 @@ public class MainActivity extends AppCompatActivity{
                 // show bottom nav bar and toolbar
                 if (destination == R.id.itemsFragment) {
                     userManager.clearLocalImages();
+                }
 
-                    bottomNavView.setVisibility(View.VISIBLE);
-                    toolbar.setVisibility(View.VISIBLE);
-
-                    // hide bottom nav bar
-                } else if (destination == R.id.addItemFragment
+                if (destination == R.id.addItemFragment
                         || destination == R.id.filterFragment
                         || destination == R.id.cameraFragment
                         || destination == R.id.editItemDetails
