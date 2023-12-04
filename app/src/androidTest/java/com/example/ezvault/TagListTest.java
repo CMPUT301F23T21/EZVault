@@ -9,6 +9,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.ezvault.EmulatorState.setEmulator;
 import static org.hamcrest.CoreMatchers.not;
 
 import androidx.navigation.NavController;
@@ -51,13 +52,11 @@ public class TagListTest {
             .outerRule(hiltRule)
             .around(scenarioRule);
 
-    private static boolean hasEmulatorSet = false;
-
     @Before
     public void setup() {
         hiltRule.inject();
-        if (hasEmulatorSet) return;
-        hasEmulatorSet = true;
+        if (setEmulator) return;
+        setEmulator = true;
         FirebaseFirestore.getInstance().useEmulator("10.0.2.2", 8080);
         FirebaseAuth.getInstance().useEmulator("10.0.2.2", 9099);
         FirebaseStorage.getInstance().useEmulator("10.0.2.2", 9199);

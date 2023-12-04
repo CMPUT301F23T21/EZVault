@@ -14,6 +14,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSubstring;
 
+import static com.example.ezvault.EmulatorState.setEmulator;
 import static org.hamcrest.CoreMatchers.not;
 
 import androidx.navigation.NavController;
@@ -57,8 +58,6 @@ public class EditItemTest {
     public RuleChain chain = RuleChain
             .outerRule(hiltRule)
             .around(scenarioRule);
-
-    private static boolean setEmulator = false;
 
     @Before
     public void setup() {

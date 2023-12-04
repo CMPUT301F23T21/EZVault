@@ -8,6 +8,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import static com.example.ezvault.EmulatorState.setEmulator;
+
 import android.view.View;
 
 import androidx.navigation.NavController;
@@ -54,8 +56,6 @@ public class DeleteItemTest {
     public RuleChain chain = RuleChain
             .outerRule(hiltRule)
             .around(scenarioRule);
-
-    private static boolean setEmulator = false;
 
     @Before
     public void setup() {
