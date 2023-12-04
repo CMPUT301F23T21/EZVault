@@ -1,4 +1,4 @@
-package com.example.ezvault.camera;
+package com.example.ezvault.utils.camera;
 
 import android.net.Uri;
 
