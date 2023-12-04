@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.ezvault.model.Image;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.widget.ImageView;
 
@@ -45,6 +47,11 @@ public class ViewpagerAdapter extends RecyclerView.Adapter<ViewpagerAdapter.View
     @Override
     public int getItemCount() {
         return imageList.size();
+    }
+
+    public void setImages(ArrayList<Image> newImages){
+        imageList = newImages;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

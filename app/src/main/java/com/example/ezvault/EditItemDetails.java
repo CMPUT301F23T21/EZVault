@@ -140,6 +140,7 @@ public class EditItemDetails extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // This callback is only called when MyFragment is at least started
         setupTextWatchers();
 
         MenuHost menuHost = (MenuHost) requireActivity();
@@ -351,6 +352,9 @@ public class EditItemDetails extends Fragment {
                                         .update(raw.getId(), raw)
                                         .addOnSuccessListener(x -> {
                                             userManager.clearLocalImages();
+
+                                            itemModel.setValue(raw);
+
                                             toggleInteractable();
 
                                             Toast.makeText(requireContext(),
@@ -360,7 +364,7 @@ public class EditItemDetails extends Fragment {
 
                                 return TaskUtils.drop(Tasks.forResult(null));
                             }));
-            Navigation.findNavController(view).navigate(R.id.editItemDetails_to_viewItemFragment);
+
         });
 
         return view;

@@ -3,6 +3,7 @@ package com.example.ezvault;
 import android.content.ContentResolver;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -30,6 +31,7 @@ import com.example.ezvault.database.ItemDAO;
 import com.example.ezvault.database.RawUserDAO;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
+import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.User;
 import com.example.ezvault.viewmodel.ItemViewModel;
 import com.example.ezvault.utils.UserManager;
@@ -76,25 +78,20 @@ public class ViewItemFragment extends Fragment {
         itemModel = new ViewModelProvider(requireActivity()).get(com.example.ezvault.ItemViewModel.class).get();
         images = new ArrayList<>();
         images.addAll(itemModel.getValue().getImages());
-        viewpagerAdapter = new ViewpagerAdapter(requireContext(), images);
+        viewpagerAdapter = new ViewpagerAdapter(requireContext(), itemModel.getValue().getImages());
         viewModel = new ViewModelProvider(this).get(com.example.ezvault.viewmodel.ItemViewModel.class);
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_view_item_details, container, false);
 
-        // load images into the viewpager
-        userManager.synchronizeToPager(images, viewpagerAdapter);
+        // Find the view pager
         ViewPager2 viewPager = view.findViewById(R.id.view_item_viewpager);
-        viewPager.setAdapter(viewpagerAdapter);
 
         // Set up the circle indicator
         CircleIndicator3 circleIndicator = view.findViewById(R.id.circle_indicator);
-        circleIndicator.setViewPager(viewPager);
 
         // find text fields
         EditText makeText = view.findViewById(R.id.view_details_make);
@@ -106,23 +103,28 @@ public class ViewItemFragment extends Fragment {
         EditText serialText = view.findViewById(R.id.view_details_serial_number);
         EditText dateText = view.findViewById(R.id.view_details_date);
 
-        Item raw = itemModel.getValue();
-        Log.v("EZVault", "Viewing item: " + raw.getId());
+        // Make changes to fields based on live data
+        itemModel.observe(getViewLifecycleOwner(), item -> {
 
+            // Sync the image adapter
+            viewpagerAdapter.setImages(item.getImages());
+            viewPager.setAdapter(viewpagerAdapter);
+            circleIndicator.setViewPager(viewPager);
+
+            makeText.setText(item.getMake());
+            modelText.setText(item.getModel());
+            descText.setText(item.getDescription());
+            commentText.setText(item.getComment());
+            countText.setText(String.valueOf(item.getCount()));
+            valueText.setText(String.valueOf(item.getValue()));
+            serialText.setText(item.getSerialNumber());
+
+            SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
+            String dateString = format.format(item.getAcquisitionDate().toDate());
+
+            dateText.setText(dateString);
+        });
         // set item details
-        makeText.setText(raw.getMake());
-        modelText.setText(raw.getModel());
-        descText.setText(raw.getDescription());
-        commentText.setText(raw.getComment());
-        countText.setText(String.valueOf(raw.getCount()));
-        valueText.setText(String.valueOf(raw.getValue()));
-        serialText.setText(raw.getSerialNumber());
-
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
-        String dateString = format.format(raw.getAcquisitionDate().toDate());
-
-        dateText.setText(dateString);
-
         return view;
     }
 
@@ -180,17 +182,13 @@ public class ViewItemFragment extends Fragment {
 
         User currUser = userManager.getUser();
 
-        List<Item> itemList = userManager.getUser().getItemList();
+        ItemList itemList = userManager.getUser().getItemList();
         itemList.remove(itemModel.getValue());
-        List<String> itemStr = itemList.stream().map(item -> item.getId()).collect(Collectors.toList());
 
-        List<String> tagIds = currUser.getItemList()
-                .getTags()
-                .stream()
-                .map(tag -> tag.getUid())
-                .collect(Collectors.toList());
+        rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(),
+                        (ArrayList<String>) itemList.getTagIds(),
+                        (ArrayList<String>) itemList.getItemIds()))
 
-        rawUserDAO.update(currUser.getUid(), new RawUserDAO.RawUser(currUser.getUserName(), (ArrayList<String>) tagIds, (ArrayList<String>) itemStr))
                 .continueWith(t -> {
                     Item item = itemModel.getValue();
                     itemDAO.delete(item.getId());
