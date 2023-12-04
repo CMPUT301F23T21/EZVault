@@ -1,4 +1,4 @@
-package com.example.ezvault.database;
+package com.example.ezvault.data.database;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;

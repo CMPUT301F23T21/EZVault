@@ -32,7 +32,7 @@ import androidx.lifecycle.Lifecycle;
 import com.example.ezvault.R;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.utils.FileUtils;
-import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.data.UserManager;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;

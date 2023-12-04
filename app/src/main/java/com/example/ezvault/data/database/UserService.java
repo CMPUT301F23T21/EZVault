@@ -2,9 +2,9 @@
 Provides utilities for interacting with Users on the database.
  */
 
-package com.example.ezvault.database;
+package com.example.ezvault.data.database;
 
-import com.example.ezvault.database.RawUserDAO.RawUser;
+import com.example.ezvault.data.database.RawUserDAO.RawUser;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.Tag;

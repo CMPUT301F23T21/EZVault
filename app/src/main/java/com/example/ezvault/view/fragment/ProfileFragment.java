@@ -14,14 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.ezvault.R;
-import com.example.ezvault.authentication.registration.RegistrationException;
-import com.example.ezvault.database.FirebaseBundle;
-import com.example.ezvault.database.RawUserDAO;
-import com.example.ezvault.database.UserService;
+import com.example.ezvault.data.authentication.registration.RegistrationException;
+import com.example.ezvault.data.database.FirebaseBundle;
+import com.example.ezvault.data.database.RawUserDAO;
+import com.example.ezvault.data.database.UserService;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.utils.textwatchers.PasswordWatcher;
-import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.data.UserManager;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 

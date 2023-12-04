@@ -1,4 +1,4 @@
-package com.example.ezvault.utils;
+package com.example.ezvault.data;
 
 import com.example.ezvault.view.adapter.PhotoAdapter;
 import com.example.ezvault.model.Image;

@@ -17,7 +17,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.ezvault.R;
-import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.data.UserManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.HashSet;

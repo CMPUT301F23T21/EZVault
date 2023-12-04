@@ -2,7 +2,7 @@
 Manages direct database operations in the 'tags' collections.
  */
 
-package com.example.ezvault.database;
+package com.example.ezvault.data.database;
 
 import android.util.Log;
 

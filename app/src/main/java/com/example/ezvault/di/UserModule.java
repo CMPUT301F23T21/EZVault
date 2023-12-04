@@ -1,6 +1,6 @@
 package com.example.ezvault.di;
 
-import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.data.UserManager;
 
 import javax.inject.Singleton;
 
