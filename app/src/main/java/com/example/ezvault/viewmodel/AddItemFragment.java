@@ -48,7 +48,7 @@ import com.example.ezvault.model.SerialPrediction;
 import com.example.ezvault.model.SerialPredictor;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
-import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
+import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;
 import com.example.ezvault.upcAPI;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
