@@ -71,19 +71,14 @@ public class NewUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_user, container, false);
 
         // find text fields
-        EditText emailText = view.findViewById(R.id.create_email_text);
-        EditText userNameText = view.findViewById(R.id.create_username_text);
-        EditText passwordText = view.findViewById(R.id.create_password_text);
-        EditText confirmPasswordText = view.findViewById(R.id.confirm_password_text);
-      
-        // setup back button
-        backButton = view.findViewById(R.id.create_user_back_button);
-        backButton.setOnClickListener(v -> Navigation.findNavController(view).popBackStack());
-
         emailText = view.findViewById(R.id.create_email_text);
         userNameText = view.findViewById(R.id.create_username_text);
         passwordText = view.findViewById(R.id.create_password_text);
         confirmPasswordText = view.findViewById(R.id.confirm_password_text);
+      
+        // setup back button
+        backButton = view.findViewById(R.id.create_user_back_button);
+        backButton.setOnClickListener(v -> Navigation.findNavController(view).popBackStack());
 
         // create user functionality
         Button createUser = view.findViewById(R.id.create_user_button);
