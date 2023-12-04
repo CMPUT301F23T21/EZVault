@@ -35,7 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ezvault.view.adapter.PhotoAdapter;
 import com.example.ezvault.R;
-import com.example.ezvault.camera.GalleryAction;
+import com.example.ezvault.utils.camera.GalleryAction;
 import com.example.ezvault.data.database.FirebaseBundle;
 import com.example.ezvault.data.database.ImageDAO;
 import com.example.ezvault.data.database.ItemDAO;
