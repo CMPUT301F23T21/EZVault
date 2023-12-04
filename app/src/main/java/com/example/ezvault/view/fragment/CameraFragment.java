@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -183,12 +184,13 @@ public class CameraFragment extends Fragment {
 
                     @Override
                     public void onError(ImageCaptureException error) {
-
+                        Log.v("EZVAULT", error.getMessage());
                     }
                 }
 
         );
 
+        // Start screen flash animation
         view.getRootView().setForeground(new ColorDrawable(Color.WHITE));
         view.getRootView().animate()
                 .setDuration(350)

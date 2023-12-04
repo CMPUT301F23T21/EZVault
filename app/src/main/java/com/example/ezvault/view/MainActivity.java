@@ -1,11 +1,16 @@
 package com.example.ezvault.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -104,6 +109,17 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
+
+        // Request camera access
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (!isGranted) {
+                    Toast.makeText(this,
+                            "Camera will not be usable until permission is granted.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }).launch(Manifest.permission.CAMERA);
+        }
     }
 
     @Override
