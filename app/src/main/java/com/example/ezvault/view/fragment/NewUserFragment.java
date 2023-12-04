@@ -20,9 +20,9 @@ import com.example.ezvault.authentication.registration.EmailPasswordRegistration
 import com.example.ezvault.authentication.registration.RegistrationException;
 import com.example.ezvault.authentication.registration.RegistrationHandler;
 import com.example.ezvault.database.FirebaseBundle;
-import com.example.ezvault.textwatchers.MirroredTextWatcher;
-import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
-import com.example.ezvault.textwatchers.PasswordWatcher;
+import com.example.ezvault.utils.textwatchers.MirroredTextWatcher;
+import com.example.ezvault.utils.textwatchers.NonEmptyTextWatcher;
+import com.example.ezvault.utils.textwatchers.PasswordWatcher;
 import com.example.ezvault.utils.FragmentUtils;
 import com.example.ezvault.utils.UserManager;
 

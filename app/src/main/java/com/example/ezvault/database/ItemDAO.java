@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.Item;
-import com.example.ezvault.model.ItemBuilder;
+import com.example.ezvault.utils.ItemBuilder;
 import com.example.ezvault.model.Tag;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;

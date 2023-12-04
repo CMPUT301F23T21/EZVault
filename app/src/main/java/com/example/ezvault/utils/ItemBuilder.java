@@ -1,7 +1,10 @@
 // A Builder Utility Class for Building Items
 
-package com.example.ezvault.model;
+package com.example.ezvault.utils;
 
+import com.example.ezvault.model.Image;
+import com.example.ezvault.model.Item;
+import com.example.ezvault.model.Tag;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;

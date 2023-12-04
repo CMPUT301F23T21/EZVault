@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.example.ezvault.model.ActivityTaskChunk;
+import com.example.ezvault.utils.ActivityTaskChunk;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;

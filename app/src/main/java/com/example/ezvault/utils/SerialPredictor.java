@@ -1,8 +1,7 @@
-package com.example.ezvault.model;
+package com.example.ezvault.utils;
 
 import android.graphics.Bitmap;
 
-import com.example.ezvault.utils.TaskUtils;
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;

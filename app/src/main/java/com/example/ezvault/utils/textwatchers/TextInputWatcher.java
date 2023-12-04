@@ -1,4 +1,4 @@
-package com.example.ezvault.textwatchers;
+package com.example.ezvault.utils.textwatchers;
 
 import android.text.Editable;
 import android.text.TextWatcher;
