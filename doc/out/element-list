@@ -1,0 +1,14 @@
+com.example.ezvault
+com.example.ezvault.data
+com.example.ezvault.data.authentication.authentication
+com.example.ezvault.data.authentication.registration
+com.example.ezvault.data.database
+com.example.ezvault.di
+com.example.ezvault.model
+com.example.ezvault.utils
+com.example.ezvault.utils.camera
+com.example.ezvault.utils.textwatchers
+com.example.ezvault.view
+com.example.ezvault.view.adapter
+com.example.ezvault.view.fragment
+com.example.ezvault.viewmodel
