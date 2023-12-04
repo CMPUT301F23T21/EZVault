@@ -201,6 +201,7 @@ public class ItemsFragment extends Fragment {
                 }
             }
         });
+
         builder.setNegativeButton("Cancel", (dialog, x) -> dialog.dismiss());
 
         builder.show();
