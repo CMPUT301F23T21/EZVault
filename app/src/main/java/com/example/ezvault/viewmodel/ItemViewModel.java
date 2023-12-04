@@ -12,9 +12,9 @@ import com.example.ezvault.data.FilterRepository;
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.utils.ItemListView;
-import com.example.ezvault.model.utils.filter.IItemFilter;
+import com.example.ezvault.utils.IItemFilter;
 import com.example.ezvault.model.utils.filter.ItemListFilter;
-import com.example.ezvault.model.utils.filter.MainItemFilter;
+import com.example.ezvault.utils.MainItemFilter;
 import com.example.ezvault.utils.UserManager;
 
 import java.util.ArrayList;

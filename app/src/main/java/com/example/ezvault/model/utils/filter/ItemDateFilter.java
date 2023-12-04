@@ -1,6 +1,7 @@
 package com.example.ezvault.model.utils.filter;
 
 import com.example.ezvault.model.Item;
+import com.example.ezvault.utils.IItemFilter;
 import com.google.firebase.Timestamp;
 
 import java.time.Instant;

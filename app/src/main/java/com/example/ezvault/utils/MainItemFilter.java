@@ -1,7 +1,12 @@
-package com.example.ezvault.model.utils.filter;
+package com.example.ezvault.utils;
 
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.Tag;
+import com.example.ezvault.model.utils.filter.ItemDateFilter;
+import com.example.ezvault.model.utils.filter.ItemKeywordFilter;
+import com.example.ezvault.model.utils.filter.ItemMakeFilter;
+import com.example.ezvault.model.utils.filter.ItemTagFilter;
+import com.example.ezvault.utils.IItemFilter;
 
 import java.time.Instant;
 import java.util.Date;

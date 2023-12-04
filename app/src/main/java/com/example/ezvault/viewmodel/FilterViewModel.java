@@ -11,7 +11,7 @@ import com.example.ezvault.model.utils.filter.ItemDateFilter;
 import com.example.ezvault.model.utils.filter.ItemKeywordFilter;
 import com.example.ezvault.model.utils.filter.ItemMakeFilter;
 import com.example.ezvault.model.utils.filter.ItemTagFilter;
-import com.example.ezvault.model.utils.filter.MainItemFilter;
+import com.example.ezvault.utils.MainItemFilter;
 import com.example.ezvault.utils.UserManager;
 
 import java.text.SimpleDateFormat;

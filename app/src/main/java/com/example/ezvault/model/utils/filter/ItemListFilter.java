@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.utils.ItemListView;
+import com.example.ezvault.utils.IItemFilter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
