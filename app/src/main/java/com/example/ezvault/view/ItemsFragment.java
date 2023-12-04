@@ -173,10 +173,6 @@ public class ItemsFragment extends Fragment {
     private void tagSelected() {
         if (itemAdapter.getSelectedItems().isEmpty()) return;
 
-        for (Item item : itemAdapter.getSelectedItems()) {
-            Log.d("EZVaultT", "Selected: " + item.getId());
-        }
-
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         EditText input = new EditText(requireContext());
         input.setInputType(InputType.TYPE_CLASS_TEXT);

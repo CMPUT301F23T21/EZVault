@@ -1,13 +1,11 @@
-package com.example.ezvault.model.utils.filter;
+package com.example.ezvault.utils;
 
 import com.example.ezvault.model.Item;
-
-import java.io.Serializable;
 
 /**
  * An interface for classes that filter items.
  */
-public interface IItemFilter extends Serializable {
+public interface IItemFilter {
     /**
      * Determine whether or not an object passes the filter.
      * @param item The item to be checked.
