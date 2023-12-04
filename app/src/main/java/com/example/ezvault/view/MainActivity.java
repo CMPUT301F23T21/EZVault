@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity{
 
                 if (destination == R.id.addItemFragment
                         || destination == R.id.filterFragment
+                        || destination == R.id.cameraFragment
                         || destination == R.id.editItemDetails
                         || destination == R.id.viewItemFragment) {
 
@@ -94,8 +95,7 @@ public class MainActivity extends AppCompatActivity{
                 // Hide both nav bars in following fragments
                 } else if (navDestination.getId() == R.id.welcomeFragment
                         || navDestination.getId() == R.id.loginFragment
-                        || navDestination.getId() == R.id.newUserFragment
-                        || destination == R.id.cameraFragment){
+                        || navDestination.getId() == R.id.newUserFragment){
 
                     bottomNavView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
