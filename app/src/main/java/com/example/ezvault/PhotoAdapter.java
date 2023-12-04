@@ -16,7 +16,11 @@ import com.example.ezvault.model.Image;
 
 import java.util.List;
 
+/**
+ * Recyclerview adapter for displaying photos
+ */
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder> {
+
 
     public static class ImageHolder extends RecyclerView.ViewHolder {
         ImageView image;
@@ -41,7 +45,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
     public PhotoAdapter.ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater = LayoutInflater.from(context);
-        // inflate layout based on which type of image is to be displayed
         view = inflater.inflate(R.layout.photo_layout, parent, false);
         return new ImageHolder(view);
     }
@@ -56,21 +59,18 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ImageHolder>
 
         holder.image.setImageBitmap(imageBmp);
 
+        // delete photo
         holder.deletePhotoButton.setOnClickListener(v -> {
             int updatedPosition = holder.getAdapterPosition();
 
             if (updatedPosition == RecyclerView.NO_POSITION){
                 return;
             }
-
             imageList.remove(updatedPosition);
-
             notifyItemRemoved(updatedPosition);
             notifyItemRangeChanged(updatedPosition, imageList.size() - updatedPosition);
         });
     }
-
-    // returns what type of image layout to be displayed
 
     @Override
     public int getItemCount() {

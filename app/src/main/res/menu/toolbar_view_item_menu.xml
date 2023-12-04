@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/view_item_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="Edit"
         android:icon="@drawable/icon_edit"
         app:showAsAction="ifRoom"/>
     <item
+        android:id="@+id/view_item_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="Delete"

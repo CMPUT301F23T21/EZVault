@@ -28,9 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity{
-    BottomNavigationView bottomNavView;
-    Toolbar toolbar;
-    NavController navController;
+    private BottomNavigationView bottomNavView;
+    private Toolbar toolbar;
+    private NavController navController;
     NavHostFragment navHostFragment;
     @Inject
     UserManager userManager;
@@ -68,18 +68,23 @@ public class MainActivity extends AppCompatActivity{
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
-                if (navDestination.getId() == R.id.itemsFragment) {
+                int destination = navDestination.getId();
+
+                // show bottom nav bar and toolbar
+                if (destination == R.id.itemsFragment) {
                     userManager.clearLocalImages();
                 }
 
-                // Hide bottom nav bar in following fragments
-                if (navDestination.getId() == R.id.addItemFragment
-                        || navDestination.getId() == R.id.filterFragment
-                        || navDestination.getId() == R.id.cameraFragment
-                        || navDestination.getId() == R.id.editItemDetails) {
+                if (destination == R.id.addItemFragment
+                        || destination == R.id.filterFragment
+                        || destination == R.id.cameraFragment
+                        || destination == R.id.editItemDetails
+                        || destination == R.id.viewItemFragment) {
+
 
                     toolbar.setVisibility(View.VISIBLE);
                     bottomNavView.setVisibility(View.GONE);
+
 
                 // Hide both nav bars in following fragments
                 } else if (navDestination.getId() == R.id.welcomeFragment

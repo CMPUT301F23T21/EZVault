@@ -15,9 +15,6 @@ import androidx.navigation.Navigation;
 
 public class WelcomeFragment extends Fragment {
 
-    Button existingUser;
-    Button newUser;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +27,8 @@ public class WelcomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_welcome, container, false);
 
         // find the views
-        existingUser = view.findViewById(R.id.existing_user_button);
-        newUser = view.findViewById(R.id.new_user_button);
+        Button existingUser = view.findViewById(R.id.existing_user_button);
+        Button newUser = view.findViewById(R.id.new_user_button);
 
         // click listener for existingUser button
         existingUser.setOnClickListener(v ->

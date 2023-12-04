@@ -1,6 +1,7 @@
 package com.example.ezvault.utils;
 
 import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.ViewpagerAdapter;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.User;
 
@@ -46,5 +47,4 @@ public class UserManager {
         photoAdapter.notifyItemRangeInserted(unsyncedLen, newPhotosLen - 1);
         clearLocalImages();
     }
-
 }

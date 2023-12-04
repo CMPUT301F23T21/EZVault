@@ -1,5 +1,8 @@
 package com.example.ezvault;
 
+
+
+
 import static com.example.ezvault.utils.FragmentUtils.getTextParentLayout;
 import static com.example.ezvault.utils.FragmentUtils.textLayoutHasNoErrors;
 
@@ -22,8 +25,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import androidx.core.view.MenuHost;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
@@ -71,6 +74,9 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.stream.Collectors;
 /**
  * fragment class that collects the information of a new item
  */
@@ -139,6 +145,7 @@ public class AddItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         setupTextWatchers();
         setupCreateButton(view);
         setupToolbar();
@@ -175,7 +182,7 @@ public class AddItemFragment extends Fragment {
         photoRecyclerView.setLayoutManager(new LinearLayoutManager(this.requireContext(), LinearLayoutManager.HORIZONTAL, false));
         photoRecyclerView.setAdapter(photoAdapter);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
         String dateString = format.format(new Date());
 
         itemDate.setText(dateString);
@@ -303,7 +310,7 @@ public class AddItemFragment extends Fragment {
         // Handle opening the camera
         ImageButton cameraButton = view.findViewById(R.id.edit_take_pic);
         cameraButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_addItemFragment_to_cameraFragment);
+            Navigation.findNavController(view).navigate(R.id.addItemFragment_to_cameraFragment);
         });
 
         // Handle opening the gallery

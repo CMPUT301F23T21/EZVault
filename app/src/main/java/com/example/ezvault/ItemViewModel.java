@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.model.Item;
 
+/**
+ *
+ */
 public class ItemViewModel extends ViewModel {
     private final MutableLiveData<Item> itemData = new MutableLiveData<>();
 

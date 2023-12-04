@@ -103,7 +103,7 @@ public class ItemsFragment extends Fragment {
                         .getItemList()
                         .get(position));
 
-                Navigation.findNavController(view).navigate(R.id.action_itemsFragment_to_editItemDetails);
+                Navigation.findNavController(view).navigate(R.id.itemsFragment_to_viewItemFragment);
             }
         });
 
@@ -197,6 +197,7 @@ public class ItemsFragment extends Fragment {
                 }
             }
         });
+
         builder.setNegativeButton("Cancel", (dialog, x) -> dialog.dismiss());
 
         builder.show();
@@ -249,6 +250,9 @@ public class ItemsFragment extends Fragment {
         itemAdapter.clearSelected();
     }
 
+    /**
+     * Set up toolbar with new menu and button functionality
+     */
     private void setupToolbar(){
         MenuHost menuHost = requireActivity();
         menuHost.addMenuProvider(new MenuProvider() {
@@ -281,7 +285,6 @@ public class ItemsFragment extends Fragment {
                             .create()
                             .show();
                 }
-
                 return false;
             }
         }, getViewLifecycleOwner(), Lifecycle.State.RESUMED);

@@ -71,7 +71,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Allows user to edit an item's details
  */
 @AndroidEntryPoint
 public class EditItemDetails extends Fragment {
@@ -140,6 +140,7 @@ public class EditItemDetails extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // This callback is only called when MyFragment is at least started
         setupTextWatchers();
 
         MenuHost menuHost = (MenuHost) requireActivity();
@@ -178,7 +179,7 @@ public class EditItemDetails extends Fragment {
         ImageButton galleryButton = view.findViewById(R.id.edit_gallery);
 
         takePhotoButton.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_editItemDetails_to_cameraFragment);
+            Navigation.findNavController(view).navigate(R.id.editItemDetails_to_cameraFragment);
         });
 
         galleryButton.setOnClickListener(v -> {
@@ -219,7 +220,7 @@ public class EditItemDetails extends Fragment {
         valueText.setText(String.valueOf(raw.getValue()));
         serialText.setText(raw.getSerialNumber());
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
         String dateString = format.format(raw.getAcquisitionDate().toDate());
 
         dateText.setText(dateString);
@@ -351,6 +352,9 @@ public class EditItemDetails extends Fragment {
                                         .update(raw.getId(), raw)
                                         .addOnSuccessListener(x -> {
                                             userManager.clearLocalImages();
+
+                                            itemModel.setValue(raw);
+
                                             toggleInteractable();
 
                                             Toast.makeText(requireContext(),
@@ -360,6 +364,7 @@ public class EditItemDetails extends Fragment {
 
                                 return TaskUtils.drop(Tasks.forResult(null));
                             }));
+
         });
 
         return view;

@@ -81,4 +81,6 @@ dependencies {
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
     androidTestAnnotationProcessor("com.google.dagger:hilt-android-compiler:2.44")
 
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("me.relex:circleindicator:2.1.6")
 }
