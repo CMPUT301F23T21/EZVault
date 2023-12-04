@@ -53,12 +53,17 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage")
+    implementation("androidx.test:rules:1.5.0")
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation ("androidx.test:runner:1.5.0")
+    debugImplementation ("androidx.test:core:1.5.0")  // or implementation "androidx.test:core:1.4.0"
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1") {
         exclude(module = "protobuf-lite")
     }
+    androidTestImplementation("org.hamcrest:hamcrest:2.2")
+
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
