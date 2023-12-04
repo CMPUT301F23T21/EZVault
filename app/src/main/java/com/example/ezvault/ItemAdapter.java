@@ -81,11 +81,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
         // show or hide checkbox if in delete mode
         if (deleteMode) {
-            holder.itemView.findViewById(R.id.view_details_button).setVisibility(View.GONE);
+            holder.itemView.findViewById(R.id.view_details_image).setVisibility(View.GONE);
             checkBox.setVisibility(View.VISIBLE);
         }
         else {
-            holder.itemView.findViewById(R.id.view_details_button).setVisibility(View.VISIBLE);
+            holder.itemView.findViewById(R.id.view_details_image).setVisibility(View.VISIBLE);
             checkBox.setVisibility(View.GONE);
             checkBox.setChecked(false);
         }
@@ -133,7 +133,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         TextView itemAmount;
 
         CheckBox checkBox;
-        ImageButton imageButton;
+        ImageView imageView;
         ItemViewHolder(View itemView) {
             super(itemView);
             itemName = itemView.findViewById(R.id.item_name);
@@ -141,7 +141,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             itemCount = itemView.findViewById(R.id.quantity_text);
             itemAmount = itemView.findViewById(R.id.cost_text);
             checkBox = itemView.findViewById(R.id.item_checkbox);
-            imageButton = itemView.findViewById(R.id.view_details_button);
+            imageView = itemView.findViewById(R.id.view_details_image);
         }
     }
 

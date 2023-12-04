@@ -82,7 +82,7 @@
         android:id="@+id/addItemFragment"
         android:name="com.example.ezvault.AddItemFragment"
         android:label="New Item"
-        tools:layout="@layout/fragment_add_item" >
+        tools:layout="@layout/fragment_edit_item_details" >
         <action
             android:id="@+id/addItemFragment_to_itemsFragment"
             app:destination="@id/itemsFragment" />
@@ -109,7 +109,7 @@
         android:id="@+id/viewItemFragment"
         android:name="com.example.ezvault.ViewItemFragment"
         android:label="Item Details"
-        tools:layout="@layout/fragment_view_item">
+        tools:layout="@layout/fragment_view_item_details">
         <action
             android:id="@+id/viewItemFragment_to_editItemDetails"
             app:destination="@id/editItemDetails" />

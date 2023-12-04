@@ -72,7 +72,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@id/edittext_profile_password"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        >
 
         <Button
             android:id="@+id/update_info_button"
@@ -81,16 +83,27 @@
             android:text="Update"
             android:layout_marginTop="50dp"
             android:layout_marginHorizontal="2dp"
-            android:backgroundTint="@color/EZGuardOrange"/>
+            android:backgroundTint="#BCD7F8"
+            android:textColor="@color/black"
+            android:fontFamily="@font/fredoka_one"
+            android:paddingVertical="15dp"
+            android:layout_marginEnd="20dp"
+            />
+
 
         <Button
             android:id="@+id/log_out_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Log Out"
+            android:textColor="@color/black"
             android:layout_marginTop="50dp"
             android:layout_marginHorizontal="2dp"
-            android:backgroundTint="@color/EZGuardOrange"/>
+            android:backgroundTint="#BCD7F8"
+            android:fontFamily="@font/fredoka_one"
+            android:paddingVertical="15dp"
+            android:layout_marginStart="20dp"
+            />
     </LinearLayout>
 
 

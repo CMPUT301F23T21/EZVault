@@ -69,17 +69,12 @@ public class NewUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_user, container, false);
-
-        // find text fields
-        EditText emailText = view.findViewById(R.id.create_email_text);
-        EditText userNameText = view.findViewById(R.id.create_username_text);
-        EditText passwordText = view.findViewById(R.id.create_password_text);
-        EditText confirmPasswordText = view.findViewById(R.id.confirm_password_text);
       
         // setup back button
         backButton = view.findViewById(R.id.create_user_back_button);
         backButton.setOnClickListener(v -> Navigation.findNavController(view).popBackStack());
 
+        // find text fields
         emailText = view.findViewById(R.id.create_email_text);
         userNameText = view.findViewById(R.id.create_username_text);
         passwordText = view.findViewById(R.id.create_password_text);
@@ -87,6 +82,7 @@ public class NewUserFragment extends Fragment {
 
         // create user functionality
         Button createUser = view.findViewById(R.id.create_user_button);
+        EditText finalUserNameText = userNameText;
         createUser.setOnClickListener(v -> {
             String email = emailText.getText().toString();
             String userName = userNameText.getText().toString();
@@ -103,7 +99,7 @@ public class NewUserFragment extends Fragment {
                     Navigation.findNavController(view).navigate(R.id.newUserFragment_to_itemsFragment);
                 }).addOnFailureListener(e -> {
                     if (e instanceof RegistrationException.UserAlreadyExists){
-                        userNameText.setError("Username already exists");
+                        finalUserNameText.setError("Username already exists");
                     }
 
                     String toastText = "Could not register: " + e.getMessage();
