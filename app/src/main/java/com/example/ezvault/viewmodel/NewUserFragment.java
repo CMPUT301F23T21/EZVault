@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.viewmodel;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.ezvault.R;
 import com.example.ezvault.authentication.registration.EmailPasswordRegistrationStrategy;
 import com.example.ezvault.authentication.registration.RegistrationException;
 import com.example.ezvault.authentication.registration.RegistrationHandler;

@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.viewmodel;
 
 import static com.example.ezvault.utils.FragmentUtils.getTextParentLayout;
 import static com.example.ezvault.utils.FragmentUtils.textLayoutHasNoErrors;
@@ -33,6 +33,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.R;
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
@@ -47,6 +49,7 @@ import com.example.ezvault.model.SerialPredictor;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.model.User;
 import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
+import com.example.ezvault.upcAPI;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;
@@ -77,7 +80,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class AddItemFragment extends Fragment {
 
-    private final upcAPI upcLookup = new upcAPI();
+    private final com.example.ezvault.upcAPI upcLookup = new upcAPI();
     private Button createButton;
 
     private AutoCompleteTextView itemSerial;

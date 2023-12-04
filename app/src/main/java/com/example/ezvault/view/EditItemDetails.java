@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.view;
 
 import static com.example.ezvault.utils.FragmentUtils.getTextParentLayout;
 import static com.example.ezvault.utils.FragmentUtils.textLayoutHasNoErrors;
@@ -38,6 +38,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.ezvault.ItemViewModel;
+import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.R;
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
@@ -47,6 +50,7 @@ import com.example.ezvault.model.Item;
 import com.example.ezvault.model.SerialPrediction;
 import com.example.ezvault.model.SerialPredictor;
 import com.example.ezvault.textwatchers.NonEmptyTextWatcher;
+import com.example.ezvault.upcAPI;
 import com.example.ezvault.utils.FileUtils;
 import com.example.ezvault.utils.TaskUtils;
 import com.example.ezvault.utils.UserManager;

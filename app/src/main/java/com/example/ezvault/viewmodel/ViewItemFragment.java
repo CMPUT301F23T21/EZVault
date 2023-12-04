@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.viewmodel;
 
 import android.os.Bundle;
 
@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.ezvault.R;
 
 /**
  * A simple {@link Fragment} subclass.

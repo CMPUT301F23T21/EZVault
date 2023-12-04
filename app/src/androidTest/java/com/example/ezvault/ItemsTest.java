@@ -27,6 +27,7 @@ import com.example.ezvault.model.ItemBuilder;
 import com.example.ezvault.model.ItemList;
 import com.example.ezvault.model.User;
 import com.example.ezvault.utils.UserManager;
+import com.example.ezvault.viewmodel.MainActivity;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;

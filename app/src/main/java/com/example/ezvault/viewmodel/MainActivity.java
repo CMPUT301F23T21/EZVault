@@ -1,4 +1,4 @@
-package com.example.ezvault;
+package com.example.ezvault.viewmodel;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.ezvault.R;
 import com.example.ezvault.utils.UserManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
