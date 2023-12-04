@@ -26,6 +26,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ezvault.viewmodel.SelectedItemViewModel;
 import com.example.ezvault.view.adapter.ItemAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.database.FirebaseBundle;
@@ -96,8 +97,8 @@ public class ItemsFragment extends Fragment {
             public void onItemClick(View view, int position) {
                 Log.d("EZVault", userManager.getUser().getItemList().get(position).getModel());
 
-                com.example.ezvault.ItemViewModel viewModel = new ViewModelProvider(requireActivity())
-                        .get(com.example.ezvault.ItemViewModel.class);
+                SelectedItemViewModel viewModel = new ViewModelProvider(requireActivity())
+                        .get(SelectedItemViewModel.class);
 
                 viewModel.set(userManager.getUser()
                         .getItemList()

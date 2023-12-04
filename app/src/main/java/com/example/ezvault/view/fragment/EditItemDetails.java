@@ -38,7 +38,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.ezvault.ItemViewModel;
+import com.example.ezvault.viewmodel.SelectedItemViewModel;
 import com.example.ezvault.view.adapter.PhotoAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.camera.GalleryAction;
@@ -127,7 +127,7 @@ public class EditItemDetails extends Fragment {
 
         canInteract = true;
 
-        itemModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class).get();
+        itemModel = new ViewModelProvider(requireActivity()).get(SelectedItemViewModel.class).get();
 
         images = new ArrayList<>();
         images.addAll(itemModel.getValue().getImages());

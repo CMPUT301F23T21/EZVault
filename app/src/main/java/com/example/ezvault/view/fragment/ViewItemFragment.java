@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.example.ezvault.R;
+import com.example.ezvault.viewmodel.SelectedItemViewModel;
 import com.example.ezvault.view.adapter.ViewPagerAdapter;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
@@ -72,7 +73,7 @@ public class ViewItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // setup variables
-        itemModel = new ViewModelProvider(requireActivity()).get(com.example.ezvault.ItemViewModel.class).get();
+        itemModel = new ViewModelProvider(requireActivity()).get(SelectedItemViewModel.class).get();
         images = new ArrayList<>();
         images.addAll(itemModel.getValue().getImages());
         viewpagerAdapter = new ViewPagerAdapter(requireContext(), itemModel.getValue().getImages());
