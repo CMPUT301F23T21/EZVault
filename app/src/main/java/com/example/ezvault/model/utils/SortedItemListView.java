@@ -1,7 +1,6 @@
-package com.example.ezvault.viewmodel;
+package com.example.ezvault.model.utils;
 
 import com.example.ezvault.model.Item;
-import com.example.ezvault.view.utils.ItemListView;
 import com.google.firebase.Timestamp;
 
 import java.util.Collections;

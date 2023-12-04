@@ -1,9 +1,9 @@
-package com.example.ezvault.utils.filter;
+package com.example.ezvault.model.utils.filter;
 
 import androidx.annotation.NonNull;
 
 import com.example.ezvault.model.Item;
-import com.example.ezvault.view.utils.ItemListView;
+import com.example.ezvault.model.utils.ItemListView;
 
 import java.util.ArrayList;
 import java.util.Iterator;

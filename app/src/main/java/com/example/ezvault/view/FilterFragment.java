@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.example.ezvault.R;
 import com.example.ezvault.model.Tag;
 import com.example.ezvault.viewmodel.FilterViewModel;
-import com.example.ezvault.viewmodel.SortedItemListView;
+import com.example.ezvault.model.utils.SortedItemListView;
 
 import java.util.List;
 import java.util.function.Consumer;

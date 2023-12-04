@@ -1,4 +1,4 @@
-package com.example.ezvault.view.utils;
+package com.example.ezvault.model.utils;
 
 import com.example.ezvault.model.Item;
 
