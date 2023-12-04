@@ -55,20 +55,20 @@ public class UpcApi {
 
                     // Open the connection and parse the JSON response
                     URLConnection connection;
-                    String itemname = "";
+                    String itemName = "";
                     try {
                         connection = url.openConnection();
                         connection.connect();
                         JsonElement root = JsonParser.parseReader(new InputStreamReader((InputStream) connection.getContent()));
                         Log.i(TAG, root.toString());
-                        JsonObject rootobj = root.getAsJsonObject();
+                        JsonObject rootObject = root.getAsJsonObject();
                         // Check if the response is empty or no items are returned
-                        if (rootobj.isEmpty() || rootobj.get("items").getAsJsonArray().isEmpty()) {
+                        if (rootObject.isEmpty() || rootObject.get("items").getAsJsonArray().isEmpty()) {
                             code = 1;
                             Log.i(TAG, "No items found");
                         } else {
                             // Get the item name from the JSON response
-                            itemname = rootobj.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
+                            itemName = rootObject.get("items").getAsJsonArray().get(0).getAsJsonObject().get("description").getAsString();
                         }
                     } catch (IOException e) {
                         code = 2;
@@ -76,8 +76,8 @@ public class UpcApi {
                     }
 
                     // Make the item name and exit code effectively final so it can be passed to the UI thread
-                    String finalItemname = itemname;
-                    Log.i(TAG, itemname);
+                    String finalItemName = itemName;
+                    Log.i(TAG, itemName);
                     int finalCode = code;
 
                     // Run the UI update on the UI thread
@@ -90,7 +90,7 @@ public class UpcApi {
                             switch (finalCode) {
                                 case 0:
                                     // If a valid item name was found, set the text to that
-                                    destination.setText(finalItemname);
+                                    destination.setText(finalItemName);
                                     break;
                                 case 1:
                                     // If no items were found, set the text to "No items found"
