@@ -34,5 +34,11 @@ public class FilterRepository {
     public void setSortOrder(SortedItemListView.SortOrder sortOrder) {
         this.sortOrder = sortOrder;
     }
+    public SortedItemListView.SortField getSortField() {
+        return sortField;
+    }
 
+    public SortedItemListView.SortOrder getSortOrder() {
+        return sortOrder;
+    }
 }
