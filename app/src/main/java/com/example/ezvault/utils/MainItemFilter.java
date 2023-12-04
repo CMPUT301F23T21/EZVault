@@ -2,64 +2,76 @@ package com.example.ezvault.utils;
 
 import com.example.ezvault.model.Item;
 import com.example.ezvault.model.Tag;
-import com.example.ezvault.model.utils.filter.ItemDateFilter;
-import com.example.ezvault.model.utils.filter.ItemKeywordFilter;
-import com.example.ezvault.model.utils.filter.ItemMakeFilter;
-import com.example.ezvault.model.utils.filter.ItemTagFilter;
-import com.example.ezvault.utils.IItemFilter;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
 public class MainItemFilter implements IItemFilter {
-    private ItemKeywordFilter keywordFilter = null;
-    private ItemDateFilter dateFilter = null;
-    private ItemMakeFilter makeFilter = null;
-    private ItemTagFilter tagFilter = null;
+    private Instant start, end;
+    private List<Tag> tags;
+    private List<String> keywords;
+    private String make;
+    private boolean enabled = true;
 
-    public boolean keep(Item item) {
-        return (keywordFilter == null || keywordFilter.keep(item))
-                && (dateFilter == null || dateFilter.keep(item))
-                && (makeFilter == null || makeFilter.keep(item))
-                && (tagFilter == null || tagFilter.keep(item));
+    public MainItemFilter(Instant start, Instant end, List<Tag> tags, List<String> keywords, String make, boolean enabled) {
+        this.start = start;
+        this.end = end;
+        this.tags = tags;
+        this.keywords = keywords;
+        this.make = make;
+        this.enabled = enabled;
     }
 
-    public void setDateFilter(ItemDateFilter dateFilter) {
-        this.dateFilter = dateFilter;
+    public boolean keep(Item item) {
+        if (!enabled) return true;
+
+        boolean datePasses = start != null
+                && !item.getAcquisitionDate().toDate().before(getStartDate());
+        if (end != null && !item.getAcquisitionDate().toDate().after(getEndDate())) {
+            datePasses = false;
+        }
+
+        boolean tagsPass = true;
+        if (tags != null) {
+            for (Tag tag : item.getTags()) {
+                tagsPass = tagsPass && item.hasTag(tag);
+            }
+        }
+
+        boolean keywordsPass = true;
+        if (keywords != null) {
+            for (String keyword : keywords) {
+                if (!item.getDescription().contains(keyword)) {
+                    keywordsPass = false;
+                    break;
+                }
+            }
+        }
+
+        boolean makePasses = make == null || item.getMake().equalsIgnoreCase(make);
+
+        return datePasses && tagsPass && keywordsPass && makePasses;
     }
 
     public Date getStartDate() {
-        Instant instant = dateFilter != null ? dateFilter.getStart() : null;
-        return instant != null ? Date.from(instant) : null;
+        return start != null ? Date.from(start) : null;
     }
 
     public Date getEndDate() {
-        Instant instant = dateFilter != null ? dateFilter.getEnd() : null;
-        return instant != null ? Date.from(instant) : null;
+        return end != null ? Date.from(end) : null;
     }
 
-    public void setTagFilter(ItemTagFilter tagFilter) {
-        this.tagFilter = tagFilter;
-    }
 
     public List<Tag> getTags() {
-        return tagFilter.getTags();
-    }
-
-    public void setKeywordFilter(ItemKeywordFilter keywordFilter) {
-        this.keywordFilter = keywordFilter;
+        return tags;
     }
 
     public List<String> getKeywords() {
-        return keywordFilter != null ? keywordFilter.getKeywords() : null;
-    }
-
-    public void setMakeFilter(ItemMakeFilter makeFilter) {
-        this.makeFilter = makeFilter;
+        return keywords;
     }
 
     public String getMake() {
-        return makeFilter != null ? makeFilter.getMake() : null;
+        return make;
     }
 }

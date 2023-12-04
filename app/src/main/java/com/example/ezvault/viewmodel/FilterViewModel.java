@@ -7,10 +7,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ezvault.data.FilterRepository;
 import com.example.ezvault.model.Tag;
-import com.example.ezvault.model.utils.filter.ItemDateFilter;
-import com.example.ezvault.model.utils.filter.ItemKeywordFilter;
-import com.example.ezvault.model.utils.filter.ItemMakeFilter;
-import com.example.ezvault.model.utils.filter.ItemTagFilter;
 import com.example.ezvault.utils.MainItemFilter;
 import com.example.ezvault.utils.UserManager;
 
@@ -136,13 +132,7 @@ public class FilterViewModel extends ViewModel {
         Instant start = startDate.getValue() != null ? startDate.getValue().toInstant() : null;
         Instant end = endDate.getValue() != null ? endDate.getValue().toInstant() : null;
 
-        MainItemFilter filter = new MainItemFilter();
-        filter.setDateFilter(new ItemDateFilter(start, end));
-        filter.setMakeFilter(new ItemMakeFilter(make));
-        filter.setKeywordFilter(new ItemKeywordFilter(keywords));
-        filter.setTagFilter(new ItemTagFilter(tags != null ? tags : new ArrayList<>()));
-
-        return filter;
+        return new MainItemFilter(start, end, tags, keywords, make, true);
     }
 
     public void apply() {
