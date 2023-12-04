@@ -1,6 +1,6 @@
 package com.example.ezvault.utils;
 
-import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.view.adapter.PhotoAdapter;
 import com.example.ezvault.model.Image;
 import com.example.ezvault.model.User;
 

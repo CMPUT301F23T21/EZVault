@@ -33,7 +33,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.view.adapter.PhotoAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;

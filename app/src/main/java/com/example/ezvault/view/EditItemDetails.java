@@ -39,7 +39,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.ezvault.ItemViewModel;
-import com.example.ezvault.PhotoAdapter;
+import com.example.ezvault.view.adapter.PhotoAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.camera.GalleryAction;
 import com.example.ezvault.database.FirebaseBundle;

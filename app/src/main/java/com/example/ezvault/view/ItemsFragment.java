@@ -26,7 +26,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ezvault.ItemAdapter;
+import com.example.ezvault.view.adapter.ItemAdapter;
 import com.example.ezvault.R;
 import com.example.ezvault.database.FirebaseBundle;
 import com.example.ezvault.database.ImageDAO;
