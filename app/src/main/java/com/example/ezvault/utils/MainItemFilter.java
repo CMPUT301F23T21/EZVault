@@ -30,7 +30,7 @@ public class MainItemFilter implements IItemFilter {
 
         boolean datePasses = start == null
             || !item.getAcquisitionDate().toDate().before(getStartDate());
-        if (end != null && !item.getAcquisitionDate().toDate().after(getEndDate())) {
+        if (end != null && item.getAcquisitionDate().toDate().after(getEndDate())) {
             datePasses = false;
         }
 
