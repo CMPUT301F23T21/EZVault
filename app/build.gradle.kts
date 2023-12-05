@@ -88,4 +88,11 @@ dependencies {
 
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("me.relex:circleindicator:2.1.6")
+
+    androidTestImplementation("androidx.fragment:fragment-testing:1.6.2")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("androidx.test.espresso:espresso-idling-resource:3.5.1")
+
+
+
 }
